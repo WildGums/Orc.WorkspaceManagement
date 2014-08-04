@@ -7,7 +7,9 @@
 
 namespace Orc.WorkspaceManagement.Models
 {
-    public interface IWorkspace
+    using Catel.Data;
+
+    public interface IWorkspace : IModel
     {
         string Title { get; }
 
