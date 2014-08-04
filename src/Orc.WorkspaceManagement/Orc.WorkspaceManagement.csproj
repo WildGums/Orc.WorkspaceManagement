@@ -69,6 +69,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Models\Extension\IWorkspaceExtensions.cs" />
     <Compile Include="Models\Interfaces\IWorkspace.cs" />
     <Compile Include="Models\WorkspaceBase.cs" />
     <Compile Include="ModuleInitializer.cs" />
