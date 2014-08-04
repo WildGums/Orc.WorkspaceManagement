@@ -13,6 +13,7 @@ public static class ModuleInitializer
     {
         var serviceLocator = ServiceLocator.Default;
 
+        serviceLocator.RegisterType<ICommandLineService, CommandLineService>();
         serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
         //serviceLocator.RegisterType<IWorkspaceReaderService, WorkspaceReaderService>();
         //serviceLocator.RegisterType<IWorkspaceWriterService, WorkspaceWriterService>();
