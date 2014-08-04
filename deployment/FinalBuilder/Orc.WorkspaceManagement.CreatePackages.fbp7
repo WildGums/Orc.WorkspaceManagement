@@ -575,7 +575,6 @@
                 <Property name="Parameters" type="TStrings">
                   <![CDATA[Name=Orc.WorkspaceManagement
 TargetRootDirectory=%NuGetOutputIntermediate%\%PackagesDirectoryName%
-BaseDirectory=Orc.WorkspaceManagement
 ]]>
                 </Property>
                 <Property name="PauseInterval" type="Cardinal">0</Property>
