@@ -11,7 +11,8 @@ namespace Orc.WorkspaceManagement.Services
     using Catel.Logging;
     using Models;
 
-    public abstract class WorkspaceWriterServiceBase : IWorkspaceWriterService
+    public abstract class WorkspaceWriterServiceBase<TWorkspace> : IWorkspaceWriterService
+        where TWorkspace : IWorkspace
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -22,13 +23,13 @@ namespace Orc.WorkspaceManagement.Services
 
             Log.Info("Writing all data to '{0}'", directory);
 
-            WriteToDirectory(workspace, directory);
+            WriteToDirectory((TWorkspace)workspace, directory);
 
             workspace.ClearIsDirty();
 
             Log.Info("Wrote all data to '{0}'", directory);
         }
 
-        protected abstract IWorkspace WriteToDirectory(IWorkspace workspace, string directory);
+        protected abstract void WriteToDirectory(TWorkspace workspace, string directory);
     }
 }
