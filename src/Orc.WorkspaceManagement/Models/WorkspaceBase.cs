@@ -11,9 +11,9 @@ namespace Orc.WorkspaceManagement.Models
 
     public abstract class WorkspaceBase : ModelBase, IWorkspace
     {
-        protected WorkspaceBase()
+        protected WorkspaceBase(string title)
         {
-            Title = "untitled";
+            Title = title;
         }
 
         public string Title { get; private set; }
