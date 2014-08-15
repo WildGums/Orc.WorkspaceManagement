@@ -71,6 +71,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Initializers\FileWorkspaceInitializer.cs" />
     <Compile Include="Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="Models\Extension\IWorkspaceExtensions.cs" />
     <Compile Include="Models\Interfaces\IWorkspace.cs" />

@@ -38,6 +38,7 @@ By default the following initializers are available:
 
 * **EmptyWorkspaceInitializer** => initializes nothing, this is the default
 * **DirectoryWorkspaceInitializer** => First checks if there is an app config setting called *DataLocation*. If so, it will use that. If not, it will fall back to *%AppData%\\[assembly company]\\[assembly product]\\data*. Then it will also check if a command line directory is passed (first argument). If so, all previous will be overriden by the command line directory.
+* **FileWorkspaceInitializer** => This will check if a command line file is passed (first argument). If so, it will be used as initial workspace. Otherwise no workspace will be loaded.
 
 To create a custom workspace initializer, see the example below:
 
