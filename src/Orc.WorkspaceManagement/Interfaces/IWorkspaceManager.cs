@@ -1,16 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceReaderService.cs" company="Simulation Modelling Services">
+// <copyright file="IWorkspaceManager.cs" company="Simulation Modelling Services">
 //   Copyright (c) 2008 - 2014 Simulation Modelling Services. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Services
+namespace Orc.WorkspaceManagement
 {
-    using Models;
+    using System;
 
-    public interface IWorkspaceReaderService
+    public interface IWorkspaceManager
     {
-        IWorkspace Read(string directory);
+        void Refresh();
+        string CurrentLocation { get; }
+        IWorkspace CurrentWorkspace { get; }
+        event EventHandler<EventArgs> WorkspaceUpdated;
+        void Save();
     }
 }

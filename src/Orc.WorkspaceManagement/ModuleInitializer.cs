@@ -1,4 +1,5 @@
 ﻿using Catel.IoC;
+using Orc.WorkspaceManagement;
 using Orc.WorkspaceManagement.Services;
 
 /// <summary>
@@ -15,6 +16,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<ICommandLineService, CommandLineService>();
         serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
+        serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
         //serviceLocator.RegisterType<IWorkspaceReaderService, WorkspaceReaderService>();
         //serviceLocator.RegisterType<IWorkspaceWriterService, WorkspaceWriterService>();
     }

@@ -1,18 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspace.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="IWorkspaceWriterService.cs" company="Simulation Modelling Services">
+//   Copyright (c) 2008 - 2014 Simulation Modelling Services. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 namespace Orc.WorkspaceManagement
 {
-    using Catel.Data;
-
-    public interface IWorkspace : IModel
+    public interface IWorkspaceWriter
     {
-        string Title { get; }
-
-        void ClearIsDirty();
+        void Write(IWorkspace workspace, string location);
     }
 }

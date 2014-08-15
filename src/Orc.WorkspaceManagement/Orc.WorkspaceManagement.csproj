@@ -71,20 +71,23 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="Models\Extension\IWorkspaceExtensions.cs" />
     <Compile Include="Models\Interfaces\IWorkspace.cs" />
     <Compile Include="Models\WorkspaceBase.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CommandLineService.cs" />
-    <Compile Include="Services\Extensions\IWorkspaceManagerExtensions.cs" />
+    <Compile Include="Extensions\IWorkspaceManagerExtensions.cs" />
     <Compile Include="Services\Interfaces\ICommandLineService.cs" />
-    <Compile Include="Services\Interfaces\IWorkspaceManager.cs" />
-    <Compile Include="Services\Interfaces\IWorkspaceReaderService.cs" />
-    <Compile Include="Services\Interfaces\IWorkspaceWriterService.cs" />
-    <Compile Include="Services\WorkspaceManager.cs" />
-    <Compile Include="Services\WorkspaceReaderServiceBase.cs" />
-    <Compile Include="Services\WorkspaceWriterServiceBase.cs" />
+    <Compile Include="Interfaces\IWorkspaceManager.cs" />
+    <Compile Include="Interfaces\IWorkspaceReader.cs" />
+    <Compile Include="Interfaces\IWorkspaceWriter.cs" />
+    <Compile Include="Initializers\Interfaces\IWorkspaceInitializer.cs" />
+    <Compile Include="Initializers\DirectoryWorkspaceInitializer.cs" />
+    <Compile Include="WorkspaceManager.cs" />
+    <Compile Include="WorkspaceReaderBase.cs" />
+    <Compile Include="WorkspaceWriterBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

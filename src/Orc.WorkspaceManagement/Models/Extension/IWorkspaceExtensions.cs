@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Models
+namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;

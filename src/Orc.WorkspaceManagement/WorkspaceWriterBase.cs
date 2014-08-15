@@ -5,31 +5,30 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Services
+namespace Orc.WorkspaceManagement
 {
     using Catel;
     using Catel.Logging;
-    using Models;
 
-    public abstract class WorkspaceWriterServiceBase<TWorkspace> : IWorkspaceWriterService
+    public abstract class WorkspaceWriterBase<TWorkspace> : IWorkspaceWriter
         where TWorkspace : IWorkspace
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public void Write(IWorkspace workspace, string directory)
+        public void Write(IWorkspace workspace, string location)
         {
             Argument.IsNotNull(() => workspace);
-            Argument.IsNotNullOrWhitespace(() => directory);
+            Argument.IsNotNullOrWhitespace(() => location);
 
-            Log.Info("Writing all data to '{0}'", directory);
+            Log.Info("Writing all data to '{0}'", location);
 
-            WriteToDirectory((TWorkspace)workspace, directory);
+            WriteToLocation((TWorkspace)workspace, location);
 
             workspace.ClearIsDirty();
 
-            Log.Info("Wrote all data to '{0}'", directory);
+            Log.Info("Wrote all data to '{0}'", location);
         }
 
-        protected abstract void WriteToDirectory(TWorkspace workspace, string directory);
+        protected abstract void WriteToLocation(TWorkspace workspace, string location);
     }
 }

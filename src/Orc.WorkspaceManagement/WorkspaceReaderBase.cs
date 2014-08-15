@@ -5,31 +5,30 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Services
+namespace Orc.WorkspaceManagement
 {
     using Catel;
     using Catel.Logging;
-    using Models;
 
-    public abstract class WorkspaceReaderServiceBase : IWorkspaceReaderService
+    public abstract class WorkspaceReaderBase : IWorkspaceReader
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public IWorkspace Read(string directory)
+        public IWorkspace Read(string location)
         {
-            Argument.IsNotNullOrWhitespace(() => directory);
+            Argument.IsNotNullOrWhitespace(() => location);
 
-            Log.Info("Loading data from '{0}'", directory);
+            Log.Info("Reading data from '{0}'", location);
 
-            var workspace = ReadFromDirectory(directory);
+            var workspace = ReadFromLocation(location);
 
             workspace.ClearIsDirty();
 
-            Log.Info("Loaded data from '{0}'", directory);
+            Log.Info("Reading data from '{0}'", location);
 
             return workspace;
         }
 
-        protected abstract IWorkspace ReadFromDirectory(string directory);
+        protected abstract IWorkspace ReadFromLocation(string location);
     }
 }

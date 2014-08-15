@@ -5,10 +5,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Services
+namespace Orc.WorkspaceManagement
 {
     using Catel;
-    using Models;
 
     public static class IWorkspaceManagerExtensions
     {
