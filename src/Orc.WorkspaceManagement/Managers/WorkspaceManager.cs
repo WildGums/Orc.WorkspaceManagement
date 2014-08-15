@@ -122,6 +122,7 @@ namespace Orc.WorkspaceManagement
             Log.Debug("Saving workspace '{0}' to '{1}'", workspace, location);
 
             _workspaceWriter.Write(workspace, location);
+            Location = location;
 
             Log.Info("Saved workspace '{0}' to '{1}'", workspace, location);
         }

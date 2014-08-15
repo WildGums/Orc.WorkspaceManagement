@@ -7,18 +7,29 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using Catel;
     using Catel.Data;
 
     public abstract class WorkspaceBase : ModelBase, IWorkspace
     {
-        protected WorkspaceBase(string title)
+        public WorkspaceBase(string location)
+            : this(location, location) { }
+
+        protected WorkspaceBase(string location, string title)
         {
+            Location = location;
             Title = title;
+
+            Id = UniqueIdentifierHelper.GetUniqueIdentifier(GetType());
         }
 
-        public string Title { get; private set; }
+        public int Id { get; private set; }
 
-        public void ClearIsDirty()
+        public virtual string Location { get; set; }
+
+        public virtual string Title { get; private set; }
+
+        public virtual void ClearIsDirty()
         {
             IsDirty = false;
         }

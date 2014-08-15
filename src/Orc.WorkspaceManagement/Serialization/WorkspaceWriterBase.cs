@@ -24,6 +24,7 @@ namespace Orc.WorkspaceManagement
 
             WriteToLocation((TWorkspace)workspace, location);
 
+            workspace.Location = location;
             workspace.ClearIsDirty();
 
             Log.Info("Wrote all data to '{0}'", location);

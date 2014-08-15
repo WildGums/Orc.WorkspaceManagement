@@ -1,22 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspace.cs" company="Orchestra development team">
+// <copyright file="Workspace.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement
+namespace Orc.WorkspaceManagement.Test.Mocks
 {
-    using Catel.Data;
-
-    public interface IWorkspace : IModel
+    public class Workspace : WorkspaceBase
     {
-        int Id { get; }
-
-        string Location { get; set; }
-
-        string Title { get; }
-
-        void ClearIsDirty();
+        public Workspace(string location) 
+            : base(location)
+        {
+        }
     }
 }

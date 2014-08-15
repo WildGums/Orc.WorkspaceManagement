@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using Catel;
 
     public class WorkspaceUpdatedEventArgs : EventArgs
     {
@@ -20,5 +21,18 @@ namespace Orc.WorkspaceManagement
         public IWorkspace OldWorkspace { get; private set; }
 
         public IWorkspace NewWorkspace { get; private set; }
+
+        public bool IsRefresh
+        {
+            get
+            {
+                if (OldWorkspace == null || NewWorkspace == null)
+                {
+                    return false;
+                }
+
+                return ObjectHelper.AreEqual(OldWorkspace.Location, NewWorkspace.Location);
+            }
+        }
     }
 }

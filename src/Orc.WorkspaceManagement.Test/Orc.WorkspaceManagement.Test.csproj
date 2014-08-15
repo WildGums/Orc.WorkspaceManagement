@@ -66,6 +66,7 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\..\lib\Microsoft.Bcl.1.1.8\lib\net40\System.Threading.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -83,8 +84,12 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DummyFacts.cs" />
+    <Compile Include="EventArgs\WorkspaceUpdatedEventArgsFacts.cs" />
+    <Compile Include="Managers\WorkspaceManagerFacts.cs" />
+    <Compile Include="Mocks\Workspace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\WorkspaceWriterBaseFacts.cs" />
+    <Compile Include="Serialization\WorkspaceReaderBaseFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Orc.WorkspaceManagement\Orc.WorkspaceManagement.csproj">

@@ -1,22 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspace.cs" company="Orchestra development team">
+// <copyright file="WorkspaceReaderBaseFacts.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement
+namespace Orc.WorkspaceManagement.Test.Serialization
 {
-    using Catel.Data;
+    using NUnit.Framework;
 
-    public interface IWorkspace : IModel
+    public class WorkspaceReaderBaseFacts
     {
-        int Id { get; }
-
-        string Location { get; set; }
-
-        string Title { get; }
-
-        void ClearIsDirty();
+        [TestFixture]
+        public class TheReadMethod
+        {
+            // TODO: Write test to check if location is reset, etc
+        }
     }
 }

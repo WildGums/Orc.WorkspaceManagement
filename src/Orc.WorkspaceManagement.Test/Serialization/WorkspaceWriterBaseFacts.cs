@@ -1,22 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DummyFacts.cs" company="Orchestra development team">
+// <copyright file="WorkspaceReaderBaseFacts.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Test
+namespace Orc.WorkspaceManagement.Test.Serialization
 {
     using NUnit.Framework;
 
-    [TestFixture]
-    public class DummyFacts
+    public class WorkspaceWriterBaseFacts
     {
-        #region Methods
-        [TestCase]
-        public void DummyTest()
+        [TestFixture]
+        public class TheWriteMethod
         {
+            // TODO: Write test to check if location is reset, etc
         }
-        #endregion
     }
 }
