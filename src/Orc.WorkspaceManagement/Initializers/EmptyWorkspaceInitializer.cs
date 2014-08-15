@@ -9,7 +9,7 @@ namespace Orc.WorkspaceManagement
 {
     public class EmptyWorkspaceInitializer : IWorkspaceInitializer
     {
-        public string GetInitialLocation()
+        public virtual string GetInitialLocation()
         {
             return null;
         }

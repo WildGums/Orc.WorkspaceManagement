@@ -16,7 +16,7 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull("workspaceManager", workspaceManager);
 
-            return (TWorkspace)workspaceManager.CurrentWorkspace;
+            return (TWorkspace)workspaceManager.Workspace;
         }
     }
 }

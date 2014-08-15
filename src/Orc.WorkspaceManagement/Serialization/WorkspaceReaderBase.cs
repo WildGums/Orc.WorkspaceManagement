@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceWriterService.cs" company="Simulation Modelling Services">
+// <copyright file="WorkspaceReaderService.cs" company="Simulation Modelling Services">
 //   Copyright (c) 2008 - 2014 Simulation Modelling Services. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -10,25 +10,25 @@ namespace Orc.WorkspaceManagement
     using Catel;
     using Catel.Logging;
 
-    public abstract class WorkspaceWriterBase<TWorkspace> : IWorkspaceWriter
-        where TWorkspace : IWorkspace
+    public abstract class WorkspaceReaderBase : IWorkspaceReader
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public void Write(IWorkspace workspace, string location)
+        public IWorkspace Read(string location)
         {
-            Argument.IsNotNull(() => workspace);
             Argument.IsNotNullOrWhitespace(() => location);
 
-            Log.Info("Writing all data to '{0}'", location);
+            Log.Debug("Reading data from '{0}'", location);
 
-            WriteToLocation((TWorkspace)workspace, location);
+            var workspace = ReadFromLocation(location);
 
             workspace.ClearIsDirty();
 
-            Log.Info("Wrote all data to '{0}'", location);
+            Log.Info("Read data from '{0}'", location);
+
+            return workspace;
         }
 
-        protected abstract void WriteToLocation(TWorkspace workspace, string location);
+        protected abstract IWorkspace ReadFromLocation(string location);
     }
 }

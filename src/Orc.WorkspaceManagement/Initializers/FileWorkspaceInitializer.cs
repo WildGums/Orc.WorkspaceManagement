@@ -21,7 +21,7 @@ namespace Orc.WorkspaceManagement
             _commandLineService = commandLineService;
         }
 
-        public string GetInitialLocation()
+        public virtual string GetInitialLocation()
         {
             string filePath = null;
 

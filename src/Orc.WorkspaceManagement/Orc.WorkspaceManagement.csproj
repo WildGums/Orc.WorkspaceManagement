@@ -71,6 +71,9 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="EventArgs\WorkspaceUpdatedEventArgs.cs" />
+    <Compile Include="EventArgs\WorkspaceEventArgs.cs" />
+    <Compile Include="Exceptions\InvalidWorkspaceException.cs" />
     <Compile Include="Initializers\FileWorkspaceInitializer.cs" />
     <Compile Include="Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="Models\Extension\IWorkspaceExtensions.cs" />
@@ -81,14 +84,14 @@
     <Compile Include="Services\CommandLineService.cs" />
     <Compile Include="Extensions\IWorkspaceManagerExtensions.cs" />
     <Compile Include="Services\Interfaces\ICommandLineService.cs" />
-    <Compile Include="Interfaces\IWorkspaceManager.cs" />
-    <Compile Include="Interfaces\IWorkspaceReader.cs" />
-    <Compile Include="Interfaces\IWorkspaceWriter.cs" />
+    <Compile Include="Managers\Interfaces\IWorkspaceManager.cs" />
+    <Compile Include="Serialization\Interfaces\IWorkspaceReader.cs" />
+    <Compile Include="Serialization\Interfaces\IWorkspaceWriter.cs" />
     <Compile Include="Initializers\Interfaces\IWorkspaceInitializer.cs" />
     <Compile Include="Initializers\DirectoryWorkspaceInitializer.cs" />
-    <Compile Include="WorkspaceManager.cs" />
-    <Compile Include="WorkspaceReaderBase.cs" />
-    <Compile Include="WorkspaceWriterBase.cs" />
+    <Compile Include="Managers\WorkspaceManager.cs" />
+    <Compile Include="Serialization\WorkspaceReaderBase.cs" />
+    <Compile Include="Serialization\WorkspaceWriterBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -97,6 +100,7 @@
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\lib\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\lib\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

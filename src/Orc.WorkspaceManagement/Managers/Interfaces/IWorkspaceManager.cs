@@ -11,10 +11,22 @@ namespace Orc.WorkspaceManagement
 
     public interface IWorkspaceManager
     {
+        IWorkspace Workspace { get; }
+        string Location { get; }
+
+        event EventHandler<WorkspaceEventArgs> WorkspaceLoading;
+        event EventHandler<WorkspaceEventArgs> WorkspaceLoaded;
+
+        event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
+
+        event EventHandler<WorkspaceEventArgs> WorkspaceClosing;
+        event EventHandler<WorkspaceEventArgs> WorkspaceClosed;
+
+        //void Refresh();
+        //void Save();
         void Refresh();
-        string CurrentLocation { get; }
-        IWorkspace CurrentWorkspace { get; }
-        event EventHandler<EventArgs> WorkspaceUpdated;
-        void Save();
+        void Load(string location);
+        void Save(string location = null);
+        void Close();
     }
 }

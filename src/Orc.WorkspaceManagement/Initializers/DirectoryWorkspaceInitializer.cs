@@ -30,7 +30,7 @@ namespace Orc.WorkspaceManagement
             _commandLineService = commandLineService;
         }
 
-        public string GetInitialLocation()
+        public virtual string GetInitialLocation()
         {
             var dataDirectory = _configurationService.GetValue<string>("DataLocation");
             if (string.IsNullOrWhiteSpace(dataDirectory))
