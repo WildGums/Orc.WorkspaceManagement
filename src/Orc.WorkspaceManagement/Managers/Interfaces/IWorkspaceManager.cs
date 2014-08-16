@@ -17,6 +17,9 @@ namespace Orc.WorkspaceManagement
         event EventHandler<WorkspaceEventArgs> WorkspaceLoading;
         event EventHandler<WorkspaceEventArgs> WorkspaceLoaded;
 
+        event EventHandler<WorkspaceEventArgs> WorkspaceSaving;
+        event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+
         event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
         event EventHandler<WorkspaceEventArgs> WorkspaceClosing;

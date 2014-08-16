@@ -67,6 +67,9 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<WorkspaceEventArgs> WorkspaceLoading;
         public event EventHandler<WorkspaceEventArgs> WorkspaceLoaded;
 
+        public event EventHandler<WorkspaceEventArgs> WorkspaceSaving;
+        public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
         public event EventHandler<WorkspaceEventArgs> WorkspaceClosing;
@@ -96,8 +99,11 @@ namespace Orc.WorkspaceManagement
 
             Log.Debug("Loading workspace from '{0}'", location);
 
+            WorkspaceLoading.SafeInvoke(this, new WorkspaceEventArgs(location));
+
             var workspace = _workspaceReader.Read(location);
 
+            Location = location;
             Workspace = workspace;
 
             WorkspaceLoaded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
@@ -121,8 +127,13 @@ namespace Orc.WorkspaceManagement
 
             Log.Debug("Saving workspace '{0}' to '{1}'", workspace, location);
 
+            var eventArgs = new WorkspaceEventArgs(workspace);
+            WorkspaceSaving.SafeInvoke(this, eventArgs);
+
             _workspaceWriter.Write(workspace, location);
             Location = location;
+
+            WorkspaceSaved.SafeInvoke(this, eventArgs);
 
             Log.Info("Saved workspace '{0}' to '{1}'", workspace, location);
         }
@@ -135,10 +146,17 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
-            Log.Info("Closing workspace '{0}'", workspace);
+            Log.Debug("Closing workspace '{0}'", workspace);
+
+            var eventArgs = new WorkspaceEventArgs(workspace);
+            WorkspaceClosing.SafeInvoke(this, eventArgs);
 
             Workspace = null;
             Location = null;
+
+            WorkspaceClosed.SafeInvoke(this, eventArgs);
+
+            Log.Info("Closed workspace '{0}'", workspace);
         }
         #endregion
     }
