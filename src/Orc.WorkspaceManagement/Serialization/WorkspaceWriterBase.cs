@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
 
@@ -15,14 +16,14 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public void Write(IWorkspace workspace, string location)
+        public async Task Write(IWorkspace workspace, string location)
         {
             Argument.IsNotNull(() => workspace);
             Argument.IsNotNullOrWhitespace(() => location);
 
             Log.Debug("Writing all data to '{0}'", location);
 
-            WriteToLocation((TWorkspace)workspace, location);
+            await WriteToLocation((TWorkspace)workspace, location);
 
             workspace.Location = location;
             workspace.ClearIsDirty();
@@ -30,6 +31,6 @@ namespace Orc.WorkspaceManagement
             Log.Info("Wrote all data to '{0}'", location);
         }
 
-        protected abstract void WriteToLocation(TWorkspace workspace, string location);
+        protected abstract Task WriteToLocation(TWorkspace workspace, string location);
     }
 }

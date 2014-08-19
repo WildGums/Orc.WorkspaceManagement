@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Threading.Tasks;
 
     public interface IWorkspaceManager
     {
@@ -25,11 +26,10 @@ namespace Orc.WorkspaceManagement
         event EventHandler<WorkspaceEventArgs> WorkspaceClosing;
         event EventHandler<WorkspaceEventArgs> WorkspaceClosed;
 
-        //void Refresh();
-        //void Save();
-        void Refresh();
-        void Load(string location);
-        void Save(string location = null);
+        Task Initialize();
+        Task Refresh();
+        Task Load(string location);
+        Task Save(string location = null);
         void Close();
     }
 }

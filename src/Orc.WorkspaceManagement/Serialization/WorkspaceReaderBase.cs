@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
 
@@ -14,13 +15,13 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public IWorkspace Read(string location)
+        public async Task<IWorkspace> Read(string location)
         {
             Argument.IsNotNullOrWhitespace(() => location);
 
             Log.Debug("Reading data from '{0}'", location);
 
-            var workspace = ReadFromLocation(location);
+            var workspace = await ReadFromLocation(location);
 
             workspace.ClearIsDirty();
 
@@ -29,6 +30,6 @@ namespace Orc.WorkspaceManagement
             return workspace;
         }
 
-        protected abstract IWorkspace ReadFromLocation(string location);
+        protected abstract Task<IWorkspace> ReadFromLocation(string location);
     }
 }

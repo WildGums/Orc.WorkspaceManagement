@@ -7,7 +7,9 @@
 
 namespace Orc.WorkspaceManagement.Example.ViewModels
 {
+    using System;
     using System.ComponentModel;
+    using System.IO;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Data;
@@ -23,6 +25,8 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private const string TextFilter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
 
         private readonly IWorkspaceManager _workspaceManager;
         private readonly IOpenFileService _openFileService;
@@ -77,7 +81,8 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         private void OnLoadWorkspaceExecute()
         {
-            _openFileService.Filter = "*.txt|Text files (*.txt)|*.*|All files (*.*)";
+            _openFileService.InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Data");
+            _openFileService.Filter = TextFilter;
             if (_openFileService.DetermineFile())
             {
                 _workspaceManager.Load(_openFileService.FileName);
@@ -117,7 +122,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         private void OnSaveWorkspaceAsExecute()
         {
-            _saveFileService.Filter = "*.txt|Text files (*.txt)|*.*|All files (*.*)";
+            _saveFileService.Filter = TextFilter;
             if (_saveFileService.DetermineFile())
             {
                 _workspaceManager.Save(_openFileService.FileName);

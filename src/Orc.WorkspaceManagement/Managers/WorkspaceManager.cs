@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
 
@@ -35,13 +36,6 @@ namespace Orc.WorkspaceManagement
             var location = workspaceInitializer.GetInitialLocation();
 
             Location = location;
-
-            if (!string.IsNullOrEmpty(location))
-            {
-                Log.Debug("Initial location is '{0}', loading initial workspace", location);
-
-                Load(location);
-            }
         }
         #endregion
 
@@ -77,7 +71,19 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspaceManager Members
-        public void Refresh()
+        public async Task Initialize()
+        {
+            var location = Location;
+            if (!string.IsNullOrEmpty(location))
+            {
+                Log.Debug("Initial location is '{0}', loading initial workspace", location);
+
+                // TODO: Determine if this should be moved to a separate method
+                await Load(location);
+            }
+        }
+
+        public async Task Refresh()
         {
             if (Workspace == null)
             {
@@ -88,12 +94,12 @@ namespace Orc.WorkspaceManagement
 
             Log.Debug("Refreshing workspace from '{0}'", location);
 
-            Load(location);
+            await Load(location);
 
             Log.Info("Refreshed workspace from '{0}'", location);
         }
 
-        public void Load(string location)
+        public async Task Load(string location)
         {
             Argument.IsNotNullOrWhitespace("location", location);
 
@@ -101,7 +107,7 @@ namespace Orc.WorkspaceManagement
 
             WorkspaceLoading.SafeInvoke(this, new WorkspaceEventArgs(location));
 
-            var workspace = _workspaceReader.Read(location);
+            var workspace = await _workspaceReader.Read(location);
 
             Location = location;
             Workspace = workspace;
@@ -111,7 +117,7 @@ namespace Orc.WorkspaceManagement
             Log.Info("Loaded workspace from '{0}'", location);
         }
 
-        public void Save(string location = null)
+        public async Task Save(string location = null)
         {
             var workspace = Workspace;
             if (workspace == null)
@@ -130,7 +136,7 @@ namespace Orc.WorkspaceManagement
             var eventArgs = new WorkspaceEventArgs(workspace);
             WorkspaceSaving.SafeInvoke(this, eventArgs);
 
-            _workspaceWriter.Write(workspace, location);
+            await _workspaceWriter.Write(workspace, location);
             Location = location;
 
             WorkspaceSaved.SafeInvoke(this, eventArgs);

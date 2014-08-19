@@ -55,7 +55,7 @@ Workspaces must be read via the *IWorkspaceReaderService*. The workspace manager
 
 	public class WorkspaceWriter : WorkspaceWriterBase<MyWorkspace>
 	{
-	    protected override void WriteToLocation(MyWorkspace workspace, string location)
+	    protected override async Task WriteToLocation(MyWorkspace workspace, string location)
 	    {
 	        // TODO: Write to a file / directory / database / anything
 	    }
@@ -69,11 +69,13 @@ Next it can be registered in the ServiceLocator (so it will automatically be inj
 
 	public class WorkspaceReader : WorkspaceReaderBase
 	{
-	    protected override IWorkspace ReadFromLocation(string location)
+	    protected override async Task<IWorkspace> ReadFromLocation(string location)
 	    {
 	        var workspace = new MyWorkspace(location);
 	
 	        // TODO: Read from a file / directory / database / anything
+
+			return workspace;
 	    }
 	}
 
@@ -81,8 +83,13 @@ Next it can be registered in the ServiceLocator (so it will automatically be inj
 
 	ServiceLocator.Default.RegisterType<IWorkspaceWriterService, MyWorkspaceWriterService>();
 
+# Initializing the workspace manager
 
-# Retrieving a type instance of the workspace
+Because the workspace manager is using async, the initialization is a separate method. This gives the developer the option to load the workspace whenever it is required. To (optionally) initialize the workspace manager, use the code below:
+
+	await workspaceManager.Initialize(); 
+
+# Retrieving a typed instance of the workspace
 
 The library contains extension methods for the *IWorkspaceManager* to retrieve a typed instance:
 

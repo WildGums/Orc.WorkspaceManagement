@@ -7,8 +7,10 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
+
     public interface IWorkspaceWriter
     {
-        void Write(IWorkspace workspace, string location);
+        Task Write(IWorkspace workspace, string location);
     }
 }

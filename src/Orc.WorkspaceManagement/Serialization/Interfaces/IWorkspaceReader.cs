@@ -7,8 +7,10 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
+
     public interface IWorkspaceReader
     {
-        IWorkspace Read(string location);
+        Task<IWorkspace> Read(string location);
     }
 }

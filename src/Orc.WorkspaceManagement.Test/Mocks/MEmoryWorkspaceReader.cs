@@ -7,9 +7,11 @@
 
 namespace Orc.WorkspaceManagement.Test.Mocks
 {
+    using System.Threading.Tasks;
+
     public class MemoryWorkspaceReader : WorkspaceReaderBase
     {
-        protected override IWorkspace ReadFromLocation(string location)
+        protected override async Task<IWorkspace> ReadFromLocation(string location)
         {
             return new Workspace(location);
         }

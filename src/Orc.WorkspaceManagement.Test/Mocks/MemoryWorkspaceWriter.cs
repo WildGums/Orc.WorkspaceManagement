@@ -7,9 +7,11 @@
 
 namespace Orc.WorkspaceManagement.Test.Mocks
 {
+    using System.Threading.Tasks;
+
     public class MemoryWorkspaceWriter : WorkspaceWriterBase<Workspace>
     {
-        protected override void WriteToLocation(Workspace workspace, string location)
+        protected override async Task WriteToLocation(Workspace workspace, string location)
         {
             // no implementation required
         }

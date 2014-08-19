@@ -8,11 +8,12 @@
 namespace Orc.WorkspaceManagement.Example.Services
 {
     using System.IO;
+    using System.Threading.Tasks;
     using Models;
 
     public class PersonWorkspaceReader : WorkspaceReaderBase
     {
-        protected override IWorkspace ReadFromLocation(string location)
+        protected override async Task<IWorkspace> ReadFromLocation(string location)
         {
             var workspace = new PersonWorkspace(location);
 

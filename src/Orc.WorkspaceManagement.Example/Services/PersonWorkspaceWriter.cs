@@ -8,11 +8,12 @@
 namespace Orc.WorkspaceManagement.Example.Services
 {
     using System.IO;
+    using System.Threading.Tasks;
     using Models;
 
     public class PersonWorkspaceWriter : WorkspaceWriterBase<PersonWorkspace>
     {
-        protected override void WriteToLocation(PersonWorkspace workspace, string location)
+        protected override async Task WriteToLocation(PersonWorkspace workspace, string location)
         {
             using (var fileStream = new FileStream(location, FileMode.Create, FileAccess.Write))
             {
