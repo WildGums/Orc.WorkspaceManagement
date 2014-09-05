@@ -24,22 +24,6 @@ The base directory will be used as repository. This means that it cannot contain
 
 -- 
 
-# Creating a workspace
-
-A workspace is a model that can be implemented by the developer and must implement the *IWorkspace* interface. The most convenient way to implement a workspace is by deriving from the *WorkspaceBase* class:
-
-    public class MyWorkspace : WorkspaceBase
-    {
-    	public Workspace(string title)
-    		: base(title)
-	    {
-	    }
-	    
-	    public string FirstName { get; private set; }
-	    
-	    public string LastName { get; private set; }
-    }
-
 # Creating a workspace initializer
 
 When a workspace manager is created, it doesn't contain anything. The *IWorkspaceInitializer* interface allows the customization of that state. 
@@ -68,7 +52,7 @@ Next it can be registered in the ServiceLocator (so it will automatically be inj
 
 # Initializing the workspace manager
 
-Because the workspace manager is using async, the initialization is a separate method. This gives the developer the option to load the workspace whenever it is required. To (optionally) initialize the workspace manager, use the code below:
+Because the workspace manager is using async, the initialization is a separate method. This gives the developer the option to load the workspaces whenever it is required. To read the stored workspaces from disk, use the code below:
 
 	await workspaceManager.Initialize(); 
 
