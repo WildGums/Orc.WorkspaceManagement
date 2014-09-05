@@ -3,10 +3,16 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://catel.codeplex.com"
                   xmlns:views="clr-namespace:Orc.WorkspaceManagement.Example.Views"
+                  xmlns:behaviors="clr-namespace:Orc.WorkspaceManagement.Behaviors;assembly=Orc.WorkspaceManagement.Xaml"
+                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                   ShowInTaskbar="True" ResizeMode="CanResize" SizeToContent="Manual" WindowStartupLocation="Manual" WindowState="Normal"
                   MinWidth="600" MinHeight="400">
 
     <Grid x:Name="LayoutRoot">
+        <i:Interaction.Behaviors>
+            <behaviors:AutoWorkspaceGrid KeyPrefix="mainWindowGrid" RowsToPersist="none" ColumnsToPersist="0,4" />
+        </i:Interaction.Behaviors>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -15,17 +21,18 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         
         <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
             <ComboBox ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" />
-            <Button Command="{Binding SaveWorkspace}" Content="Save" />
+            <Button Command="{Binding UpdateWorkspace}" Content="Update" />
             <Button Command="{Binding AddWorkspace}" Content="Add..." />
+            <Button Command="{Binding EditWorkspace}" Content="Edit..." />
             <Button Command="{Binding RemoveWorkspace}" Content="Remove" />
         </StackPanel>
 
@@ -33,10 +40,20 @@
             <TextBlock TextWrapping="Wrap">
                 Use any of the buttons above to manage the workspace. It shows how to use the workspace manager and how
                 to interact with it.
+                <LineBreak /><LineBreak />
+                This example will automatically persist all settings when the application is closed. When the 'Update' button
+                is used, the current workspace is stored into the selected workspace.
+                <LineBreak /><LineBreak />
+                Note that managing a workspace isn't a view model specific thing, so writing / reading a workspace can happen in 
+                both the views and view models.
             </TextBlock>
         </Label>
 
-        <views:AView Grid.Row="2" Grid.Column="0" />
+        <views:AView Grid.Row="2" Grid.Column="0">
+            <i:Interaction.Behaviors>
+                <behaviors:AutoWorkspace PersistSize="False" />
+            </i:Interaction.Behaviors>
+        </views:AView>
 
         <GridSplitter Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
         
@@ -46,7 +63,11 @@
 
         <GridSplitter Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
         
-        <views:BView Grid.Row="2" Grid.Column="4" />
+        <views:BView Grid.Row="2" Grid.Column="4">
+            <i:Interaction.Behaviors>
+                <behaviors:AutoWorkspace PersistSize="False" />
+            </i:Interaction.Behaviors>
+        </views:BView>
 
         <TextBox Grid.Row="3" Grid.ColumnSpan="5" x:Name="outputTextBox" IsReadOnly="True" Height="200" />
     </Grid>

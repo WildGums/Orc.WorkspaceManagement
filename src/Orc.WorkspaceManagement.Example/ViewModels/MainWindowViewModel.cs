@@ -48,7 +48,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
             AvailableWorkspaces = new ObservableCollection<IWorkspace>();
 
-            SaveWorkspace = new Command(OnSaveWorkspaceExecute, OnSaveWorkspaceCanExecute);
+            UpdateWorkspace = new Command(OnUpdateWorkspaceExecute, OnUpdateWorkspaceCanExecute);
             AddWorkspace = new Command(OnAddWorkspaceExecute);
             EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new Command(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
@@ -71,16 +71,16 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         #endregion
 
         #region Commands
-        public Command SaveWorkspace { get; private set; }
+        public Command UpdateWorkspace { get; private set; }
 
-        private bool OnSaveWorkspaceCanExecute()
+        private bool OnUpdateWorkspaceCanExecute()
         {
             return (SelectedWorkspace != null);
         }
 
-        private void OnSaveWorkspaceExecute()
+        private void OnUpdateWorkspaceExecute()
         {
-            // TODO: Handle command logic here
+            _workspaceManager.StoreWorkspace();
         }
 
         public Command AddWorkspace { get; private set; }
@@ -155,6 +155,8 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             _workspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
             _workspaceManager.WorkspacesChanged -= OnWorkspacesChanged;
+
+            await _workspaceManager.Save();
 
             await base.Close();
         }

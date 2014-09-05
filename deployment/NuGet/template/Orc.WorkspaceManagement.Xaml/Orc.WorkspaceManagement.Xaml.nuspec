@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Orc.WorkspaceManagement</id>
+    <id>Orc.WorkspaceManagement.Xaml</id>
     <version>[VERSION]</version>
-    <title>Orc.WorkspaceManagement</title>
+    <title>Orc.WorkspaceManagement.Xaml</title>
     <authors>OrchestraDevs</authors>
     <owners>OrchestraDevs</owners>
 
@@ -13,7 +13,7 @@
 	<summary>
 	</summary>
 
-	<tags>orc workspace management</tags>
+	<tags>orc workspace management xaml wpf</tags>
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright Orchestra team 2010 - 2014</copyright>
@@ -24,7 +24,8 @@
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
     <dependencies>
-      <dependency id="Catel.Core" version="[replaced]" />
+      <dependency id="Orc.WorkspaceManagement" version="[VERSION]" />
+      <dependency id="Catel.MVVM" version="[replaced]" />
     </dependencies>
   </metadata>
 </package>

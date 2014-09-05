@@ -175,6 +175,22 @@ namespace Orc.WorkspaceManagement
             WorkspacesChanged.SafeInvoke(this);
         }
 
+        public void StoreWorkspace()
+        {
+            Log.Debug("Storing workspace");
+
+            var workspace = Workspace;
+            if (workspace == null)
+            {
+                Log.Error("Workspace is empty, cannot store workspace");
+                return;
+            }
+
+            WorkspaceInfoRequested.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+
+            Log.Info("Stored workspace");
+        }
+
         public async Task Save()
         {
             var baseDirectory = BaseDirectory;

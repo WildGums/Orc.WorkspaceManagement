@@ -7,7 +7,9 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System;
     using System.Collections.Generic;
+    using Catel;
     using Catel.Configuration;
     using Catel.Data;
 
@@ -21,6 +23,30 @@ namespace Orc.WorkspaceManagement
 
         #region IWorkspace Members
         public string Title { get; set; }
+
+        public void SetWorkspaceValue(string name, object value)
+        {
+            var stringValue = ObjectToStringHelper.ToString(value);
+            SetConfigurationValue(name, stringValue);
+        }
+
+        public T GetWorkspaceValue<T>(string name, T defaultValue)
+        {
+            if (!IsConfigurationKeyAvailable(name))
+            {
+                return defaultValue;
+            }
+
+            try
+            {
+                var value = GetConfigurationValue(name);
+                return (T)StringToObjectHelper.ToRightType(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
+        }
         #endregion
 
         #region Methods

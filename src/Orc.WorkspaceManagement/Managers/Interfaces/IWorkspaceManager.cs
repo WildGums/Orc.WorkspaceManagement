@@ -35,6 +35,7 @@ namespace Orc.WorkspaceManagement
         void Add(IWorkspace workspace);
         void Remove(IWorkspace workspace);
 
+        void StoreWorkspace();
         Task Save();
     }
 }
