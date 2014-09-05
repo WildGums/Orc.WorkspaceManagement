@@ -14,6 +14,8 @@ Below is an overview of the most important components:
 - **IWorkspaceManager** => the workspace manager with events and management methods
 - **IWorkspaceInitializer** => allows customization of initial settings of a workspace
 
+![Managing workspaces the easy way](doc/images/workspace_handling.gif)  
+
 -- 
 
 **Important note** 
@@ -21,9 +23,6 @@ Below is an overview of the most important components:
 The base directory will be used as repository. This means that it cannot contain other files and all other files will be deleted from the directory
 
 -- 
-
-// TODO: Consider changing documentation below this point
-
 
 # Creating a workspace
 
@@ -48,51 +47,24 @@ When a workspace manager is created, it doesn't contain anything. The *IWorkspac
 By default the following initializers are available:
 
 * **EmptyWorkspaceInitializer** => initializes nothing, this is the default
-* **DirectoryWorkspaceInitializer** => First checks if there is an app config setting called *DataLocation*. If so, it will use that. If not, it will fall back to *%AppData%\\[assembly company]\\[assembly product]\\data*. Then it will also check if a command line directory is passed (first argument). If so, all previous will be overriden by the command line directory.
-* **FileWorkspaceInitializer** => This will check if a command line file is passed (first argument). If so, it will be used as initial workspace. Otherwise no workspace will be loaded.
 
 To create a custom workspace initializer, see the example below:
 
+    public class WorkspaceInitializer : IWorkspaceInitializer
+    {
+        public void Initialize(IWorkspace workspace)
+        {
+            workspace.SetValue("AView.Width", 200d);
+            workspace.SetValue("BView.Width", 200d);
+        }
+    }
+
 Next it can be registered in the ServiceLocator (so it will automatically be injected into the *WorkspaceManager*):
 
-	ServiceLocator.Default.RegisterType<IWorkspaceReaderService, MyWorkspaceReaderService>();
+	ServiceLocator.Default.RegisterType<IWorkspaceInitializer, MyWorkspaceInitializer>();
 
 
 **Make sure to register the service before instantiating the *IWorkspaceManager* because it will be injected**
-
-# Creating a workspace reader service
-
-Workspaces must be read via the *IWorkspaceReaderService*. The workspace manager automatically knows when to read a workspace. First, one must create a workspace reader as shown in the example below:
-
-	public class WorkspaceWriter : WorkspaceWriterBase<MyWorkspace>
-	{
-	    protected override async Task WriteToLocation(MyWorkspace workspace, string location)
-	    {
-	        // TODO: Write to a file / directory / database / anything
-	    }
-	}
-
-Next it can be registered in the ServiceLocator (so it will automatically be injected into the *WorkspaceManager*):
-
-	ServiceLocator.Default.RegisterType<IWorkspaceReaderService, MyWorkspaceReaderService>();
-
-# Creating a workspace writer service
-
-	public class WorkspaceReader : WorkspaceReaderBase
-	{
-	    protected override async Task<IWorkspace> ReadFromLocation(string location)
-	    {
-	        var workspace = new MyWorkspace(location);
-	
-	        // TODO: Read from a file / directory / database / anything
-
-			return workspace;
-	    }
-	}
-
-Next it can be registered in the ServiceLocator (so it will automatically be injected into the *WorkspaceManager*):
-
-	ServiceLocator.Default.RegisterType<IWorkspaceWriterService, MyWorkspaceWriterService>();
 
 # Initializing the workspace manager
 
@@ -100,8 +72,50 @@ Because the workspace manager is using async, the initialization is a separate m
 
 	await workspaceManager.Initialize(); 
 
-# Retrieving a typed instance of the workspace
+# Retrieving a list of all workspaces
+
+    var workspaces = workspaceManager.Workspaces;
+
+# Retrieving the current workspace
 
 The library contains extension methods for the *IWorkspaceManager* to retrieve a typed instance:
 
-	var myWorkspace = workspaceManager.GetWorkspace<MyWorkspace>();
+	var myWorkspace = workspaceManager.Workspace;
+
+To customize the location where the workspaces are stored, use the *BaseDirectory* property.
+
+# Storing information in a workspace
+
+Storing information in a workspace is the responsibility of every single component in the application. The *IWorkspaceManager* will raise the *WorkspaceInfoRequested* event so every component can put in the required information into the workspace.
+
+To store information in a workspace, set the workspace to be updated as current workspace. Then let the user (or software) customize all components. Call the following method to raise the *WorkspaceInfoRequested* event to update the workspace:
+
+    workspaceManager.StoreWorkspace();
+
+**Note that a workspace is only updated, not saved to disk by this method**.
+
+# Saving all workspaces to disk
+
+To save all workspaces to disk, use the code below:
+
+    await workspaceManager.Save();
+
+-- 
+
+# Using the XAML behaviors
+
+For the developers using XAML (WPF), behaviors and extension methods are available in the *Orc.WorkspaceManagement.Xaml* library.
+
+## Using the extension methods
+
+Using the extension methods still requires manual work by subscribing to events of both the view and workspace manager, but allow more control.
+
+## Using the behaviors
+
+The behavior is a wrapper around the extension methods and take away to need to manage anything. The behavior is aware of all the events and will handle everything accordingly. To use the behavior, use the code below:
+
+    <views:BView Grid.Row="2" Grid.Column="4">
+        <i:Interaction.Behaviors>
+            <behaviors:AutoWorkspace />
+        </i:Interaction.Behaviors>
+    </views:BView>
