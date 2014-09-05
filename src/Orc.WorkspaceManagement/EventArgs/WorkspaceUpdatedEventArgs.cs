@@ -31,7 +31,7 @@ namespace Orc.WorkspaceManagement
                     return false;
                 }
 
-                return ObjectHelper.AreEqual(OldWorkspace.Location, NewWorkspace.Location);
+                return ObjectHelper.AreEqual(OldWorkspace, NewWorkspace);
             }
         }
     }

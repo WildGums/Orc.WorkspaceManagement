@@ -1,21 +1,27 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceEventArgs.cs" company="Orchestra development team">
+// <copyright file="WorkspaceViewModel.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement
+namespace Orc.WorkspaceManagement.Example.ViewModels
 {
-    using System;
+    using Catel;
+    using Catel.Fody;
+    using Catel.MVVM;
 
-    public class WorkspaceEventArgs : EventArgs
+    public class WorkspaceViewModel : ViewModelBase
     {
-        public WorkspaceEventArgs(IWorkspace workspace)
+        public WorkspaceViewModel(IWorkspace workspace)
         {
+            Argument.IsNotNull(() => workspace);
+
             Workspace = workspace;
         }
 
+        [Model]
+        [Expose("WorkspaceTitle", "Title")]
         public IWorkspace Workspace { get; private set; }
     }
 }

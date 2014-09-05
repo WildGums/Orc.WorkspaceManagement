@@ -9,6 +9,6 @@ namespace Orc.WorkspaceManagement
 {
     public interface IWorkspaceInitializer
     {
-        string GetInitialLocation();
+        void Initialize(IWorkspace workspace);
     }
 }

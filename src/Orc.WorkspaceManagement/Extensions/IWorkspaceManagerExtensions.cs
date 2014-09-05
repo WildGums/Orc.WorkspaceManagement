@@ -18,5 +18,18 @@ namespace Orc.WorkspaceManagement
 
             return (TWorkspace)workspaceManager.Workspace;
         }
+
+        public static void Add(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
+        {
+            Argument.IsNotNull("workspaceManager", workspaceManager);
+            Argument.IsNotNull("workspace", workspace);
+
+            workspaceManager.Add(workspace);
+
+            if (autoSelect)
+            {
+                workspaceManager.Workspace = workspace;
+            }
+        }
     }
 }

@@ -7,79 +7,144 @@
 
 namespace Orc.WorkspaceManagement.Test.Managers
 {
-    using Mocks;
+    using System.Linq;
     using NUnit.Framework;
 
     public class WorkspaceManagerFacts
     {
         [TestFixture]
-        public class TheLoadMethod
+        public class TheAddMethod
         {
-            [TestCase("myLocation")]
-            public void UpdatesLocationAfterLoadingWorkspace(string newLocation)
+            [TestCase]
+            public void AddsTheWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                Assert.AreEqual(null, workspaceManager.Location);
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace"
+                };
 
-                workspaceManager.Load(newLocation);
+                workspaceManager.Add(workspace);
 
-                Assert.AreEqual(newLocation, workspaceManager.Location);
+                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
             }
 
             [TestCase]
-            public void RaisesWorkspaceLoadingEvent()
+            public void RaisesWorkspaceAddedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceLoading += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
 
-                workspaceManager.Load("dummyLocation");
+                workspaceManager.Add(new Workspace());
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public void RaisesWorkspaceLoadedEvent()
+            public void RaisesWorkspacesChangedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceLoaded += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
-                workspaceManager.Load("dummyLocation");
+                workspaceManager.Add(new Workspace());
 
                 Assert.IsTrue(eventRaised);
             }
         }
 
         [TestFixture]
-        public class TheRefreshMethod
+        public class TheRemoveMethod
         {
             [TestCase]
-            public void DoesNothingWithoutWorkspace()
+            public void RemovesTheWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                Assert.IsNull(workspaceManager.Workspace);
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace"
+                };
 
-                workspaceManager.Refresh();
+                workspaceManager.Add(workspace);
 
-                Assert.IsNull(workspaceManager.Workspace);
+                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+
+                workspaceManager.Remove(workspace);
+
+                Assert.IsFalse(workspaceManager.Workspaces.Contains(workspace));
             }
 
             [TestCase]
-            public void RaisesWorkspaceUpdatedEvent()
+            public void RaisesWorkspaceRemovedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                workspaceManager.Load("dummyLocation");
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace"
+                };
+
+                workspaceManager.Add(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceUpdated += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
-                workspaceManager.Refresh(); 
+                workspaceManager.Remove(workspace);
+
+                Assert.IsTrue(eventRaised);
+            }
+
+            [TestCase]
+            public void RaisesWorkspacesChangedEvent()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace"
+                };
+
+                workspaceManager.Add(workspace);
+
+                var eventRaised = false;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
+
+                workspaceManager.Remove(workspace);
+
+                Assert.IsTrue(eventRaised);
+            }
+        }
+
+        [TestFixture]
+        public class TheInitializeMethod
+        {
+            [TestCase]
+            public async void RaisesInitializingEvent()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+
+                var eventRaised = false;
+                workspaceManager.Initializing += (sender, e) => eventRaised = true;
+
+                await workspaceManager.Initialize();
+
+                Assert.IsTrue(eventRaised);
+            }
+
+            [TestCase]
+            public async void RaisesInitializedEvent()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+
+                var eventRaised = false;
+                workspaceManager.Initialized += (sender, e) => eventRaised = true;
+
+                await workspaceManager.Initialize();
 
                 Assert.IsTrue(eventRaised);
             }
@@ -88,111 +153,37 @@ namespace Orc.WorkspaceManagement.Test.Managers
         [TestFixture]
         public class TheSaveMethod
         {
-            [TestCase("myLocation")]
-            public void UpdatesLocationAfterSavingWorkspace(string newLocation)
-            {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
-
-                Assert.AreEqual("dummyLocation", workspaceManager.Location);
-
-                workspaceManager.Save(newLocation);
-
-                Assert.AreEqual(newLocation, workspaceManager.Location);
-            }
-
             [TestCase]
-            public void RaisesWorkspaceSavingEvent()
+            public async void RaisesSavingEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceSaving += (sender, e) => eventRaised = true;
+                workspaceManager.Saving += (sender, e) => eventRaised = true;
 
-                workspaceManager.Save();
+                await workspaceManager.Save();
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public void RaisesWorkspaceLoadedEvent()
+            public async void RaisesSavedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceSaved += (sender, e) => eventRaised = true;
+                workspaceManager.Saved += (sender, e) => eventRaised = true;
 
-                workspaceManager.Save();
+                await workspaceManager.Save();
 
                 Assert.IsTrue(eventRaised);
             }
         }
 
         [TestFixture]
-        public class TheCloseMethod
+        public class ThePersistenceLogic
         {
-            [TestCase]
-            public void UpdatesWorkspaceAfterClosingWorkspace()
-            {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
-
-                Assert.IsNotNull(workspaceManager.Workspace);
-
-                workspaceManager.Close();
-
-                Assert.IsNull(workspaceManager.Workspace);
-            }
-
-            [TestCase]
-            public void UpdatesLocationAfterClosingWorkspace()
-            {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
-
-                Assert.AreEqual("dummyLocation", workspaceManager.Location);
-
-                workspaceManager.Close();
-
-                Assert.AreEqual(null, workspaceManager.Location);
-            }
-
-            [TestCase]
-            public void RaisesWorkspaceClosingEvent()
-            {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
-
-                var eventRaised = false;
-                workspaceManager.WorkspaceClosing += (sender, e) => eventRaised = true;
-
-                workspaceManager.Close();
-
-                Assert.IsTrue(eventRaised);
-            }
-
-            [TestCase]
-            public void RaisesWorkspaceClosedEvent()
-            {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer(), new MemoryWorkspaceReader(), new MemoryWorkspaceWriter());
-
-                workspaceManager.Load("dummyLocation");
-
-                var eventRaised = false;
-                workspaceManager.WorkspaceClosed += (sender, e) => eventRaised = true;
-
-                workspaceManager.Close();
-
-                Assert.IsTrue(eventRaised);
-            }
+            // TODO : WRite unit tests
         }
     }
 }

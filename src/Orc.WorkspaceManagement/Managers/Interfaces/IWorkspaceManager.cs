@@ -8,28 +8,33 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IWorkspaceManager
     {
-        IWorkspace Workspace { get; }
-        string Location { get; }
+        string BaseDirectory { get; set; }
+        IEnumerable<IWorkspace> Workspaces { get; }
+        IWorkspace Workspace { get; set; }
 
-        event EventHandler<WorkspaceEventArgs> WorkspaceLoading;
-        event EventHandler<WorkspaceEventArgs> WorkspaceLoaded;
+        event EventHandler<EventArgs> Initializing;
+        event EventHandler<EventArgs> Initialized;
 
-        event EventHandler<WorkspaceEventArgs> WorkspaceSaving;
-        event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+        event EventHandler<EventArgs> Saving;
+        event EventHandler<EventArgs> Saved;
 
+        event EventHandler<EventArgs> WorkspacesChanged;
+        event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
+        event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+
+        event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
         event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
-        event EventHandler<WorkspaceEventArgs> WorkspaceClosing;
-        event EventHandler<WorkspaceEventArgs> WorkspaceClosed;
-
         Task Initialize();
-        Task Refresh();
-        Task Load(string location);
-        Task Save(string location = null);
-        void Close();
+
+        void Add(IWorkspace workspace);
+        void Remove(IWorkspace workspace);
+
+        Task Save();
     }
 }

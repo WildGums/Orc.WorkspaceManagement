@@ -1,20 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceReaderBaseFacts.cs" company="Orchestra development team">
+// <copyright file="BViewModel.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Test.Serialization
+namespace Orc.WorkspaceManagement.Example.ViewModels
 {
-    using NUnit.Framework;
+    using Catel.MVVM;
 
-    public class WorkspaceWriterBaseFacts
+    public class BViewModel : ViewModelBase
     {
-        [TestFixture]
-        public class TheWriteMethod
-        {
-            // TODO: Write test to check if location is reset, etc
-        }
     }
 }

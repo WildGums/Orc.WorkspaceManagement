@@ -8,16 +8,18 @@
 namespace Orc.WorkspaceManagement.Example.ViewModels
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Collections;
     using Catel.Data;
     using Catel.Fody;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using Models;
 
     /// <summary>
     /// MainWindow view model.
@@ -26,36 +28,30 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private const string TextFilter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-
         private readonly IWorkspaceManager _workspaceManager;
-        private readonly IOpenFileService _openFileService;
-        private readonly ISaveFileService _saveFileService;
-        private readonly IProcessService _processService;
+        private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IViewModelFactory _viewModelFactory;
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
-        public MainWindowViewModel(IWorkspaceManager workspaceManager, IOpenFileService openFileService,
-            ISaveFileService saveFileService, IProcessService processService)
+        public MainWindowViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
         {
             Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => openFileService);
-            Argument.IsNotNull(() => saveFileService);
-            Argument.IsNotNull(() => processService);
+            Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => viewModelFactory);
 
             _workspaceManager = workspaceManager;
-            _openFileService = openFileService;
-            _saveFileService = saveFileService;
-            _processService = processService;
+            _uiVisualizerService = uiVisualizerService;
+            _viewModelFactory = viewModelFactory;
 
-            LoadWorkspace = new Command(OnLoadWorkspaceExecute);
-            RefreshWorkspace = new Command(OnRefreshWorkspaceExecute, OnRefreshWorkspaceCanExecute);
+            AvailableWorkspaces = new ObservableCollection<IWorkspace>();
+
             SaveWorkspace = new Command(OnSaveWorkspaceExecute, OnSaveWorkspaceCanExecute);
-            SaveWorkspaceAs = new Command(OnSaveWorkspaceAsExecute, OnSaveWorkspaceAsCanExecute);
-            CloseWorkspace = new Command(OnCloseWorkspaceExecute, OnCloseWorkspaceCanExecute);
-            OpenFile = new Command(OnOpenFileExecute, OnOpenFileCanExecute);
+            AddWorkspace = new Command(OnAddWorkspaceExecute);
+            EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
+            RemoveWorkspace = new Command(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
         }
         #endregion
 
@@ -69,116 +65,108 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             get { return "Orc.WorkspaceManagement.Example"; }
         }
 
-        [Model]
-        [Expose("FirstName")]
-        [Expose("MiddleName")]
-        [Expose("LastName")]
-        public PersonWorkspace Workspace { get; private set; }
+        public ObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
+
+        public IWorkspace SelectedWorkspace { get; set; }
         #endregion
 
         #region Commands
-        public Command LoadWorkspace { get; private set; }
-
-        private void OnLoadWorkspaceExecute()
-        {
-            _openFileService.InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Data");
-            _openFileService.Filter = TextFilter;
-            if (_openFileService.DetermineFile())
-            {
-                _workspaceManager.Load(_openFileService.FileName);
-            }
-        }
-
-        public Command RefreshWorkspace { get; private set; }
-
-        private bool OnRefreshWorkspaceCanExecute()
-        {
-            return _workspaceManager.Workspace != null;
-        }
-
-        private void OnRefreshWorkspaceExecute()
-        {
-            _workspaceManager.Refresh();
-        }
-
         public Command SaveWorkspace { get; private set; }
 
         private bool OnSaveWorkspaceCanExecute()
         {
-            return _workspaceManager.Workspace != null;
+            return (SelectedWorkspace != null);
         }
 
         private void OnSaveWorkspaceExecute()
         {
-            _workspaceManager.Save();
+            // TODO: Handle command logic here
         }
 
-        public Command SaveWorkspaceAs { get; private set; }
+        public Command AddWorkspace { get; private set; }
 
-        private bool OnSaveWorkspaceAsCanExecute()
+        private async void OnAddWorkspaceExecute()
         {
-            return _workspaceManager.Workspace != null;
-        }
+            var workspace = new Workspace();
 
-        private void OnSaveWorkspaceAsExecute()
-        {
-            _saveFileService.Filter = TextFilter;
-            if (_saveFileService.DetermineFile())
+            var vm = _viewModelFactory.CreateViewModel<WorkspaceViewModel>(workspace);
+            if (await _uiVisualizerService.ShowDialog(vm) ?? false)
             {
-                _workspaceManager.Save(_openFileService.FileName);
+                _workspaceManager.Add(workspace, true);
             }
         }
 
-        public Command CloseWorkspace { get; private set; }
+        public Command EditWorkspace { get; private set; }
 
-        private bool OnCloseWorkspaceCanExecute()
+        private bool OnEditWorkspaceCanExecute()
         {
-            return _workspaceManager.Workspace != null;
+            return (SelectedWorkspace != null);
         }
 
-        private void OnCloseWorkspaceExecute()
+        private async void OnEditWorkspaceExecute()
         {
-            _workspaceManager.Close();
+            var vm = _viewModelFactory.CreateViewModel<WorkspaceViewModel>(SelectedWorkspace);
+            await _uiVisualizerService.ShowDialog(vm);
         }
 
-        public Command OpenFile { get; private set; }
+        public Command RemoveWorkspace { get; private set; }
 
-        private bool OnOpenFileCanExecute()
+        private bool OnRemoveWorkspaceCanExecute()
         {
-            return _workspaceManager.Workspace != null;
+            if (SelectedWorkspace == null)
+            {
+                return false;
+            }
+
+            if (_workspaceManager.Workspaces.Count() <= 1)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        private void OnOpenFileExecute()
+        private void OnRemoveWorkspaceExecute()
         {
-            _processService.StartProcess(_workspaceManager.Location);
+            _workspaceManager.Remove(SelectedWorkspace);
         }
         #endregion
 
         #region Methods
-        protected override void Initialize()
+        private void OnSelectedWorkspaceChanged()
+        {
+            _workspaceManager.Workspace = SelectedWorkspace;
+        }
+
+        protected override async void Initialize()
         {
             base.Initialize();
 
             _workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
+            _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
 
-            ReloadWorkspace();
+            await _workspaceManager.Initialize();
+
+            AvailableWorkspaces.AddRange(_workspaceManager.Workspaces);
+            SelectedWorkspace = _workspaceManager.Workspace;
         }
 
-        protected override Task Close()
+        protected override async Task Close()
         {
             _workspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
+            _workspaceManager.WorkspacesChanged -= OnWorkspacesChanged;
 
-            return base.Close();
+            await base.Close();
         }
 
         private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
         {
-            ReloadWorkspace();
+            SelectedWorkspace = e.NewWorkspace;
         }
 
-        private void ReloadWorkspace()
+        private void OnWorkspacesChanged(object sender, EventArgs e)
         {
-            Workspace = _workspaceManager.GetWorkspace<PersonWorkspace>();
+            AvailableWorkspaces.ReplaceRange(_workspaceManager.Workspaces);
         }
         #endregion
     }

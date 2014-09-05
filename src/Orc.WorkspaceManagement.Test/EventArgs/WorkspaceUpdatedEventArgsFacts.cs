@@ -7,7 +7,6 @@
 
 namespace Orc.WorkspaceManagement.Test.EventArgs
 {
-    using Mocks;
     using NUnit.Framework;
 
     [TestFixture]
@@ -18,10 +17,10 @@ namespace Orc.WorkspaceManagement.Test.EventArgs
         [TestCase("A", null, false)]
         [TestCase("A", "B", false)]
         [TestCase("A", "A", true)]
-        public void TheIsRefreshProperty(string workspaceLocation1, string workspaceLocation2, bool expectedResult)
+        public void TheIsRefreshProperty(string title1, string title2, bool expectedResult)
         {
-            var workspace1 = !string.IsNullOrEmpty(workspaceLocation1) ? new Workspace(workspaceLocation1) : null;
-            var workspace2 = !string.IsNullOrEmpty(workspaceLocation2) ? new Workspace(workspaceLocation2) : null;
+            var workspace1 = !string.IsNullOrEmpty(title1) ? new Workspace { Title = title1 } : null;
+            var workspace2 = !string.IsNullOrEmpty(title2) ? new Workspace { Title = title2 } : null;
 
             var workspaceUpdatedEventArgs = new WorkspaceUpdatedEventArgs(workspace1, workspace2);
 

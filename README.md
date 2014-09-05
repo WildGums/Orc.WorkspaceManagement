@@ -4,15 +4,26 @@ Manage workspaces the easy way using this library.
 
 # Quick introduction
 
-The workspace management library makes it easy to manage workspaces. The main component is the *IWorkspaceManager* that contains the current workspace and allows to load or save a workspace. Note that this library does not force you to use a specific workspace location of any sort, so it can even be a database or server call to read / write the workspace. 
+Workspaces are a combination of settings that a user can choose to configure an application. An example is the layout of all docking windows in Visual Studio. The advantage of the workspace management is that it takes away all the plumbing and you can concentrate on the actual usage of workspaces.
+
+The workspace management library makes it easy to manage workspaces. The main component is the *IWorkspaceManager* that contains the current workspace and all available workspaces and allows to load or save workspaces.
 
 Below is an overview of the most important components:
 
 - **IWorkspace** => the actual workspace object
 - **IWorkspaceManager** => the workspace manager with events and management methods
 - **IWorkspaceInitializer** => allows customization of initial settings of a workspace
-- **IWorkspaceReader** => reads a workspace from a location
-- **IWorkspaceWriter** => writes a workspace to a location
+
+-- 
+
+**Important note** 
+
+The base directory will be used as repository. This means that it cannot contain other files and all other files will be deleted from the directory
+
+-- 
+
+// TODO: Consider changing documentation below this point
+
 
 # Creating a workspace
 

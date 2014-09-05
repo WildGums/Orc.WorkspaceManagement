@@ -11,12 +11,6 @@ namespace Orc.WorkspaceManagement
 
     public interface IWorkspace : IModel
     {
-        int Id { get; }
-
-        string Location { get; set; }
-
-        string Title { get; }
-
-        void ClearIsDirty();
+        string Title { get; set; }
     }
 }

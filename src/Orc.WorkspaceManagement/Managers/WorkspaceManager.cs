@@ -8,47 +8,57 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Data;
     using Catel.Logging;
+    using Path = Catel.IO.Path;
 
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        public const string WorkspaceFileExtension = ".xml";
+
         private readonly IWorkspaceInitializer _workspaceInitializer;
-        private readonly IWorkspaceReader _workspaceReader;
-        private readonly IWorkspaceWriter _workspaceWriter;
+        private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
 
         private IWorkspace _workspace;
 
         #region Constructors
-        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceReader workspaceReader, IWorkspaceWriter workspaceWriter)
+        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer)
         {
             Argument.IsNotNull(() => workspaceInitializer);
-            Argument.IsNotNull(() => workspaceReader);
-            Argument.IsNotNull(() => workspaceWriter);
 
             _workspaceInitializer = workspaceInitializer;
-            _workspaceReader = workspaceReader;
-            _workspaceWriter = workspaceWriter;
 
-            var location = workspaceInitializer.GetInitialLocation();
-
-            Location = location;
+            BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
         #endregion
 
         #region Properties
-        public string Location { get; private set; }
+        public string BaseDirectory { get; set; }
+
+        public IEnumerable<IWorkspace> Workspaces
+        {
+            get { return _workspaces.ToArray(); }
+        }
 
         public IWorkspace Workspace
         {
             get { return _workspace; }
-            private set
+            set
             {
                 var oldWorkspace = _workspace;
                 var newWorkspace = value;
+
+                if (ObjectHelper.AreEqual(oldWorkspace, newWorkspace))
+                {
+                    return;
+                }
 
                 _workspace = value;
 
@@ -58,111 +68,156 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Events
-        public event EventHandler<WorkspaceEventArgs> WorkspaceLoading;
-        public event EventHandler<WorkspaceEventArgs> WorkspaceLoaded;
+        public event EventHandler<EventArgs> Initializing;
+        public event EventHandler<EventArgs> Initialized;
 
-        public event EventHandler<WorkspaceEventArgs> WorkspaceSaving;
-        public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+        public event EventHandler<EventArgs> Saving;
+        public event EventHandler<EventArgs> Saved;
 
+        public event EventHandler<EventArgs> WorkspacesChanged;
+        public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
+        public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+
+        public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
-
-        public event EventHandler<WorkspaceEventArgs> WorkspaceClosing;
-        public event EventHandler<WorkspaceEventArgs> WorkspaceClosed;
         #endregion
 
         #region IWorkspaceManager Members
         public async Task Initialize()
         {
-            var location = Location;
-            if (!string.IsNullOrEmpty(location))
-            {
-                Log.Debug("Initial location is '{0}', loading initial workspace", location);
+            var baseDirectory = BaseDirectory;
 
-                // TODO: Determine if this should be moved to a separate method
-                await Load(location);
+            Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
+
+            Initializing.SafeInvoke(this);
+
+            if (Directory.Exists(baseDirectory))
+            {
+                foreach (var workspaceFile in Directory.GetFiles(baseDirectory, string.Format("*{0}", WorkspaceFileExtension)))
+                {
+                    try
+                    {
+                        Log.Debug("Loading workspace from '{0}'", workspaceFile);
+
+                        using (var fileStream = new FileStream(workspaceFile, FileMode.Open))
+                        {
+                            var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml);
+                            if (workspace == null || string.IsNullOrEmpty(workspace.Title))
+                            {
+                                Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", workspaceFile);
+                            }
+                            else
+                            {
+                                _workspaces.Add(workspace);
+
+                                Log.Debug("Loaded workspace");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to load workspace from '{0}'", workspaceFile);
+                    }
+                }
             }
+
+            if (_workspaces.Count == 0)
+            {
+                var defaultWorkspace = new Workspace();
+                defaultWorkspace.Title = "Default workspace";
+
+                _workspaceInitializer.Initialize(defaultWorkspace);
+
+                _workspaces.Add(defaultWorkspace);
+            }
+
+            Workspace = _workspaces.FirstOrDefault();
+
+            Initialized.SafeInvoke(this);
+
+            Log.Info("Initialized workspaces from '{0}'", baseDirectory);
         }
 
-        public async Task Refresh()
+        public void Add(IWorkspace workspace)
         {
-            if (Workspace == null)
+            Argument.IsNotNull(() => workspace);
+
+            if (_workspaces.Contains(workspace))
             {
                 return;
             }
 
-            var location = Location;
+            _workspaceInitializer.Initialize(workspace);
 
-            Log.Debug("Refreshing workspace from '{0}'", location);
+            _workspaces.Add(workspace);
 
-            await Load(location);
-
-            Log.Info("Refreshed workspace from '{0}'", location);
+            WorkspaceAdded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+            WorkspacesChanged.SafeInvoke(this);
         }
 
-        public async Task Load(string location)
+        public void Remove(IWorkspace workspace)
         {
-            Argument.IsNotNullOrWhitespace("location", location);
+            Argument.IsNotNull(() => workspace);
 
-            Log.Debug("Loading workspace from '{0}'", location);
-
-            WorkspaceLoading.SafeInvoke(this, new WorkspaceEventArgs(location));
-
-            var workspace = await _workspaceReader.Read(location);
-
-            Location = location;
-            Workspace = workspace;
-
-            WorkspaceLoaded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-
-            Log.Info("Loaded workspace from '{0}'", location);
-        }
-
-        public async Task Save(string location = null)
-        {
-            var workspace = Workspace;
-            if (workspace == null)
-            {
-                Log.Error("Cannot save empty workspace");
-                throw new InvalidWorkspaceException(workspace);
-            }
-
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                location = Location;
-            }
-
-            Log.Debug("Saving workspace '{0}' to '{1}'", workspace, location);
-
-            var eventArgs = new WorkspaceEventArgs(workspace);
-            WorkspaceSaving.SafeInvoke(this, eventArgs);
-
-            await _workspaceWriter.Write(workspace, location);
-            Location = location;
-
-            WorkspaceSaved.SafeInvoke(this, eventArgs);
-
-            Log.Info("Saved workspace '{0}' to '{1}'", workspace, location);
-        }
-
-        public void Close()
-        {
-            var workspace = Workspace;
-            if (workspace == null)
+            if (!_workspaces.Contains(workspace))
             {
                 return;
             }
 
-            Log.Debug("Closing workspace '{0}'", workspace);
+            _workspaces.Remove(workspace);
 
-            var eventArgs = new WorkspaceEventArgs(workspace);
-            WorkspaceClosing.SafeInvoke(this, eventArgs);
+            if (ObjectHelper.AreEqual(workspace, Workspace))
+            {
+                Workspace = _workspaces.FirstOrDefault();
+            }
 
-            Workspace = null;
-            Location = null;
+            WorkspaceRemoved.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+            WorkspacesChanged.SafeInvoke(this);
+        }
 
-            WorkspaceClosed.SafeInvoke(this, eventArgs);
+        public async Task Save()
+        {
+            var baseDirectory = BaseDirectory;
 
-            Log.Info("Closed workspace '{0}'", workspace);
+            Log.Debug("Saving all workspaces to '{0}'", baseDirectory);
+
+            Saving.SafeInvoke(this);
+
+            if (!Directory.Exists(baseDirectory))
+            {
+                Log.Debug("Creating base directory '{0}'", baseDirectory);
+
+                Directory.CreateDirectory(baseDirectory);
+            }
+
+            Log.Debug("Deleting previous workspace files");
+
+            foreach (var workspaceFile in Directory.GetFiles(baseDirectory, string.Format("*{0}", WorkspaceFileExtension)))
+            {
+                try
+                {
+                    Log.Debug("Deleting file '{0}'", workspaceFile);
+
+                    File.Delete(workspaceFile);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to delete file '{0}'", workspaceFile);
+                }
+            }
+
+            foreach (var workspace in _workspaces)
+            {
+                var workspaceFile = Path.Combine(baseDirectory, string.Format("{0}{1}", workspace.Title.GetSlug(), WorkspaceFileExtension));
+
+                Log.Debug("Saving workspace '{0}' to '{1}'", workspace, workspaceFile);
+
+                ((Workspace)workspace).SaveAsXml(workspaceFile);
+            }
+
+            Saved.SafeInvoke(this);
+
+            Log.Info("Saved all workspaces to '{0}'", baseDirectory);
         }
         #endregion
     }
