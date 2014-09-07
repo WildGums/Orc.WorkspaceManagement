@@ -18,7 +18,7 @@ namespace Orc.WorkspaceManagement.Example.Logging
 
         public TextBoxLogListener(TextBox textBox)
         {
-            Argument.IsNotNull("textBox", textBox);
+            Argument.IsNotNull(() => textBox);
 
             _textBox = textBox;
 

@@ -14,15 +14,15 @@ namespace Orc.WorkspaceManagement
         public static TWorkspace GetWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager)
             where TWorkspace : IWorkspace
         {
-            Argument.IsNotNull("workspaceManager", workspaceManager);
+            Argument.IsNotNull(() => workspaceManager);
 
             return (TWorkspace)workspaceManager.Workspace;
         }
 
         public static void Add(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
         {
-            Argument.IsNotNull("workspaceManager", workspaceManager);
-            Argument.IsNotNull("workspace", workspace);
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNull(() => workspace);
 
             workspaceManager.Add(workspace);
 
