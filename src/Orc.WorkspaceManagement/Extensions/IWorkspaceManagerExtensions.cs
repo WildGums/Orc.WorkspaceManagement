@@ -34,6 +34,23 @@ namespace Orc.WorkspaceManagement
             }
         }
 
+        public static void AddProvider(this IWorkspaceManager workspaceManager, IWorkspaceProvider workspaceProvider, bool callApplyWorkspaceForCurrentWorkspace)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNull(() => workspaceProvider);
+
+            workspaceManager.AddProvider(workspaceProvider);
+
+            if (callApplyWorkspaceForCurrentWorkspace)
+            {
+                var workspace = workspaceManager.Workspace;
+                if (workspace != null)
+                {
+                    workspaceProvider.ApplyWorkspace(workspace);
+                }
+            }
+        }
+
         public static async Task Initialize(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound,
             string defaultWorkspaceName = "Default")
         {
