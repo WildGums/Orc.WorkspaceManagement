@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Example.Views
+namespace Orc.WorkspaceManagement.Views
 {
     using Catel.Windows;
     using ViewModels;

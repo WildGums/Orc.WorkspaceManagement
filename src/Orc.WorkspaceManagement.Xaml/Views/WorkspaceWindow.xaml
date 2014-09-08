@@ -1,21 +1,21 @@
-﻿<catel:DataWindow x:Class="Orc.WorkspaceManagement.Example.Views.WorkspaceWindow"
+﻿<catel:DataWindow x:Class="Orc.WorkspaceManagement.Views.WorkspaceWindow"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://catel.codeplex.com"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
-    <catel:StackGrid>
-        <catel:StackGrid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="400" />
-        </catel:StackGrid.ColumnDefinitions>
-        
-        <TextBlock Text="Title" />
-        <TextBox Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True}">
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="Title" />
+        <TextBox Grid.Column="1" Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True}">
             <i:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged />
             </i:Interaction.Behaviors>
         </TextBox>
-    </catel:StackGrid>
-    
+    </Grid>
+
 </catel:DataWindow>

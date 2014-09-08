@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Example.ViewModels
+namespace Orc.WorkspaceManagement.ViewModels
 {
     using Catel;
     using Catel.Fody;
@@ -16,6 +16,8 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         public WorkspaceViewModel(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
+
+            DeferValidationUntilFirstSaveCall = true;
 
             Workspace = workspace;
         }

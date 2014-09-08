@@ -20,6 +20,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
+    using Orc.WorkspaceManagement.ViewModels;
 
     /// <summary>
     /// MainWindow view model.
