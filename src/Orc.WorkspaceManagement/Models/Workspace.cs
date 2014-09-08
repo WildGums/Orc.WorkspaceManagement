@@ -40,6 +40,11 @@ namespace Orc.WorkspaceManagement
             try
             {
                 var value = GetConfigurationValue(name);
+                if (value == null)
+                {
+                    return defaultValue;
+                }
+
                 return (T)StringToObjectHelper.ToRightType(typeof(T), value);
             }
             catch (Exception)

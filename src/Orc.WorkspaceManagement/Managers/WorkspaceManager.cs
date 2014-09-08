@@ -61,6 +61,8 @@ namespace Orc.WorkspaceManagement
             get { return _workspace; }
             set
             {
+                Argument.IsNotNull("workspace", value);
+
                 var oldWorkspace = _workspace;
                 var newWorkspace = value;
 
@@ -70,6 +72,11 @@ namespace Orc.WorkspaceManagement
                 }
 
                 _workspace = value;
+
+                foreach (var provider in _workspaceProviders)
+                {
+                    provider.ApplyWorkspace(value);
+                }
 
                 WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
             }

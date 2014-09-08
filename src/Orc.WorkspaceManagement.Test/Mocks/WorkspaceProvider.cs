@@ -26,5 +26,10 @@ namespace Orc.WorkspaceManagement.Test.Mocks
 
             workspace.SetWorkspaceValue(_key, _value);
         }
+
+        public void ApplyWorkspace(IWorkspace workspace)
+        {
+            // location to respond to changes
+        }
     }
 }

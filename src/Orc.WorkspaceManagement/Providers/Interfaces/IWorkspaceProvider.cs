@@ -17,5 +17,11 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         /// <param name="workspace">The workspace.</param>
         void ProvideInformation(IWorkspace workspace);
+
+        /// <summary>
+        /// Applies the workspace values in response to a workspace change.
+        /// </summary>
+        /// <param name="workspace">The workspace.</param>
+        void ApplyWorkspace(IWorkspace workspace);
     }
 }
