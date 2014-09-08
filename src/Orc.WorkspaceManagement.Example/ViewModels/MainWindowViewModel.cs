@@ -146,7 +146,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
             _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
 
-            await _workspaceManager.Initialize();
+            await _workspaceManager.Initialize(true);
 
             AvailableWorkspaces.AddRange(_workspaceManager.Workspaces);
             SelectedWorkspace = _workspaceManager.Workspace;

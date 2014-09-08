@@ -141,21 +141,14 @@ namespace Orc.WorkspaceManagement
                 }
             }
 
-            if (_workspaces.Count == 0)
+            if (_workspaces.Any())
             {
-                var defaultWorkspace = new Workspace();
-                defaultWorkspace.Title = "Default workspace";
-
-                _workspaceInitializer.Initialize(defaultWorkspace);
-
-                _workspaces.Add(defaultWorkspace);
+                Workspace = _workspaces.FirstOrDefault();
             }
-
-            Workspace = _workspaces.FirstOrDefault();
 
             Initialized.SafeInvoke(this);
 
-            Log.Info("Initialized workspaces from '{0}'", baseDirectory);
+            Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
         }
 
         /// <summary>

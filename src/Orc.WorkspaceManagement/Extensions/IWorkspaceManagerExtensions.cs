@@ -7,6 +7,8 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Linq;
+    using System.Threading.Tasks;
     using Catel;
 
     public static class IWorkspaceManagerExtensions
@@ -29,6 +31,22 @@ namespace Orc.WorkspaceManagement
             if (autoSelect)
             {
                 workspaceManager.Workspace = workspace;
+            }
+        }
+
+        public static async Task Initialize(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound,
+            string defaultWorkspaceName = "Default")
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            await workspaceManager.Initialize();
+
+            if (!workspaceManager.Workspaces.Any())
+            {
+                var defaultWorkspace = new Workspace();
+                defaultWorkspace.Title = defaultWorkspaceName;
+
+                workspaceManager.Add(defaultWorkspace, true);
             }
         }
     }
