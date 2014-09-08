@@ -10,6 +10,7 @@ namespace Orc.WorkspaceManagement
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.IoC;
 
     public static class IWorkspaceManagerExtensions
     {
@@ -49,6 +50,15 @@ namespace Orc.WorkspaceManagement
                     workspaceProvider.ApplyWorkspace(workspace);
                 }
             }
+        }
+
+        public static void AddProvider<TWorkspaceProvider>(this IWorkspaceManager workspaceManager, bool callApplyWorkspaceForCurrentWorkspace)
+            where TWorkspaceProvider : IWorkspaceProvider
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            var workspaceProvider = TypeFactory.Default.CreateInstance<TWorkspaceProvider>();
+            workspaceManager.AddProvider(workspaceProvider, callApplyWorkspaceForCurrentWorkspace);
         }
 
         public static async Task Initialize(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound,
