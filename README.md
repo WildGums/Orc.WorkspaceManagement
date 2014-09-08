@@ -78,6 +78,64 @@ To store information in a workspace, set the workspace to be updated as current 
 
 **Note that a workspace is only updated, not saved to disk by this method**.
 
+## Providers
+
+Create a provider as shown in the example below:
+
+    public class RibbonWorkspaceProvider : IWorkspaceProvider
+    {
+        private readonly Ribbon _ribbon;
+
+        public RibbonWorkspaceProvider(Ribbon ribbon)
+        {
+            Argument.IsNotNull(() => ribbon);
+
+            _ribbon = ribbon;
+        }
+
+        public void ProvideInformation(IWorkspace workspace)
+        {
+            workspace.SetWorkspaceValue("Ribbon.IsMinimized", _ribbon.IsMinimized);
+        }
+
+        public void ApplyWorkspace(IWorkspace workspace)
+        {
+            _ribbon.IsMinimized = workspace.GetWorkspaceValue("Ribbon.IsMinimized", false);
+        }
+    }
+
+Then add it to the provider where the ribbon is available:
+
+    public RibbonView()
+    {
+        InitializeComponent();
+
+        var dependencyResolver = this.GetDependencyResolver();
+        var workspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
+
+        var ribbonWorkspaceProvider = new RibbonWorkspaceProvider(ribbon);
+        workspaceManager.AddProvider(ribbonWorkspaceProvider, true);
+    }
+
+## Events
+
+Using events is a bit more work, but can accomplish the same:
+
+        public MyComponent(IWorkspaceManager workspaceManager)
+        {
+            workspaceManager.WorkspaceInfoRequested += OnWorkspaceInfoRequested;
+        }
+
+        private void OnWorkspaceInfoRequested(object sender, WorkspaceEventArgs e)
+        {
+            var workspace = e.Workspace;
+
+            workspace.SetWorkspaceValue("somekey", "somevalue");
+        }
+
+**Note that this will only be called when storing the workspace, restoring the workspace needs more events**     
+
+
 # Saving all workspaces to disk
 
 To save all workspaces to disk, use the code below:
