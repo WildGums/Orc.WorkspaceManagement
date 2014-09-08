@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="EventArgs\WorkspaceUpdatedEventArgsFacts.cs" />
     <Compile Include="Managers\WorkspaceManagerFacts.cs" />
+    <Compile Include="Mocks\WorkspaceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +102,7 @@
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mocks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

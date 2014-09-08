@@ -103,7 +103,8 @@
     <Compile Include="Views\BView.xaml.cs">
       <DependentUpon>BView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkspaceManagement\WorkspaceInitializer.cs" />
+    <Compile Include="WorkspaceManagement\Initializers\WorkspaceInitializer.cs" />
+    <Compile Include="WorkspaceManagement\Providers\DummyWorkspaceProvider.cs" />
     <Page Include="Views\AView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

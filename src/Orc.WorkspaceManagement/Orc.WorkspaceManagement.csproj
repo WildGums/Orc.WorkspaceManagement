@@ -86,6 +86,7 @@
     <Compile Include="Managers\Interfaces\IWorkspaceManager.cs" />
     <Compile Include="Initializers\Interfaces\IWorkspaceInitializer.cs" />
     <Compile Include="Managers\WorkspaceManager.cs" />
+    <Compile Include="Providers\Interfaces\IWorkspaceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

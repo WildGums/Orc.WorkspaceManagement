@@ -21,14 +21,19 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public const string WorkspaceFileExtension = ".xml";
+        private const string WorkspaceFileExtension = ".xml";
 
         private readonly IWorkspaceInitializer _workspaceInitializer;
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
+        private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
 
         private IWorkspace _workspace;
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
+        /// </summary>
+        /// <param name="workspaceInitializer">The workspace initializer.</param>
         public WorkspaceManager(IWorkspaceInitializer workspaceInitializer)
         {
             Argument.IsNotNull(() => workspaceInitializer);
@@ -40,6 +45,10 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the base directory to store the workspaces in.
+        /// </summary>
+        /// <value>The base directory.</value>
         public string BaseDirectory { get; set; }
 
         public IEnumerable<IWorkspace> Workspaces
@@ -83,6 +92,10 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspaceManager Members
+        /// <summary>
+        /// Initializes the workspaces by reading them from the <see cref="BaseDirectory"/>.
+        /// </summary>
+        /// <returns>Task.</returns>
         public async Task Initialize()
         {
             var baseDirectory = BaseDirectory;
@@ -138,6 +151,32 @@ namespace Orc.WorkspaceManagement
             Log.Info("Initialized workspaces from '{0}'", baseDirectory);
         }
 
+        /// <summary>
+        /// Adds the provider that will provide information to the workspace when the information is requested.
+        /// </summary>
+        /// <param name="workspaceProvider">The workspace provider.</param>
+        public void AddProvider(IWorkspaceProvider workspaceProvider)
+        {
+            Argument.IsNotNull(() => workspaceProvider);
+
+            _workspaceProviders.Add(workspaceProvider);
+        }
+
+        /// <summary>
+        /// Removes the provider that will provide information to the workspace when the information is requested.
+        /// </summary>
+        /// <param name="workspaceProvider">The workspace provider.</param>
+        public void RemoveProvider(IWorkspaceProvider workspaceProvider)
+        {
+            Argument.IsNotNull(() => workspaceProvider);
+
+            _workspaceProviders.Remove(workspaceProvider);
+        }
+
+        /// <summary>
+        /// Adds the specified workspace to the list of workspaces.
+        /// </summary>
+        /// <param name="workspace">The workspace.</param>
         public void Add(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
@@ -155,6 +194,10 @@ namespace Orc.WorkspaceManagement
             WorkspacesChanged.SafeInvoke(this);
         }
 
+        /// <summary>
+        /// Removes the specified workspace from the list of workspaces.
+        /// </summary>
+        /// <param name="workspace">The workspace.</param>
         public void Remove(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
@@ -175,6 +218,9 @@ namespace Orc.WorkspaceManagement
             WorkspacesChanged.SafeInvoke(this);
         }
 
+        /// <summary>
+        /// Stores the workspace by requesting information.
+        /// </summary>
         public void StoreWorkspace()
         {
             Log.Debug("Storing workspace");
@@ -186,11 +232,21 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
+            // Events first so providers can manipulate data afterwards
             WorkspaceInfoRequested.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+
+            foreach (var provider in _workspaceProviders)
+            {
+                provider.ProvideInformation(workspace);
+            }
 
             Log.Info("Stored workspace");
         }
 
+        /// <summary>
+        /// Saves all the workspaces to disk.
+        /// </summary>
+        /// <returns>Task.</returns>
         public async Task Save()
         {
             var baseDirectory = BaseDirectory;

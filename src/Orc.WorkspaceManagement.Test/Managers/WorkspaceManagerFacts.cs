@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement.Test.Managers
 {
     using System.Linq;
+    using Mocks;
     using NUnit.Framework;
 
     public class WorkspaceManagerFacts
@@ -183,7 +184,54 @@ namespace Orc.WorkspaceManagement.Test.Managers
         [TestFixture]
         public class ThePersistenceLogic
         {
-            // TODO : WRite unit tests
+            // TODO : write unit tests
+        }
+
+        [TestFixture]
+        public class TheAddProviderMethod
+        {
+            [TestCase]
+            public void CallsProviderWhenStoringWorkspace()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspace = new Workspace()
+                {
+                    Title = "test workspace"
+                };
+
+                workspaceManager.Add(workspace, true);
+
+                var workspaceProvider = new WorkspaceProvider("key1", "value1");
+                workspaceManager.AddProvider(workspaceProvider);
+
+                workspaceManager.StoreWorkspace();
+
+                Assert.AreEqual("value1", workspace.GetWorkspaceValue("key1", "unexpected"));
+            }
+        }
+
+        [TestFixture]
+        public class TheRemoveProviderMethod
+        {
+            [TestCase]
+            public void CorrectlyRemovesProviderWhenStoringWorkspace()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspace = new Workspace()
+                {
+                    Title = "test workspace"
+                };
+
+                workspaceManager.Add(workspace, true);
+
+                var workspaceProvider = new WorkspaceProvider("key1", "value1");
+                workspaceManager.AddProvider(workspaceProvider);
+                workspaceManager.RemoveProvider(workspaceProvider);
+
+                workspaceManager.StoreWorkspace();
+
+                Assert.AreEqual("expected", workspace.GetWorkspaceValue("key1", "expected"));
+            }
         }
     }
 }
