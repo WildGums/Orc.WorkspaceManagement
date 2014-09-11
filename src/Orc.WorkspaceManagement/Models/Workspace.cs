@@ -38,7 +38,13 @@ namespace Orc.WorkspaceManagement
 
             try
             {
-                return this.GetConfigurationValue<T>(name);
+                var value = this.GetConfigurationValue<T>(name);
+                if (ObjectHelper.AreEqual(value, default(T)))
+                {
+                    return defaultValue;
+                }
+
+                return value;
             }
             catch (Exception)
             {
