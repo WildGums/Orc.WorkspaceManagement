@@ -139,9 +139,9 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _workspaceManager.Workspace = SelectedWorkspace;
         }
 
-        protected override async void Initialize()
+        protected override async Task Initialize()
         {
-            base.Initialize();
+            await base.Initialize();
 
             _workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
             _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
