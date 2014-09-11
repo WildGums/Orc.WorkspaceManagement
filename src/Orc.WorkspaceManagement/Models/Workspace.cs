@@ -26,8 +26,7 @@ namespace Orc.WorkspaceManagement
 
         public void SetWorkspaceValue(string name, object value)
         {
-            var stringValue = ObjectToStringHelper.ToString(value);
-            SetConfigurationValue(name, stringValue);
+            SetConfigurationValue(name, value);
         }
 
         public T GetWorkspaceValue<T>(string name, T defaultValue)
@@ -39,13 +38,7 @@ namespace Orc.WorkspaceManagement
 
             try
             {
-                var value = GetConfigurationValue(name);
-                if (value == null)
-                {
-                    return defaultValue;
-                }
-
-                return (T)StringToObjectHelper.ToRightType(typeof(T), value);
+                return this.GetConfigurationValue<T>(name);
             }
             catch (Exception)
             {
