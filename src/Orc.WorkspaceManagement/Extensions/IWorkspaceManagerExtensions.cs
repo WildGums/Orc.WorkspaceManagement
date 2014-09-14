@@ -68,7 +68,7 @@ namespace Orc.WorkspaceManagement
 
             await workspaceManager.Initialize();
 
-            if (!workspaceManager.Workspaces.Any())
+            if (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any())
             {
                 var defaultWorkspace = new Workspace();
                 defaultWorkspace.Title = defaultWorkspaceName;
