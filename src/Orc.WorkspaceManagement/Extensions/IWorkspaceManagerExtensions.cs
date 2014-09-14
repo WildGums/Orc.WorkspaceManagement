@@ -76,5 +76,18 @@ namespace Orc.WorkspaceManagement
                 workspaceManager.Add(defaultWorkspace, true);
             }
         }
+
+        /// <summary>
+        /// Stores the workspace and saves it immediately.
+        /// </summary>
+        /// <param name="workspaceManager">The workspace manager.</param>
+        /// <returns>Task.</returns>
+        public static async Task StoreAndSave(this IWorkspaceManager workspaceManager)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            workspaceManager.StoreWorkspace();
+            await workspaceManager.Save();
+        }
     }
 }
