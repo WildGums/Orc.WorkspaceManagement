@@ -51,6 +51,11 @@ namespace Orc.WorkspaceManagement
         /// <value>The base directory.</value>
         public string BaseDirectory { get; set; }
 
+        public IEnumerable<IWorkspaceProvider> Providers
+        {
+            get { return _workspaceProviders.ToArray(); }
+        }
+
         public IEnumerable<IWorkspace> Workspaces
         {
             get { return _workspaces.ToArray(); }

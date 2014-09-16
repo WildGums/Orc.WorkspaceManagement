@@ -16,6 +16,7 @@ namespace Orc.WorkspaceManagement
         string BaseDirectory { get; set; }
         IEnumerable<IWorkspace> Workspaces { get; }
         IWorkspace Workspace { get; set; }
+        IEnumerable<IWorkspaceProvider> Providers { get; }
 
         event EventHandler<EventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
