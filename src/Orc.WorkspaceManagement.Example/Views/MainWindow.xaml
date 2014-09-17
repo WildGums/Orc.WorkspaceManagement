@@ -5,6 +5,7 @@
                   xmlns:views="clr-namespace:Orc.WorkspaceManagement.Example.Views"
                   xmlns:behaviors="clr-namespace:Orc.WorkspaceManagement.Behaviors;assembly=Orc.WorkspaceManagement.Xaml"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                  xmlns:wmviews="clr-namespace:Orc.WorkspaceManagement.Views;assembly=Orc.WorkspaceManagement.Xaml"
                   ShowInTaskbar="True" ResizeMode="CanResize" SizeToContent="Manual" WindowStartupLocation="Manual" WindowState="Normal"
                   MinWidth="600" MinHeight="400">
 
@@ -12,7 +13,7 @@
         <i:Interaction.Behaviors>
             <behaviors:AutoWorkspaceGrid KeyPrefix="mainWindowGrid" RowsToPersist="none" ColumnsToPersist="0,4" />
         </i:Interaction.Behaviors>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,9 +28,15 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        
+
         <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
-            <ComboBox ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" />
+            <catel:DropDownButton Content="[change workspace]">
+                <catel:DropDownButton.DropDownContent>
+                    <wmviews:WorkspacesView />
+                </catel:DropDownButton.DropDownContent>
+            </catel:DropDownButton>
+
+            <!--<ComboBox ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" />-->
             <Button Command="{Binding UpdateWorkspace}" Content="Update" />
             <Button Command="{Binding AddWorkspace}" Content="Add..." />
             <Button Command="{Binding EditWorkspace}" Content="Edit..." />
@@ -56,13 +63,13 @@
         </views:AView>
 
         <GridSplitter Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
-        
+
         <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="Bold" Text="{Binding SelectedWorkspace.Title}" />
         </Label>
 
         <GridSplitter Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
-        
+
         <views:BView Grid.Row="2" Grid.Column="4">
             <i:Interaction.Behaviors>
                 <behaviors:AutoWorkspace PersistSize="False" />

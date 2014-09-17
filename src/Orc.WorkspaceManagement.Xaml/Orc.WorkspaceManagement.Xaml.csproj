@@ -86,12 +86,18 @@
     <Compile Include="Behaviors\AutoWorkspace.cs" />
     <Compile Include="Behaviors\AutoWorkspaceGrid.cs" />
     <Compile Include="Behaviors\WorkspaceBehaviorBase.cs" />
+    <Compile Include="Converters\IsCurrentWorkspaceToBooleanConverter.cs" />
+    <Compile Include="Converters\IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.grid.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.size.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\WorkspacesViewModel.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
+    <Compile Include="Views\WorkspacesView.xaml.cs">
+      <DependentUpon>WorkspacesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WorkspaceWindow.xaml.cs">
       <DependentUpon>WorkspaceWindow.xaml</DependentUpon>
     </Compile>
@@ -107,6 +113,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\WorkspacesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\WorkspaceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,7 +124,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+    <Resource Include="Resources\Images\edit.png" />
+    <Resource Include="Resources\Images\remove.png" />
+    <Resource Include="Resources\Images\selected.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

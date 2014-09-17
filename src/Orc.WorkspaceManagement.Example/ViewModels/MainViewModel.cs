@@ -25,7 +25,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
     /// <summary>
     /// MainWindow view model.
     /// </summary>
-    public class MainWindowViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -35,9 +35,9 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
-        public MainWindowViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
+        public MainViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
@@ -46,8 +46,6 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
-
-            AvailableWorkspaces = new ObservableCollection<IWorkspace>();
 
             UpdateWorkspace = new Command(OnUpdateWorkspaceExecute, OnUpdateWorkspaceCanExecute);
             AddWorkspace = new Command(OnAddWorkspaceExecute);
@@ -65,8 +63,6 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             get { return "Orc.WorkspaceManagement.Example"; }
         }
-
-        public ObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
 
         public IWorkspace SelectedWorkspace { get; set; }
         #endregion
@@ -144,18 +140,26 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             await base.Initialize();
 
             _workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
-            _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
 
             await _workspaceManager.Initialize(true);
 
-            AvailableWorkspaces.AddRange(_workspaceManager.Workspaces);
+#if DEBUG
+            var defaultWorkspace = (from workspace in _workspaceManager.Workspaces
+                                    where string.Equals(workspace.Title, "Default workspace")
+                                    select workspace).FirstOrDefault();
+            if (defaultWorkspace != null)
+            {
+                defaultWorkspace.CanEdit = false;
+                defaultWorkspace.CanDelete = false;
+            }
+#endif
+
             SelectedWorkspace = _workspaceManager.Workspace;
         }
 
         protected override async Task Close()
         {
             _workspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
-            _workspaceManager.WorkspacesChanged -= OnWorkspacesChanged;
 
             await _workspaceManager.Save();
 
@@ -165,11 +169,6 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
         {
             SelectedWorkspace = e.NewWorkspace;
-        }
-
-        private void OnWorkspacesChanged(object sender, EventArgs e)
-        {
-            AvailableWorkspaces.ReplaceRange(_workspaceManager.Workspaces);
         }
         #endregion
     }
