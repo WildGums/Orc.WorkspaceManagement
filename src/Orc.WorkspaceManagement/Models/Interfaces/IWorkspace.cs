@@ -10,6 +10,8 @@ namespace Orc.WorkspaceManagement
     public interface IWorkspace
     {
         string Title { get; set; }
+        bool CanEdit { get; set; }
+        bool CanDelete { get; set; }
 
         void SetWorkspaceValue(string name, object value);
         T GetWorkspaceValue<T>(string name, T defaultValue);

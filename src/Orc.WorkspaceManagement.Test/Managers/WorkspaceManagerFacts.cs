@@ -81,6 +81,26 @@ namespace Orc.WorkspaceManagement.Test.Managers
             }
 
             [TestCase]
+            public void DoesNotRemoveWorkspaceWithCanDeleteIsFalse()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace",
+                    CanDelete = false
+                };
+
+                workspaceManager.Add(workspace);
+
+                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+
+                workspaceManager.Remove(workspace);
+
+                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+            }
+
+            [TestCase]
             public void RaisesWorkspaceRemovedEvent()
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
@@ -148,6 +168,32 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.Initialize();
 
                 Assert.IsTrue(eventRaised);
+            }
+        }
+
+        [TestFixture]
+        public class TheStoreMethod
+        {
+            [TestCase]
+            public void PreventsSaveForReadonlyWorkspaces()
+            {
+                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+
+                var workspace = new Workspace()
+                {
+                    Title = "My workspace",
+                    CanEdit = false
+                };
+
+                workspaceManager.Add(workspace);
+                workspaceManager.Workspace = workspace;
+
+                var eventRaised = false;
+                workspaceManager.WorkspaceInfoRequested += (sender, e) => eventRaised = true;
+
+                workspaceManager.StoreWorkspace();
+
+                Assert.IsFalse(eventRaised);
             }
         }
 

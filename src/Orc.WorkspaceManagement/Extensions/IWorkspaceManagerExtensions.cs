@@ -72,6 +72,8 @@ namespace Orc.WorkspaceManagement
             {
                 var defaultWorkspace = new Workspace();
                 defaultWorkspace.Title = defaultWorkspaceName;
+                defaultWorkspace.CanEdit = false;
+                defaultWorkspace.CanDelete = false;
 
                 workspaceManager.Add(defaultWorkspace, true);
             }

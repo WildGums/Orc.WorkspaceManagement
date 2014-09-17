@@ -29,6 +29,8 @@ namespace Orc.WorkspaceManagement
         event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
 
         event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
+
+        event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdating;
         event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
         /// <summary>
@@ -47,7 +49,8 @@ namespace Orc.WorkspaceManagement
         /// Removes the provider that will provide information to the workspace when the information is requested.
         /// </summary>
         /// <param name="workspaceProvider">The workspace provider.</param>
-        void RemoveProvider(IWorkspaceProvider workspaceProvider);
+        /// <returns><c>true</c> if the workspace provider is deleted; otherwise <c>false</c>.</returns>
+        bool RemoveProvider(IWorkspaceProvider workspaceProvider);
 
         /// <summary>
         /// Adds the specified workspace to the list of workspaces.
@@ -59,7 +62,8 @@ namespace Orc.WorkspaceManagement
         /// Removes the specified workspace from the list of workspaces.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        void Remove(IWorkspace workspace);
+        /// <returns><c>true</c> if the workspace is deleted; otherwise <c>false</c>.</returns>
+        bool Remove(IWorkspace workspace);
 
         /// <summary>
         /// Stores the workspace by requesting information.

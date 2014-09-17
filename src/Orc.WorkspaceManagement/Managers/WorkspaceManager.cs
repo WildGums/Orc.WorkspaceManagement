@@ -76,6 +76,8 @@ namespace Orc.WorkspaceManagement
                     return;
                 }
 
+                WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
+
                 _workspace = value;
 
                 foreach (var provider in _workspaceProviders)
@@ -100,6 +102,8 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
 
         public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
+
+        public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdating;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         #endregion
 
@@ -171,11 +175,12 @@ namespace Orc.WorkspaceManagement
         /// Removes the provider that will provide information to the workspace when the information is requested.
         /// </summary>
         /// <param name="workspaceProvider">The workspace provider.</param>
-        public void RemoveProvider(IWorkspaceProvider workspaceProvider)
+        /// <returns><c>true</c> if the workspace provider is deleted; otherwise <c>false</c>.</returns>
+        public bool RemoveProvider(IWorkspaceProvider workspaceProvider)
         {
             Argument.IsNotNull(() => workspaceProvider);
 
-            _workspaceProviders.Remove(workspaceProvider);
+            return _workspaceProviders.Remove(workspaceProvider);
         }
 
         /// <summary>
@@ -203,24 +208,35 @@ namespace Orc.WorkspaceManagement
         /// Removes the specified workspace from the list of workspaces.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public void Remove(IWorkspace workspace)
+        /// <returns><c>true</c> if the workspace is deleted; otherwise <c>false</c>.</returns>
+        public bool Remove(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
 
             if (!_workspaces.Contains(workspace))
             {
-                return;
+                return false;
             }
 
-            _workspaces.Remove(workspace);
+            if (!workspace.CanDelete)
+            {
+                return false;
+            }
+
+            var removed = _workspaces.Remove(workspace);
 
             if (ObjectHelper.AreEqual(workspace, Workspace))
             {
                 Workspace = _workspaces.FirstOrDefault();
             }
 
-            WorkspaceRemoved.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-            WorkspacesChanged.SafeInvoke(this);
+            if (removed)
+            {
+                WorkspaceRemoved.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+                WorkspacesChanged.SafeInvoke(this);
+            }
+
+            return removed;
         }
 
         /// <summary>
@@ -234,6 +250,12 @@ namespace Orc.WorkspaceManagement
             if (workspace == null)
             {
                 Log.Error("Workspace is empty, cannot store workspace");
+                return;
+            }
+
+            if (!workspace.CanEdit)
+            {
+                Log.Warning("Workspace is read-only, cannot store workspace");
                 return;
             }
 

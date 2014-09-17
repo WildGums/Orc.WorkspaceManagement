@@ -18,11 +18,16 @@ namespace Orc.WorkspaceManagement
         #region Constructors
         public Workspace()
         {
+            CanEdit = true;
+            CanDelete = true;
         }
         #endregion
 
         #region IWorkspace Members
         public string Title { get; set; }
+
+        public bool CanEdit { get; set; }
+        public bool CanDelete { get; set; }
 
         public void SetWorkspaceValue(string name, object value)
         {
