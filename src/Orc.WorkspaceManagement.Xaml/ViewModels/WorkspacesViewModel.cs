@@ -152,8 +152,6 @@ namespace Orc.WorkspaceManagement.ViewModels
                                 select workspace);
 
             AvailableWorkspaces.ReplaceRange(finalItems);
-
-            SelectedWorkspace = _workspaceManager.Workspace;
         }
         #endregion
     }
