@@ -20,6 +20,8 @@ namespace Orc.WorkspaceManagement.ViewModels
             DeferValidationUntilFirstSaveCall = true;
 
             Workspace = workspace;
+
+            Title = !string.IsNullOrEmpty(workspace.Title) ? string.Format("Edit workspace {0}", workspace.Title) : "Create new workspace";
         }
 
         [Model]
