@@ -7,12 +7,10 @@
 
 namespace Orc.WorkspaceManagement.Views
 {
-    using Catel.Windows.Controls;
-
     /// <summary>
     /// Interaction logic for WorkspacesView.xaml.
     /// </summary>
-    public partial class WorkspacesView : UserControl
+    public partial class WorkspacesView
     {
         #region Constructors
         /// <summary>

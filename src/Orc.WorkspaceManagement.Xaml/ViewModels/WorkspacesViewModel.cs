@@ -14,12 +14,15 @@ namespace Orc.WorkspaceManagement.ViewModels
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
     using WorkspaceManagement;
 
     public class WorkspacesViewModel : ViewModelBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region Fields
         private readonly IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
@@ -37,7 +40,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             _uiVisualizerService = uiVisualizerService;
             _dispatcherService = dispatcherService;
 
-            AvailableWorkspaces = new ObservableCollection<IWorkspace>();
+            AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
             EditWorkspace = new Command<IWorkspace>(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new Command<IWorkspace>(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
@@ -45,7 +48,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Properties
-        public ObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
+        public FastObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
 
         public IWorkspace SelectedWorkspace { get; set; }
         #endregion
@@ -57,11 +60,13 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             if (workspace == null)
             {
+                Log.Debug("Cannot execute => workspace is null");
                 return false;
             }
 
             if (!workspace.CanEdit)
             {
+                Log.Debug("Cannot execute => workspace not editable");
                 return false;
             }
 
@@ -151,7 +156,17 @@ namespace Orc.WorkspaceManagement.ViewModels
                                 orderby workspace.Title
                                 select workspace);
 
-            AvailableWorkspaces.ReplaceRange(finalItems);
+            using (AvailableWorkspaces.SuspendChangeNotifications())
+            {
+                AvailableWorkspaces.ReplaceRange(finalItems);    
+            }
+            
+            // Required for button display bug
+            _dispatcherService.BeginInvoke(() =>
+            {
+                RaisePropertyChanged(() => AvailableWorkspaces);
+                ViewModelCommandManager.InvalidateCommands(true);
+            });
         }
         #endregion
     }
