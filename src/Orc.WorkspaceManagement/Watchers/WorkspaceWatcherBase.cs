@@ -11,7 +11,7 @@ namespace Orc.WorkspaceManagement
     using System.Diagnostics;
     using Catel;
 
-    public abstract class WorkspaceChangeWatcher
+    public abstract class WorkspaceWatcherBase
     {
         #region Fields
         private Stopwatch _switchStopwatch;
@@ -19,7 +19,7 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Constructors
-        protected WorkspaceChangeWatcher(IWorkspaceManager workspaceManager)
+        protected WorkspaceWatcherBase(IWorkspaceManager workspaceManager)
         {
             Argument.IsNotNull(() => workspaceManager);
 
@@ -89,11 +89,13 @@ namespace Orc.WorkspaceManagement
         {
             OnWorkspaceUpdated(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
 
+            var type = GetType();
+
             _switchStopwatch.Stop();
-            MethodTimeLogger.Log(typeof (WorkspaceChangeWatcher), "Switch", _switchStopwatch.ElapsedMilliseconds);
+            MethodTimeLogger.Log(type, "Switch", _switchStopwatch.ElapsedMilliseconds);
 
             _totalStopwatch.Stop();
-            MethodTimeLogger.Log(typeof (WorkspaceChangeWatcher), "Total", _totalStopwatch.ElapsedMilliseconds);
+            MethodTimeLogger.Log(type, "Total", _totalStopwatch.ElapsedMilliseconds);
         }
 
         private void OnWorkspaceAdded(object sender, WorkspaceEventArgs e)
