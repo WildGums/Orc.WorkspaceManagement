@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Providers
+namespace Orc.WorkspaceManagement
 {
     using Catel;
 
