@@ -80,10 +80,7 @@ namespace Orc.WorkspaceManagement
 
                 _workspace = value;
 
-                foreach (var provider in _workspaceProviders)
-                {
-                    provider.ApplyWorkspace(value);
-                }
+                ApplyWorkspaceUsingProviders(_workspace);
 
                 WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
             }
@@ -262,10 +259,7 @@ namespace Orc.WorkspaceManagement
             // Events first so providers can manipulate data afterwards
             WorkspaceInfoRequested.SafeInvoke(this, new WorkspaceEventArgs(workspace));
 
-            foreach (var provider in _workspaceProviders)
-            {
-                provider.ProvideInformation(workspace);
-            }
+            GetInformationFromProviders(workspace);
 
             Log.Info("Stored workspace");
         }
@@ -317,6 +311,36 @@ namespace Orc.WorkspaceManagement
             Saved.SafeInvoke(this);
 
             Log.Info("Saved all workspaces to '{0}'", baseDirectory);
+        }
+
+        private void GetInformationFromProviders(IWorkspace workspace)
+        {
+            foreach (var provider in _workspaceProviders)
+            {
+                try
+                {
+                    provider.ProvideInformation(workspace);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to get information for workspace using provider '{0}'", provider.GetType().Name);
+                }
+            }
+        }
+
+        private void ApplyWorkspaceUsingProviders(IWorkspace workspace)
+        {
+            foreach (var provider in _workspaceProviders)
+            {
+                try
+                {
+                    provider.ApplyWorkspace(workspace);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to apply workspace using provider '{0}'", provider.GetType().Name);
+                }
+            }
         }
         #endregion
     }

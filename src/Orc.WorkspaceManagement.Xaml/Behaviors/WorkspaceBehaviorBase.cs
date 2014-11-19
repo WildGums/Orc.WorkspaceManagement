@@ -11,14 +11,18 @@ namespace Orc.WorkspaceManagement.Behaviors
     using Catel.IoC;
     using Catel.Windows.Interactivity;
 
-    public abstract class WorkspaceBehaviorBase<T> : BehaviorBase<T>
+    public abstract class WorkspaceBehaviorBase<T> : BehaviorBase<T>, IWorkspaceBehavior
         where T : FrameworkElement
     {
+        private readonly BehaviorWorkspaceProvider _workspaceProvider;
+
         #region Constructors
         protected WorkspaceBehaviorBase()
         {
             var dependencyResolver = this.GetDependencyResolver();
             WorkspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
+
+            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this);
         }
         #endregion
 
@@ -41,8 +45,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         {
             base.OnAssociatedObjectLoaded();
 
-            WorkspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
-            WorkspaceManager.WorkspaceInfoRequested += OnWorkspaceInfoRequested;
+            WorkspaceManager.AddProvider(_workspaceProvider);
 
             var workspace = WorkspaceManager.Workspace;
             if (workspace != null)
@@ -53,25 +56,24 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         protected override void OnAssociatedObjectUnloaded()
         {
-            WorkspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
-            WorkspaceManager.WorkspaceInfoRequested -= OnWorkspaceInfoRequested;
+            WorkspaceManager.RemoveProvider(_workspaceProvider);
 
             base.OnAssociatedObjectUnloaded();
-        }
-
-        private void OnWorkspaceInfoRequested(object sender, WorkspaceEventArgs e)
-        {
-            SaveSettings(e.Workspace, KeyPrefix);
-        }
-
-        private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
-        {
-            LoadSettings(e.NewWorkspace, KeyPrefix);
         }
 
         protected abstract void SaveSettings(IWorkspace workspace, string prefix);
 
         protected abstract void LoadSettings(IWorkspace workspace, string prefix);
+
+        public void Load(IWorkspace workspace)
+        {
+            LoadSettings(workspace, KeyPrefix);
+        }
+
+        public void Save(IWorkspace workspace)
+        {
+            SaveSettings(workspace, KeyPrefix);
+        }
         #endregion
     }
 }

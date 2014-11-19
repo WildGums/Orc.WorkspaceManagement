@@ -11,10 +11,18 @@ namespace Orc.WorkspaceManagement.Behaviors
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Documents;
 
     public class AutoWorkspaceGrid : WorkspaceBehaviorBase<Grid>
     {
+        private readonly Dictionary<string, string> _defaultValues = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoWorkspaceGrid"/> class.
+        /// </summary>
+        public AutoWorkspaceGrid()
+        {
+        }
+
         #region Properties
         public string RowsToPersist
         {
@@ -37,13 +45,41 @@ namespace Orc.WorkspaceManagement.Behaviors
             DependencyProperty.Register("ColumnsToPersist", typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
         #endregion
 
+        protected override void OnAssociatedObjectLoaded()
+        {
+            GetDefaultValues();
+
+            base.OnAssociatedObjectLoaded();
+        }
+
+        private void GetDefaultValues()
+        {
+            var rows = GetRows();
+            foreach (var index in rows)
+            {
+                var defaultValueName = string.Format("row_{0}_default", index);
+                var defaultRowHeight = FromGridLengthToString(AssociatedObject.RowDefinitions[index].Height);
+
+                _defaultValues[defaultValueName] = defaultRowHeight;
+            }
+
+            var columns = GetColumns();
+            foreach (var index in columns)
+            {
+                var defaultValueName = string.Format("column_{0}_default", index);
+                var defaultColumnWidth = FromGridLengthToString(AssociatedObject.ColumnDefinitions[index].Width);
+
+                _defaultValues[defaultValueName] = defaultColumnWidth;
+            }
+        }
+
         protected override void SaveSettings(IWorkspace workspace, string prefix)
         {
             var rows = GetRows();
             foreach (var index in rows)
             {
                 var name = string.Format("row_{0}", index);
-                var rowHeight = AssociatedObject.RowDefinitions[index].ActualHeight;
+                var rowHeight = AssociatedObject.RowDefinitions[index].ActualHeight.ToString();
 
                 AssociatedObject.SaveValueToWorkspace(name, rowHeight, workspace, prefix);
             }
@@ -52,7 +88,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             foreach (var index in columns)
             {
                 var name = string.Format("column_{0}", index);
-                var columnWidth = AssociatedObject.ColumnDefinitions[index].ActualWidth;
+                var columnWidth = AssociatedObject.ColumnDefinitions[index].ActualWidth.ToString();
 
                 AssociatedObject.SaveValueToWorkspace(name, columnWidth, workspace, prefix);
             }
@@ -64,22 +100,38 @@ namespace Orc.WorkspaceManagement.Behaviors
             foreach (var index in rows)
             {
                 var name = string.Format("row_{0}", index);
-                var rowHeight = AssociatedObject.RowDefinitions[index].ActualHeight;
+                var rowValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
-                rowHeight = AssociatedObject.LoadValueFromWorkspace(name, rowHeight, workspace, prefix);
+                GridLength gridLength;
+                if (string.Equals(rowValue, "unknown"))
+                {
+                    gridLength = FromStringToGridLength(_defaultValues[string.Format("row_{0}_default", index)]);
+                }
+                else
+                {
+                    gridLength = new GridLength(double.Parse(rowValue));
+                }
 
-                AssociatedObject.RowDefinitions[index].Height = new GridLength(rowHeight);
+                AssociatedObject.RowDefinitions[index].Height = gridLength;
             }
 
             var columns = GetColumns();
             foreach (var index in columns)
             {
                 var name = string.Format("column_{0}", index);
-                var columnWidth = AssociatedObject.ColumnDefinitions[index].ActualWidth;
+                var columnValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
-                columnWidth = AssociatedObject.LoadValueFromWorkspace(name, columnWidth, workspace, prefix);
+                GridLength gridLength;
+                if (string.Equals(columnValue, "unknown"))
+                {
+                    gridLength = FromStringToGridLength(_defaultValues[string.Format("column_{0}_default", index)]);
+                }
+                else
+                {
+                    gridLength = new GridLength(double.Parse(columnValue));
+                }
 
-                AssociatedObject.ColumnDefinitions[index].Width = new GridLength(columnWidth);
+                AssociatedObject.ColumnDefinitions[index].Width = gridLength;
             }
         }
 
@@ -99,7 +151,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
             if (!string.IsNullOrWhiteSpace(input))
             {
-                var splittedItems = input.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var splittedItems = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var splittedItem in splittedItems)
                 {
                     var index = 0;
@@ -121,6 +173,41 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
 
             return items;
+        }
+
+        private static GridLength FromStringToGridLength(string str)
+        {
+            if (str.StartsWith("star-"))
+            {
+                str = str.Replace("star-", string.Empty);
+                return new GridLength(double.Parse(str), GridUnitType.Star);
+            }
+
+            if (str.StartsWith("auto-"))
+            {
+                str = str.Replace("star-", string.Empty);
+                return new GridLength(double.Parse(str), GridUnitType.Auto);
+            }
+
+            return new GridLength(double.Parse(str));
+        }
+
+        private static string FromGridLengthToString(GridLength gridLength)
+        {
+            switch (gridLength.GridUnitType)
+            {
+                case GridUnitType.Auto:
+                    return string.Format("auto-{0}", gridLength.Value);
+
+                case GridUnitType.Pixel:
+                    return string.Format("{0}", gridLength.Value);
+
+                case GridUnitType.Star:
+                    return string.Format("star-{0}", gridLength.Value);
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
