@@ -9,7 +9,6 @@ namespace Orc.WorkspaceManagement.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
@@ -17,7 +16,6 @@ namespace Orc.WorkspaceManagement.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using WorkspaceManagement;
 
     public class WorkspacesViewModel : ViewModelBase
     {
@@ -26,19 +24,16 @@ namespace Orc.WorkspaceManagement.ViewModels
         #region Fields
         private readonly IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly IDispatcherService _dispatcherService;
         #endregion
 
         #region Constructors
-        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IDispatcherService dispatcherService)
+        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => dispatcherService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
-            _dispatcherService = dispatcherService;
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
@@ -60,13 +55,11 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             if (workspace == null)
             {
-                Log.Debug("Cannot execute => workspace is null");
                 return false;
             }
 
             if (!workspace.CanEdit)
             {
-                Log.Debug("Cannot execute => workspace not editable");
                 return false;
             }
 
@@ -123,9 +116,6 @@ namespace Orc.WorkspaceManagement.ViewModels
             _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
 
             UpdateWorkspaces();
-
-            // Required because command parameter bindings are not working without this
-            _dispatcherService.BeginInvoke(() => ViewModelCommandManager.InvalidateCommands());
         }
 
         protected override async Task Close()
@@ -158,15 +148,8 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
-                AvailableWorkspaces.ReplaceRange(finalItems);    
+                AvailableWorkspaces.ReplaceRange(finalItems);
             }
-            
-            // Required for button display bug
-            _dispatcherService.BeginInvoke(() =>
-            {
-                RaisePropertyChanged(() => AvailableWorkspaces);
-                ViewModelCommandManager.InvalidateCommands(true);
-            });
         }
         #endregion
     }

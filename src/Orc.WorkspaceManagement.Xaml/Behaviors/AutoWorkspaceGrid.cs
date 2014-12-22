@@ -185,7 +185,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
             if (str.StartsWith("auto-"))
             {
-                str = str.Replace("star-", string.Empty);
+                str = str.Replace("auto-", string.Empty);
                 return new GridLength(double.Parse(str), GridUnitType.Auto);
             }
 

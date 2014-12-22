@@ -2,17 +2,19 @@
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://catel.codeplex.com"
-                   xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters">
+                   xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
     <UserControl.Resources>
         <catel:BooleanToHidingVisibilityConverter x:Key="BooleanToHidingVisibilityConverter" />
         <converters:IsCurrentWorkspaceToCollapsingVisibilityConverter x:Key="IsCurrentWorkspaceToCollapsingVisibilityConverter" />
+        
+        <converters:TriggerConverter x:Key="TriggerConverter" />
     </UserControl.Resources>
-    
+
     <Grid x:Name="layoutRoot" Background="White">
         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
-            <ListBox ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" BorderThickness="0">
-
+            <ListBox x:Name="listBox" ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" BorderThickness="0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel />
@@ -32,18 +34,36 @@
                             <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
                                    Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
-                            
+
                             <Label Grid.Column="1" Content="{Binding Title}" />
 
-                            <Button Grid.Column="2" Command="{Binding ElementName=layoutRoot, Path=DataContext.EditWorkspace}"
-                                    CommandParameter="{Binding }" ToolTip="Edit" Width="24"
+                            <Button Grid.Column="2" CommandParameter="{Binding }" ToolTip="Edit" Width="24" 
                                     Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">
+
+                                <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                <Button.Command>
+                                    <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                        <Binding Path="DataContext.EditWorkspace" ElementName="layoutRoot" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </Button.Command>
+
                                 <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/edit.png" Stretch="None" />
                             </Button>
 
-                            <Button Grid.Column="3" Command="{Binding ElementName=layoutRoot, Path=DataContext.RemoveWorkspace}"
-                                    CommandParameter="{Binding }" ToolTip="Remove" Width="24"
+                            <Button Grid.Column="3" CommandParameter="{Binding }" ToolTip="Remove" Width="24"
                                     Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">
+
+                                <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                <Button.Command>
+                                    <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                        <Binding Path="DataContext.RemoveWorkspace" ElementName="layoutRoot" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </Button.Command>                                
+                                
                                 <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/remove.png" Stretch="None" />
                             </Button>
                         </Grid>
