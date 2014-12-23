@@ -46,6 +46,19 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Methods
+        protected virtual bool ShouldIgnoreWorkspaceChange()
+        {
+            if (IgnoreSwitchToNewlyCreatedWorkspace)
+            {
+                if (_justAddedWorkspace)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected virtual void OnWorkspaceUpdating(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
             
@@ -93,7 +106,7 @@ namespace Orc.WorkspaceManagement
             _switchStopwatch = Stopwatch.StartNew();
             _totalStopwatch = Stopwatch.StartNew();
 
-            if (!IgnoreSwitchToNewlyCreatedWorkspace && !_justAddedWorkspace)
+            if (!ShouldIgnoreWorkspaceChange())
             {
                 OnWorkspaceUpdating(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
             }
@@ -105,7 +118,7 @@ namespace Orc.WorkspaceManagement
 
         private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
         {
-            if (!IgnoreSwitchToNewlyCreatedWorkspace && !_justAddedWorkspace)
+            if (!ShouldIgnoreWorkspaceChange())
             {
                 OnWorkspaceUpdated(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
             }
