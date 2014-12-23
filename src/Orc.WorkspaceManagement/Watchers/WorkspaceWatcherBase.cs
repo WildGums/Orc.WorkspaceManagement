@@ -10,10 +10,15 @@ namespace Orc.WorkspaceManagement
     using System;
     using System.Diagnostics;
     using Catel;
+    using Catel.Logging;
 
     public abstract class WorkspaceWatcherBase
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private bool _justAddedWorkspace;
+
         private Stopwatch _switchStopwatch;
         private Stopwatch _totalStopwatch;
         #endregion
@@ -22,6 +27,8 @@ namespace Orc.WorkspaceManagement
         protected WorkspaceWatcherBase(IWorkspaceManager workspaceManager)
         {
             Argument.IsNotNull(() => workspaceManager);
+
+            IgnoreSwitchToNewlyCreatedWorkspace = true;
 
             workspaceManager.WorkspaceUpdating += OnWorkspaceUpdating;
             workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
@@ -32,6 +39,10 @@ namespace Orc.WorkspaceManagement
             workspaceManager.Saving += OnSaving;
             workspaceManager.Saved += OnSaved;
         }
+        #endregion
+
+        #region Properties
+        protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
         #endregion
 
         #region Methods
@@ -82,12 +93,28 @@ namespace Orc.WorkspaceManagement
             _switchStopwatch = Stopwatch.StartNew();
             _totalStopwatch = Stopwatch.StartNew();
 
-            OnWorkspaceUpdating(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
+            if (!IgnoreSwitchToNewlyCreatedWorkspace && !_justAddedWorkspace)
+            {
+                OnWorkspaceUpdating(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
+            }
+            else
+            {
+                Log.Debug("Ignoring WorkspaceUpdating event because this is a newly added workspace");
+            }
         }
 
         private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
         {
-            OnWorkspaceUpdated(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
+            if (!IgnoreSwitchToNewlyCreatedWorkspace && !_justAddedWorkspace)
+            {
+                OnWorkspaceUpdated(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
+            }
+            else
+            {
+                Log.Debug("Ignoring WorkspaceUpdated event because this is a newly added workspace");
+            }
+
+            _justAddedWorkspace = false;
 
             var type = GetType();
 
@@ -101,6 +128,11 @@ namespace Orc.WorkspaceManagement
         private void OnWorkspaceAdded(object sender, WorkspaceEventArgs e)
         {
             OnWorkspaceAdded(e.Workspace);
+
+            if (IgnoreSwitchToNewlyCreatedWorkspace)
+            {
+                _justAddedWorkspace = true;
+            }
         }
 
         private void OnWorkspaceRemoved(object sender, WorkspaceEventArgs e)
