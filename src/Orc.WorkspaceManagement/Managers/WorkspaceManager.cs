@@ -119,6 +119,8 @@ namespace Orc.WorkspaceManagement
 
             if (Directory.Exists(baseDirectory))
             {
+                _workspaces.Clear();
+
                 foreach (var workspaceFile in Directory.GetFiles(baseDirectory, string.Format("*{0}", WorkspaceFileExtension)))
                 {
                     try
