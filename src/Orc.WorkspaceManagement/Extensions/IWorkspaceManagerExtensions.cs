@@ -77,6 +77,8 @@ namespace Orc.WorkspaceManagement
 
                 workspaceManager.Add(defaultWorkspace, true);
             }
+
+            workspaceManager.Workspace = workspaceManager.Workspaces.FirstOrDefault(w => w.Title == defaultWorkspaceName);
         }
 
         public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = false, string defaultWorkspaceName = "Default")

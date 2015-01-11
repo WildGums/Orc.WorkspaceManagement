@@ -93,6 +93,8 @@
     <Compile Include="Managers\WorkspaceManager.cs" />
     <Compile Include="Providers\Interfaces\IWorkspaceProvider.cs" />
     <Compile Include="Providers\WorkspaceProviderBase.cs" />
+    <Compile Include="Services\Interfaces\IWorkspacesStorageService.cs" />
+    <Compile Include="Services\WorkspacesStorageService.cs" />
     <Compile Include="Watchers\WorkspaceWatcherBase.cs" />
   </ItemGroup>
   <ItemGroup>

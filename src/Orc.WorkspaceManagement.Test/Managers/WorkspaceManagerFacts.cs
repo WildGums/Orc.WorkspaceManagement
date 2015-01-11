@@ -8,8 +8,11 @@
 namespace Orc.WorkspaceManagement.Test.Managers
 {
     using System.Linq;
+    using Helpers;
     using Mocks;
+    using Moq;
     using NUnit.Framework;
+    using Services;
 
     public class WorkspaceManagerFacts
     {
@@ -19,7 +22,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void AddsTheWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -34,7 +37,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void RaisesWorkspaceAddedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
@@ -47,7 +50,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void RaisesWorkspacesChangedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
@@ -64,7 +67,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void RemovesTheWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -83,7 +86,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void DoesNotRemoveWorkspaceWithCanDeleteIsFalse()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -103,7 +106,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void RaisesWorkspaceRemovedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -123,7 +126,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void RaisesWorkspacesChangedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -147,7 +150,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public async void RaisesInitializingEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Initializing += (sender, e) => eventRaised = true;
@@ -160,7 +163,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public async void RaisesInitializedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Initialized += (sender, e) => eventRaised = true;
@@ -177,7 +180,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void PreventsSaveForReadonlyWorkspaces()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var workspace = new Workspace()
                 {
@@ -203,7 +206,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public async void RaisesSavingEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Saving += (sender, e) => eventRaised = true;
@@ -216,7 +219,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public async void RaisesSavedEvent()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Saved += (sender, e) => eventRaised = true;
@@ -239,7 +242,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void CallsProviderWhenStoringWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
                 var workspace = new Workspace()
                 {
                     Title = "test workspace"
@@ -262,7 +265,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             [TestCase]
             public void CorrectlyRemovesProviderWhenStoringWorkspace()
             {
-                var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
+                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
                 var workspace = new Workspace()
                 {
                     Title = "test workspace"

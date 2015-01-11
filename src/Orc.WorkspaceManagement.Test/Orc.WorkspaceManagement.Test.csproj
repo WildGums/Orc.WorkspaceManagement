@@ -49,6 +49,9 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
       <HintPath>..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\lib\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\lib\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -85,6 +88,8 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="EventArgs\WorkspaceUpdatedEventArgsFacts.cs" />
+    <Compile Include="Extensions\WorkspaceManagerExtensionsFacts.cs" />
+    <Compile Include="Helpers\Factories.cs" />
     <Compile Include="Managers\WorkspaceManagerFacts.cs" />
     <Compile Include="Mocks\WorkspaceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
