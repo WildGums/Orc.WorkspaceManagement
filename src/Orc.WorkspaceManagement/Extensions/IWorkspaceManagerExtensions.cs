@@ -79,6 +79,16 @@ namespace Orc.WorkspaceManagement
             }
         }
 
+        public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string newDirectory, bool addDefaultWorkspaceIfNoWorkspacesAreFound = false, string defaultWorkspaceName = "Default")
+        {
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNullOrEmpty(() => newDirectory);
+            Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
+
+            workspaceManager.BaseDirectory = newDirectory;
+            await workspaceManager.Initialize(addDefaultWorkspaceIfNoWorkspacesAreFound, defaultWorkspaceName);
+        }
+
         /// <summary>
         /// Stores the workspace and saves it immediately.
         /// </summary>
