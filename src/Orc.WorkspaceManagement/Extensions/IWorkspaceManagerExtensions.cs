@@ -79,13 +79,13 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string newDirectory, bool addDefaultWorkspaceIfNoWorkspacesAreFound = false, string defaultWorkspaceName = "Default")
+        public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = false, string defaultWorkspaceName = "Default")
         {
             Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNullOrEmpty(() => newDirectory);
+            Argument.IsNotNullOrEmpty(() => directoryName);
             Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
 
-            workspaceManager.BaseDirectory = newDirectory;
+            workspaceManager.BaseDirectory = directoryName;
             await workspaceManager.Initialize(addDefaultWorkspaceIfNoWorkspacesAreFound, defaultWorkspaceName);
         }
 
