@@ -67,6 +67,13 @@ namespace Orc.WorkspaceManagement
 
             foreach (var workspace in workspaces)
             {
+                if (!workspace.CanEdit)
+                {
+                    Log.Debug("Workspace '{0}' is not editable, skipping save of workspace", workspace);
+
+                    continue;
+                }
+
                 var workspaceFile = Path.Combine(path, string.Format("{0}{1}", workspace.Title.GetSlug(), WorkspaceFileExtension));
 
                 Log.Debug("Saving workspace '{0}' to '{1}'", workspace, workspaceFile);
