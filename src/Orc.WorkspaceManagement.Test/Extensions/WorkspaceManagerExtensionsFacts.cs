@@ -7,32 +7,33 @@
 
 namespace Orc.WorkspaceManagement.Test.Extensions
 {
+    using System;
     using System.Linq;
-    using Helpers;
+    using System.Threading.Tasks;
+
     using Moq;
     using NUnit.Framework;
-    using Services;
 
     public class WorkspaceManagerExtensionsFacts
     {
         [TestFixture]
         public class SetWorkspaceSchemesDirectoryMethod
         {
-            [TestCase]
-            public void BaseDirectoryChanged()
+            [Test]
+            public async Task BaseDirectoryChanged()
             {
                 const string someDirectoryName = "Some directory";
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                workspaceManager.SetWorkspaceSchemesDirectory(someDirectoryName).Wait();
+                await workspaceManager.SetWorkspaceSchemesDirectory(someDirectoryName);
 
                 Assert.AreEqual(someDirectoryName, workspaceManager.BaseDirectory);
             }
 
             [TestCase(1)]
             [TestCase(4)]
-            public void ClearWorkspacesEachTime(int timesToRepeat)
+            public async Task ClearWorkspacesEachTime(int timesToRepeat)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -44,8 +45,8 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 for (var i = 0; i < timesToRepeat; i++)
                 {
-                    // using async/await doesn't work
-                    workspaceManager.SetWorkspaceSchemesDirectory("Some directory").Wait();
+
+                    await workspaceManager.SetWorkspaceSchemesDirectory("Some directory");
                 }
 
                 Assert.AreEqual(workspacesCount, workspaceManager.Workspaces.Count());
@@ -53,7 +54,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
             [TestCase("1", "2", "3")]
             [TestCase("1", "2")]
-            public void LoadsCorrectWorkspaces(params string[] titles)
+            public async Task LoadsCorrectWorkspaces(params string[] titles)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -61,15 +62,15 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory("Some directory").Wait();
+                await workspaceManager.SetWorkspaceSchemesDirectory("Some directory");
 
                 var titles2 = workspaceManager.Workspaces.Select(w => w.Title).ToArray();
                 var intersect = titles.Intersect(titles2);
                 Assert.AreEqual(titles.Count(), intersect.Count());
             }
 
-            [TestCase]
-            public void SetWorkspaceToNullWhenDirectoryIsEmpty()
+            [Test]
+            public async Task SetWorkspaceToNullWhenDirectoryIsEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -79,13 +80,13 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory).Wait();
+                await workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory);
 
                 Assert.AreEqual(null, workspaceManager.Workspace);
             }
 
-            [TestCase]
-            public void SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
+            [Test]
+            public async Task SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -95,7 +96,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
                 mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] {new Workspace {Title = "Not defailt 1"}, new Workspace {Title = defaultWorkspace}, new Workspace {Title = "Not defailt 2"}});
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory(notEmptyDirectory, true, defaultWorkspace).Wait();
+                await workspaceManager.SetWorkspaceSchemesDirectory(notEmptyDirectory, true, defaultWorkspace);
 
                 Assert.AreEqual(defaultWorkspace, workspaceManager.Workspace.Title);
             }

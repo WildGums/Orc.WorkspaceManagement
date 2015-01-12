@@ -3,11 +3,10 @@
 //   Copyright (c) 2008 - 2015 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Orc.WorkspaceManagement.Test.Helpers
+namespace Orc.WorkspaceManagement.Test
 {
     using System.Collections.Generic;
     using Moq;
-    using Services;
 
     public static class Factories
     {

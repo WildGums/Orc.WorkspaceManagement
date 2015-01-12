@@ -15,7 +15,6 @@ namespace Orc.WorkspaceManagement
     using Catel;
     using Catel.Data;
     using Catel.Logging;
-    using Services;
     using Path = Catel.IO.Path;
 
     public class WorkspaceManager : IWorkspaceManager
@@ -121,7 +120,9 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.Clear();
 
-            _workspaces.AddRange(_workspacesStorageService.LoadWorkspaces(baseDirectory));            
+            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
+
+            _workspaces.AddRange(workspaces);            
 
             if (_workspaces.Any())
             {

@@ -8,11 +8,11 @@
 namespace Orc.WorkspaceManagement.Test.Managers
 {
     using System.Linq;
-    using Helpers;
+    using System.Threading.Tasks;
+
     using Mocks;
     using Moq;
     using NUnit.Framework;
-    using Services;
 
     public class WorkspaceManagerFacts
     {
@@ -148,7 +148,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheInitializeMethod
         {
             [TestCase]
-            public async void RaisesInitializingEvent()
+            public async Task RaisesInitializingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
@@ -161,7 +161,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             }
 
             [TestCase]
-            public async void RaisesInitializedEvent()
+            public async Task RaisesInitializedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
@@ -204,7 +204,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheSaveMethod
         {
             [TestCase]
-            public async void RaisesSavingEvent()
+            public async Task RaisesSavingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
@@ -217,7 +217,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             }
 
             [TestCase]
-            public async void RaisesSavedEvent()
+            public async Task RaisesSavedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
