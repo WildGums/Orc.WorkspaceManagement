@@ -74,6 +74,7 @@ namespace Orc.WorkspaceManagement
                 defaultWorkspace = new Workspace
                 {
                     Title = defaultWorkspaceName,
+                    Persist = false,
                     CanEdit = false,
                     CanDelete = false,
                 };

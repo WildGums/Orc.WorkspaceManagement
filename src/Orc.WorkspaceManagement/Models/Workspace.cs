@@ -18,6 +18,7 @@ namespace Orc.WorkspaceManagement
         #region Constructors
         public Workspace()
         {
+            Persist = true;
             CanEdit = true;
             CanDelete = true;
         }
@@ -26,6 +27,7 @@ namespace Orc.WorkspaceManagement
         #region IWorkspace Members
         public string Title { get; set; }
 
+        public bool Persist { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
 

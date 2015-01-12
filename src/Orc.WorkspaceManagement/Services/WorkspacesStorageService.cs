@@ -67,9 +67,9 @@ namespace Orc.WorkspaceManagement
 
             foreach (var workspace in workspaces)
             {
-                if (!workspace.CanEdit)
+                if (!workspace.Persist)
                 {
-                    Log.Debug("Workspace '{0}' is not editable, skipping save of workspace", workspace);
+                    Log.Debug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
 
                     continue;
                 }

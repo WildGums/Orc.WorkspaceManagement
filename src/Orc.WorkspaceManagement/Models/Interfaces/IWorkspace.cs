@@ -11,6 +11,8 @@ namespace Orc.WorkspaceManagement
     {
         #region Properties
         string Title { get; set; }
+
+        bool Persist { get; set; }
         bool CanEdit { get; set; }
         bool CanDelete { get; set; }
         #endregion
