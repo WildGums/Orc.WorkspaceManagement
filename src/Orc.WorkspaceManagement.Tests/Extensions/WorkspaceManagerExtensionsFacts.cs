@@ -80,7 +80,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                await workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory, alwaysEnsureDefaultWorkspace: false);
+                await workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory, false, false);
 
                 Assert.AreEqual(null, workspaceManager.Workspace);
             }
