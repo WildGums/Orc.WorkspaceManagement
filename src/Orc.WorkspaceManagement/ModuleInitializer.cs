@@ -15,5 +15,6 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
         serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
+        serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
     }
 }

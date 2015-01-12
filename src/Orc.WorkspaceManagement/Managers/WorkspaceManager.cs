@@ -21,9 +21,10 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private const string WorkspaceFileExtension = ".xml";
+        
 
         private readonly IWorkspaceInitializer _workspaceInitializer;
+        private readonly IWorkspacesStorageService _workspacesStorageService;
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
 
@@ -34,11 +35,13 @@ namespace Orc.WorkspaceManagement
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
         /// <param name="workspaceInitializer">The workspace initializer.</param>
-        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer)
+        /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
+        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService)
         {
             Argument.IsNotNull(() => workspaceInitializer);
 
             _workspaceInitializer = workspaceInitializer;
+            _workspacesStorageService = workspacesStorageService;
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
@@ -66,8 +69,6 @@ namespace Orc.WorkspaceManagement
             get { return _workspace; }
             set
             {
-                Argument.IsNotNull("workspace", value);
-
                 var oldWorkspace = _workspace;
                 var newWorkspace = value;
 
@@ -117,39 +118,19 @@ namespace Orc.WorkspaceManagement
 
             Initializing.SafeInvoke(this);
 
-            if (Directory.Exists(baseDirectory))
-            {
-                foreach (var workspaceFile in Directory.GetFiles(baseDirectory, string.Format("*{0}", WorkspaceFileExtension)))
-                {
-                    try
-                    {
-                        Log.Debug("Loading workspace from '{0}'", workspaceFile);
+            _workspaces.Clear();
 
-                        using (var fileStream = new FileStream(workspaceFile, FileMode.Open))
-                        {
-                            var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml);
-                            if (workspace == null || string.IsNullOrEmpty(workspace.Title))
-                            {
-                                Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", workspaceFile);
-                            }
-                            else
-                            {
-                                _workspaces.Add(workspace);
+            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
 
-                                Log.Debug("Loaded workspace");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to load workspace from '{0}'", workspaceFile);
-                    }
-                }
-            }
+            _workspaces.AddRange(workspaces);            
 
             if (_workspaces.Any())
             {
                 Workspace = _workspaces.FirstOrDefault();
+            }
+            else
+            {
+                Workspace = null;
             }
 
             Initialized.SafeInvoke(this);
@@ -276,37 +257,7 @@ namespace Orc.WorkspaceManagement
 
             Saving.SafeInvoke(this);
 
-            if (!Directory.Exists(baseDirectory))
-            {
-                Log.Debug("Creating base directory '{0}'", baseDirectory);
-
-                Directory.CreateDirectory(baseDirectory);
-            }
-
-            Log.Debug("Deleting previous workspace files");
-
-            foreach (var workspaceFile in Directory.GetFiles(baseDirectory, string.Format("*{0}", WorkspaceFileExtension)))
-            {
-                try
-                {
-                    Log.Debug("Deleting file '{0}'", workspaceFile);
-
-                    File.Delete(workspaceFile);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to delete file '{0}'", workspaceFile);
-                }
-            }
-
-            foreach (var workspace in _workspaces)
-            {
-                var workspaceFile = Path.Combine(baseDirectory, string.Format("{0}{1}", workspace.Title.GetSlug(), WorkspaceFileExtension));
-
-                Log.Debug("Saving workspace '{0}' to '{1}'", workspace, workspaceFile);
-
-                ((Workspace)workspace).SaveAsXml(workspaceFile);
-            }
+            _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
 
             Saved.SafeInvoke(this);
 
