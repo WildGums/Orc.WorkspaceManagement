@@ -61,34 +61,49 @@ namespace Orc.WorkspaceManagement
             workspaceManager.AddProvider(workspaceProvider, callApplyWorkspaceForCurrentWorkspace);
         }
 
-        public static async Task Initialize(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound,
-            string defaultWorkspaceName = "Default")
+        public static void EnsureDefaultWorkspace(this IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default")
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            var defaultWorkspace = (from workspace in workspaceManager.Workspaces
+                                    where string.Equals(workspace.Title, defaultWorkspaceName)
+                                    select workspace).FirstOrDefault();
+
+            if (defaultWorkspace == null)
+            {
+                defaultWorkspace = new Workspace
+                {
+                    Title = defaultWorkspaceName,
+                    CanEdit = false,
+                    CanDelete = false,
+                };
+
+                workspaceManager.Add(defaultWorkspace, true);
+            }
+        }
+
+        public static async Task Initialize(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default")
         {
             Argument.IsNotNull(() => workspaceManager);
 
             await workspaceManager.Initialize();
 
-            if (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any())
+            if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
-                var defaultWorkspace = new Workspace();
-                defaultWorkspace.Title = defaultWorkspaceName;
-                defaultWorkspace.CanEdit = false;
-                defaultWorkspace.CanDelete = false;
-
-                workspaceManager.Add(defaultWorkspace, true);
+                EnsureDefaultWorkspace(workspaceManager, defaultWorkspaceName);
             }
 
             workspaceManager.Workspace = workspaceManager.Workspaces.FirstOrDefault(w => w.Title == defaultWorkspaceName);
         }
 
-        public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = false, string defaultWorkspaceName = "Default")
+        public static async Task SetWorkspaceSchemesDirectory(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default")
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNullOrEmpty(() => directoryName);
             Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
 
             workspaceManager.BaseDirectory = directoryName;
-            await workspaceManager.Initialize(addDefaultWorkspaceIfNoWorkspacesAreFound, defaultWorkspaceName);
+            await workspaceManager.Initialize(addDefaultWorkspaceIfNoWorkspacesAreFound, alwaysEnsureDefaultWorkspace, defaultWorkspaceName);
         }
 
         /// <summary>

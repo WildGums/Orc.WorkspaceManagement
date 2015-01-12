@@ -21,7 +21,7 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        
+
 
         private readonly IWorkspaceInitializer _workspaceInitializer;
         private readonly IWorkspacesStorageService _workspacesStorageService;
@@ -122,7 +122,7 @@ namespace Orc.WorkspaceManagement
 
             var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
 
-            _workspaces.AddRange(workspaces);            
+            _workspaces.AddRange(workspaces);
 
             if (_workspaces.Any())
             {

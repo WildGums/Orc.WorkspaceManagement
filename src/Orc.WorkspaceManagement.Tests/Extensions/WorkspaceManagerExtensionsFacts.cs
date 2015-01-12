@@ -49,7 +49,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
                     await workspaceManager.SetWorkspaceSchemesDirectory("Some directory");
                 }
 
-                Assert.AreEqual(workspacesCount, workspaceManager.Workspaces.Count());
+                Assert.AreEqual(workspacesCount + 1, workspaceManager.Workspaces.Count());
             }
 
             [TestCase("1", "2", "3")]
@@ -80,7 +80,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                await workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory);
+                await workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory, alwaysEnsureDefaultWorkspace: false);
 
                 Assert.AreEqual(null, workspaceManager.Workspace);
             }
@@ -93,10 +93,10 @@ namespace Orc.WorkspaceManagement.Test.Extensions
                 const string defaultWorkspace = "Default name";
                 const string notEmptyDirectory = "Not empty directory";
 
-                mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] {new Workspace {Title = "Not defailt 1"}, new Workspace {Title = defaultWorkspace}, new Workspace {Title = "Not defailt 2"}});
+                mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] { new Workspace { Title = "Not default 1" }, new Workspace { Title = defaultWorkspace }, new Workspace { Title = "Not default 2" } });
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                await workspaceManager.SetWorkspaceSchemesDirectory(notEmptyDirectory, true, defaultWorkspace);
+                await workspaceManager.SetWorkspaceSchemesDirectory(notEmptyDirectory, defaultWorkspaceName: defaultWorkspace);
 
                 Assert.AreEqual(defaultWorkspace, workspaceManager.Workspace.Title);
             }
