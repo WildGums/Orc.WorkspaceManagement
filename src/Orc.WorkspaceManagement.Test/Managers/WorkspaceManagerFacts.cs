@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement.Test.Managers
 {
+    using System;
     using System.Linq;
     using Mocks;
     using NUnit.Framework;
@@ -21,9 +22,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace);
@@ -66,9 +67,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace);
@@ -85,9 +86,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace",
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName(),
                     CanDelete = false
                 };
 
@@ -105,9 +106,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace);
@@ -125,9 +126,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace);
@@ -179,9 +180,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
 
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "My workspace",
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName(),
                     CanEdit = false
                 };
 
@@ -240,9 +241,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             public void CallsProviderWhenStoringWorkspace()
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "test workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace, true);
@@ -263,9 +264,9 @@ namespace Orc.WorkspaceManagement.Test.Managers
             public void CorrectlyRemovesProviderWhenStoringWorkspace()
             {
                 var workspaceManager = new WorkspaceManager(new EmptyWorkspaceInitializer());
-                var workspace = new Workspace()
+                var workspace = new Workspace
                 {
-                    Title = "test workspace"
+                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
                 };
 
                 workspaceManager.Add(workspace, true);

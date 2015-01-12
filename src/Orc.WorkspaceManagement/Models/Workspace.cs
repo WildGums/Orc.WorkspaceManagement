@@ -36,7 +36,7 @@ namespace Orc.WorkspaceManagement
 
         public T GetWorkspaceValue<T>(string name, T defaultValue)
         {
-            if (!IsConfigurationKeyAvailable(name))
+            if (!IsConfigurationValueSet(name))
             {
                 return defaultValue;
             }
