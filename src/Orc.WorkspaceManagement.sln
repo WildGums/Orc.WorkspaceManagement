@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1FE0D431-A
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Test", "Orc.WorkspaceManagement.Test\Orc.WorkspaceManagement.Test.csproj", "{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.csproj", "{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Example", "Orc.WorkspaceManagement.Example\Orc.WorkspaceManagement.Example.csproj", "{E70E1855-9D61-4063-A209-CA0A150A6F3E}"
 EndProject
