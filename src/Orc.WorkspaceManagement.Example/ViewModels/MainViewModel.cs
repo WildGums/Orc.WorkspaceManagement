@@ -32,25 +32,29 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         private readonly IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly ISelectDirectoryService _selectDirectoryService;
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
-        public MainViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
+        public MainViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory, ISelectDirectoryService selectDirectoryService)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => viewModelFactory);
+            Argument.IsNotNull(() => selectDirectoryService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
+            _selectDirectoryService = selectDirectoryService;
 
             UpdateWorkspace = new Command(OnUpdateWorkspaceExecute, OnUpdateWorkspaceCanExecute);
             AddWorkspace = new Command(OnAddWorkspaceExecute);
             EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new Command(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
+            ChooseBaseDirectory = new Command(OnChooseBaseDirectory);
         }
         #endregion
 
@@ -126,6 +130,19 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         private void OnRemoveWorkspaceExecute()
         {
             _workspaceManager.Remove(SelectedWorkspace);
+        }
+
+        public Command ChooseBaseDirectory { get; private set; }
+
+        public void OnChooseBaseDirectory()
+        {
+            _selectDirectoryService.ShowNewFolderButton = true;
+
+            if (_selectDirectoryService.DetermineDirectory())
+            {
+                _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
+            }
+            
         }
         #endregion
 
