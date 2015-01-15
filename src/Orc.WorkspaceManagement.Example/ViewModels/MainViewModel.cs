@@ -94,6 +94,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             if (await _uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 _workspaceManager.Add(workspace, true);
+                _workspaceManager.Save();
             }
         }
 
@@ -134,13 +135,13 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         public Command ChooseBaseDirectory { get; private set; }
 
-        public void OnChooseBaseDirectory()
+        public async void OnChooseBaseDirectory()
         {
             _selectDirectoryService.ShowNewFolderButton = true;
 
             if (_selectDirectoryService.DetermineDirectory())
             {
-                _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
+                await _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
             }
             
         }
