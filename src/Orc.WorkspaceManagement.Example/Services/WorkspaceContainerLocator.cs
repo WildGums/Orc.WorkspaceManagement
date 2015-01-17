@@ -8,12 +8,22 @@ namespace Orc.WorkspaceManagement.Example.Services
     using System.Windows;
     using System.Windows.Controls;
     using Behaviors;
+    using Catel;
+    using Fluent;
 
-    public class WorkspaceContainerLocator : IWorkspaceContainerLocator
+    internal class WorkspaceContainerLocator : IWorkspaceContainerLocator
     {
         public Panel GetContainerByWorkspaceParent(UIElement parent)
         {
-            return null;
+            Argument.IsNotNull(() => parent);
+
+            var dropDownControl = parent as IDropDownControl;
+            if (dropDownControl == null)
+            {
+                return null;
+            }
+
+            return dropDownControl.DropDownPopup.Child as Panel;
         }
     }
 }
