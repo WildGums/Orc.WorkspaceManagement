@@ -32,7 +32,11 @@
         <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
             <catel:DropDownButton Content="[change workspace]">
                 <catel:DropDownButton.DropDownContent>
-                    <wmviews:WorkspacesView />
+                    <wmviews:WorkspacesView>
+                        <i:Interaction.Behaviors>
+                            <behaviors:ForceRefreshWorkspacesBehavior/>
+                        </i:Interaction.Behaviors>
+                    </wmviews:WorkspacesView>
                 </catel:DropDownButton.DropDownContent>
             </catel:DropDownButton>
 

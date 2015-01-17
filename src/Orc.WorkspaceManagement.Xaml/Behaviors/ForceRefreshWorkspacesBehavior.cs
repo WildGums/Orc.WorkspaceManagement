@@ -10,32 +10,28 @@ namespace Orc.WorkspaceManagement.Behaviors
     using System;
     using System.Windows;
     using System.Windows.Controls;
-
     using Catel.IoC;
     using Catel.Windows.Interactivity;
-
-    using Orc.WorkspaceManagement.Views;
+    using Views;
 
     public class ForceRefreshWorkspacesBehavior : BehaviorBase<WorkspacesView>
     {
-        private readonly IWorkspaceContainerLocator _workspaceContainerLocator;
-
-        private readonly IWorkspaceManager _workspaceManager;
-
         private Panel _parentContainer;
-
         private WorkspacesView _workspacesView;
+        private readonly IWorkspaceContainerLocator _workspaceContainerLocator;
+        private readonly IWorkspaceManager _workspaceManager;
 
         public ForceRefreshWorkspacesBehavior()
         {
             var serviceLocator = this.GetServiceLocator();
 
             _workspaceManager = serviceLocator.ResolveType<IWorkspaceManager>();
-            _workspaceContainerLocator = serviceLocator.ResolveType<IWorkspaceContainerLocator>();
+            _workspaceContainerLocator = serviceLocator.ResolveType<IWorkspaceContainerLocator>();  
         }
 
         protected override void OnAssociatedObjectLoaded()
         {
+            
             _workspaceManager.Initialized += OnWorkspaceManagerInitialized;
             _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
         }
@@ -53,7 +49,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         private void OnWorkspaceManagerInitialized(object sender, EventArgs e)
         {
-            _parentContainer = _workspaceContainerLocator.GetContainerByWorspaceParent(AssociatedObject.Parent as UIElement);
+            _parentContainer = _workspaceContainerLocator.GetContainerByWorkspaceParent(AssociatedObject.Parent as UIElement);
 
             ForceRefreshPopup();
         }

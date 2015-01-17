@@ -95,6 +95,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Services\WorkspaceContainerLocator.cs" />
     <Compile Include="ViewModels\BViewModel.cs" />
     <Compile Include="ViewModels\AViewModel.cs" />
     <Compile Include="Views\AView.xaml.cs">
@@ -156,7 +157,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Services\" />
     <Folder Include="WorkspaceManagement\Providers\" />
   </ItemGroup>
   <ItemGroup>

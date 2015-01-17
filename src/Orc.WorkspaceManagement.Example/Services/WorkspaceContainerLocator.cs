@@ -1,17 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceContainerLocator.cs" company="Orchestra development team">
+// <copyright file="WorkspaceContainerLocator.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2015 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Behaviors
+namespace Orc.WorkspaceManagement.Example.Services
 {
     using System.Windows;
     using System.Windows.Controls;
+    using Behaviors;
 
-    public interface IWorkspaceContainerLocator
+    public class WorkspaceContainerLocator : IWorkspaceContainerLocator
     {
-        Panel GetContainerByWorkspaceParent(UIElement parent);
+        public Panel GetContainerByWorkspaceParent(UIElement parent)
+        {
+            return null;
+        }
     }
 }

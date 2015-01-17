@@ -1,5 +1,7 @@
 ﻿using Catel.IoC;
 using Orc.WorkspaceManagement;
+using Orc.WorkspaceManagement.Behaviors;
+using Orc.WorkspaceManagement.Example.Services;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -12,6 +14,6 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
-
+        serviceLocator.RegisterType<IWorkspaceContainerLocator, WorkspaceContainerLocator>();
     }
 }
