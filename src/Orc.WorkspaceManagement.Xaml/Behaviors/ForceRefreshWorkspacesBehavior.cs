@@ -49,7 +49,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         private void OnWorkspaceManagerInitialized(object sender, EventArgs e)
         {
-            _parentContainer = _workspaceContainerLocator.GetContainerByWorkspaceParent(AssociatedObject.Parent as UIElement);
+            _parentContainer = _workspaceContainerLocator.GetContainerByWorkspaceParent(AssociatedObject);
 
             ForceRefreshPopup();
         }
