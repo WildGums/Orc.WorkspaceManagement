@@ -42,7 +42,6 @@ namespace Orc.WorkspaceManagement.Example.Services
 
         private async Task RegisterTypes()
         {
-            _serviceLocator.RegisterType<IWorkspaceContainerLocator, WorkspaceContainerLocator>();
             _serviceLocator.RegisterType<IWorkspaceInitializer, WorkspaceInitializer>();
         }
     }

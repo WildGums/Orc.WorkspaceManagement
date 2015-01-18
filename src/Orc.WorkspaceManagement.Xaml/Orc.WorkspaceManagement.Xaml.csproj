@@ -85,10 +85,7 @@
     </Compile>
     <Compile Include="Behaviors\AutoWorkspace.cs" />
     <Compile Include="Behaviors\AutoWorkspaceGrid.cs" />
-    <Compile Include="Behaviors\ForceRefreshWorkspacesBehavior.cs" />
     <Compile Include="Behaviors\Interfaces\IWorkspaceBehavior.cs" />
-    <Compile Include="Behaviors\Interfaces\IRealContainerLocator.cs" />
-    <Compile Include="Behaviors\WorkspaceContainerLocatorDefault.cs" />
     <Compile Include="Behaviors\WorkspaceBehaviorBase.cs" />
     <Compile Include="Converters\IsCurrentWorkspaceToBooleanConverter.cs" />
     <Compile Include="Converters\IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" />

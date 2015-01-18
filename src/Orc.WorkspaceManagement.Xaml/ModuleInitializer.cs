@@ -13,7 +13,5 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
-
-        serviceLocator.RegisterType<IWorkspaceContainerLocator, WorkspaceContainerLocatorDeault>();
     }
 }

@@ -110,7 +110,6 @@
     <Compile Include="FontAwesome.cs" />
     <Compile Include="Services\ApplicationInitializationService.cs" />
     <Compile Include="Services\RibbonService.cs" />
-    <Compile Include="Services\WorkspaceContainerLocator.cs" />
     <Compile Include="ViewModels\BViewModel.cs" />
     <Compile Include="ViewModels\AViewModel.cs" />
     <Compile Include="ViewModels\RibbonViewModel.cs" />
