@@ -1,24 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="Orchestra development team">
+// <copyright file="StatusBarViewModel.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2015 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-
 namespace Orc.WorkspaceManagement.Example.ViewModels
 {
-    using Catel.Logging;
     using Catel.MVVM;
 
-    /// <summary>
-    /// MainWindow view model.
-    /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class StatusBarViewModel : ViewModelBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        public MainViewModel()
-        {
-        }
+         
     }
 }

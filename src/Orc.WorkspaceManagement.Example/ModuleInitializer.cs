@@ -1,5 +1,9 @@
 ﻿using Catel.IoC;
-using Orc.WorkspaceManagement;
+
+using Orc.WorkspaceManagement.Example.Services;
+
+using Orchestra.Shell.Services;
+using Orchestra.Services;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -13,5 +17,7 @@ public static class ModuleInitializer
     {
         var serviceLocator = ServiceLocator.Default;
 
+        serviceLocator.RegisterType<IRibbonService, RibbonService>();
+        serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();        
     }
 }

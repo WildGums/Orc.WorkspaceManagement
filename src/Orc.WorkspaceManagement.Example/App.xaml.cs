@@ -8,6 +8,8 @@
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Windows;
+    using Orchestra.Services;
+    using Orchestra.Views;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -16,7 +18,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
 #if DEBUG
             LogManager.AddDebugListener(true);
@@ -28,7 +30,9 @@
 
             Log.Info("Calling base.OnStartup");
 
-            base.OnStartup(e);
+            var serviceLocator = ServiceLocator.Default;
+            var shellService = serviceLocator.ResolveType<IShellService>();
+            await shellService.CreateWithSplash<ShellWindow>();
         }
 
         protected override void OnExit(ExitEventArgs e)
