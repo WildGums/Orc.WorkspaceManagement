@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Text="Title" />
-        <TextBox Grid.Column="1" Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True}">
+        <TextBox Grid.Column="1" Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged />
             </i:Interaction.Behaviors>
