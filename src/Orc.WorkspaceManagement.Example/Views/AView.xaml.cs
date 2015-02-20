@@ -1,15 +1,14 @@
-﻿namespace Orc.WorkspaceManagement.Example.Views
-{
-    using Catel.Windows.Controls;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AView.xaml.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
-    /// <summary>
-    /// Interaction logic for AView.xaml.
-    /// </summary>
-    public partial class AView : UserControl
+
+namespace Orc.WorkspaceManagement.Example.Views
+{
+    public partial class AView
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AView"/> class.
-        /// </summary>
         public AView()
         {
             InitializeComponent();
