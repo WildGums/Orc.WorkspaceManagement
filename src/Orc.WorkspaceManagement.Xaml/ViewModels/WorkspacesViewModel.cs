@@ -68,7 +68,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async void OnEditWorkspaceExecute(object workspace)
         {
-            if (await _uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
+            if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
                 await _workspaceManager.Save();
             }

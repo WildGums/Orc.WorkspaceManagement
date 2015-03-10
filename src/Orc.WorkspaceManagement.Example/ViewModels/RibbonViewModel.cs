@@ -46,9 +46,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             var workspace = new Workspace();
 
-            var vm = _viewModelFactory.CreateViewModel<WorkspaceViewModel>(workspace);
-
-            if (await _uiVisualizerService.ShowDialog(vm) ?? false)
+            if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
                 _workspaceManager.Add(workspace, true);
                 await _workspaceManager.Save();
@@ -75,10 +73,9 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             return (CurrentWorkspace != null);
         }
 
-        private async void OnEditWorkspaceExecute()
+        private void OnEditWorkspaceExecute()
         {
-            var vm = _viewModelFactory.CreateViewModel<WorkspaceViewModel>(CurrentWorkspace);
-            await _uiVisualizerService.ShowDialog(vm);
+            _uiVisualizerService.ShowDialog<WorkspaceViewModel>(CurrentWorkspace);
         }
 
         public Command RemoveWorkspace { get; private set; }
