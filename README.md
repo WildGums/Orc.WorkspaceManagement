@@ -17,7 +17,7 @@ Below is an overview of the most important components:
 ![Managing workspaces the easy way](doc/images/workspace_handling.gif)  
 
 -- 
-
+ 
 **Important note** 
 
 The base directory will be used as repository. This means that it cannot contain other files and all other files will be deleted from the directory
