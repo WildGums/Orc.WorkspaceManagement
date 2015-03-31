@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ab7a36ed-0c1c-4b1f-bec5-9310a6ed9398</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.WorkspaceManagement.Xaml.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\AutoWorkspace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\AutoWorkspaceGrid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Interfaces\IWorkspaceBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\WorkspaceBehaviorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\IsCurrentWorkspaceToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\TriggerConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.grid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.size.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Providers\BehaviorWorkspaceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WorkspacesViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WorkspaceViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WorkspacesView.xaml.cs">
+      <DependentUpon>WorkspacesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WorkspaceWindow.xaml.cs">
+      <DependentUpon>WorkspaceWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Resources\Images\edit.png" />
+    <None Include="$(MSBuildThisFileDirectory)Resources\Images\remove.png" />
+    <None Include="$(MSBuildThisFileDirectory)Resources\Images\selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Views\WorkspacesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\WorkspaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

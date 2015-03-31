@@ -45,7 +45,7 @@ namespace Orc.WorkspaceManagement
 
             try
             {
-                var value = this.GetConfigurationValue<T>(name);
+                var value = this.GetConfigurationValue(name, default(T));
                 return value;
             }
             catch (Exception)
@@ -80,6 +80,11 @@ namespace Orc.WorkspaceManagement
             }
 
             return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override string ToString()

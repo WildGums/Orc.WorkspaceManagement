@@ -198,13 +198,13 @@
     <Folder Include="WorkspaceManagement\Providers\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.csproj">
+    <ProjectReference Include="..\Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET40\Orc.WorkspaceManagement.Xaml.NET40.csproj">
       <Project>{933b120f-8d30-44ba-a4f0-6f485dda64ab}</Project>
-      <Name>Orc.WorkspaceManagement.Xaml</Name>
+      <Name>Orc.WorkspaceManagement.Xaml.NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orc.WorkspaceManagement\Orc.WorkspaceManagement.csproj">
+    <ProjectReference Include="..\Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET40\Orc.WorkspaceManagement.NET40.csproj">
       <Project>{4258fc75-dd23-4877-a56d-3a077ab57f2d}</Project>
-      <Name>Orc.WorkspaceManagement</Name>
+      <Name>Orc.WorkspaceManagement.NET40</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
