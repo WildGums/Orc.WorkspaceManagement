@@ -33,11 +33,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Resources\Images\edit.png" />
-    <None Include="$(MSBuildThisFileDirectory)Resources\Images\remove.png" />
-    <None Include="$(MSBuildThisFileDirectory)Resources\Images\selected.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Views\WorkspacesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

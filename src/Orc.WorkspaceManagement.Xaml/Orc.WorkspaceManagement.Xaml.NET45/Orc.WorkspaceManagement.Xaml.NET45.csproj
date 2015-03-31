@@ -68,6 +68,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\edit.png">
+      <Link>Resources\Images\edit.png</Link>
+    </Resource>
+    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\remove.png">
+      <Link>Resources\Images\remove.png</Link>
+    </Resource>
+    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\selected.png">
+      <Link>Resources\Images\selected.png</Link>
+    </Resource>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
