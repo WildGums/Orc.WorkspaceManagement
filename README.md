@@ -1,5 +1,7 @@
 # Orc.WorkspaceManagement
 
+[![Join the chat at https://gitter.im/WildGums/Orc.WorkspaceManagement](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WildGums/Orc.WorkspaceManagement?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Manage workspaces the easy way using this library.
 
 # Quick introduction
