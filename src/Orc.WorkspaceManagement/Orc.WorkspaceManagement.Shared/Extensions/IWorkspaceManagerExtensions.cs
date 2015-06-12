@@ -88,11 +88,21 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
-            await workspaceManager.Initialize(autoSelect);
+            await workspaceManager.Initialize(false);
 
             if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
                 EnsureDefaultWorkspace(workspaceManager, defaultWorkspaceName, autoSelect);
+            }
+
+            if (autoSelect && (workspaceManager.Workspace == null || !string.Equals(workspaceManager.Workspace.Title, defaultWorkspaceName)))
+            {
+                workspaceManager.Workspace = workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName));
+            }
+
+            if (autoSelect && workspaceManager.Workspace == null)
+            {
+                workspaceManager.Workspace = workspaceManager.Workspaces.FirstOrDefault();
             }
         }
 
