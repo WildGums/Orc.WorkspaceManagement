@@ -39,6 +39,8 @@ namespace Orc.WorkspaceManagement
         /// <returns>Task.</returns>
         Task Initialize();
 
+        Task Initialize(bool autoSelect);
+
         /// <summary>
         /// Adds the provider that will provide information to the workspace when the information is requested.
         /// </summary>

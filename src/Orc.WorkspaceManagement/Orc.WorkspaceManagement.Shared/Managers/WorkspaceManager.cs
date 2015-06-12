@@ -112,6 +112,11 @@ namespace Orc.WorkspaceManagement
         /// <returns>Task.</returns>
         public async Task Initialize()
         {
+            await Initialize(true);
+        }
+
+        public async Task Initialize(bool autoSelect)
+        {
             var baseDirectory = BaseDirectory;
 
             Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
@@ -124,7 +129,7 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.AddRange(workspaces);
 
-            if (_workspaces.Any())
+            if (autoSelect && _workspaces.Any())
             {
                 Workspace = _workspaces.FirstOrDefault();
             }
