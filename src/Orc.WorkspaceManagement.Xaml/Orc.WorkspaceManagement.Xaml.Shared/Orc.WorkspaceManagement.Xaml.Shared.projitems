@@ -6,7 +6,7 @@
     <SharedGUID>ab7a36ed-0c1c-4b1f-bec5-9310a6ed9398</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Orc.WorkspaceManagement.Xaml.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Orc.WorkspaceManagement</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IsCurrentWorkspaceToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TriggerConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\UnderscoreToDoubleUnderscoresStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.grid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FrameworkElementExtensions.size.cs" />

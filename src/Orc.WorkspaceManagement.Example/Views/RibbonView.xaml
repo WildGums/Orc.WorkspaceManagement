@@ -8,13 +8,15 @@
                    xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views;assembly=Orc.WorkspaceManagement.Xaml"
                    xmlns:orchestra="https://github.com/orcomp/orchestra"
                    xmlns:ribbon="clr-namespace:Orc.WorkspaceManagement.Example"
+                   xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters;assembly=Orc.WorkspaceManagement.Xaml"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
     
     <fluent:Ribbon>
         <fluent:Ribbon.Tabs>
             <fluent:RibbonTabItem Header="View">
                 <fluent:RibbonGroupBox Header="Workspaces">
-                    <fluent:SplitButton Header="{Binding CurrentWorkspace.Title}" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Plus}}" Command="{Binding AddWorkspace}">
+                    <fluent:SplitButton Header="{Binding CurrentWorkspace.Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Plus}}"
+                                        ClosePopupOnMouseDown="True" Command="{Binding AddWorkspace}">
                         <views:WorkspacesView/>
                     </fluent:SplitButton>
 

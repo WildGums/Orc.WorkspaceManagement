@@ -35,7 +35,7 @@
                                    Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
 
-                            <Label Grid.Column="1" Content="{Binding Title}" />
+                            <Label Grid.Column="1" Content="{Binding Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" />
 
                             <Button Grid.Column="2" CommandParameter="{Binding }" ToolTip="Edit" Width="24" 
                                     Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">

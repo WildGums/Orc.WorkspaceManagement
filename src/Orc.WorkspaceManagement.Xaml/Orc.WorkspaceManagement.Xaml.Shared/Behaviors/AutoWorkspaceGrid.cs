@@ -121,6 +121,11 @@ namespace Orc.WorkspaceManagement.Behaviors
                 var name = string.Format("column_{0}", index);
                 var columnValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
+                if (columnValue == null)
+                {
+                    continue;
+                }
+
                 GridLength gridLength;
                 if (string.Equals(columnValue, "unknown"))
                 {
