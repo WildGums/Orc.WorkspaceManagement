@@ -14,6 +14,13 @@ namespace Orc.WorkspaceManagement
 
     public static class IWorkspaceManagerExtensions
     {
+        public static void RefreshCurrentWorksace(this IWorkspaceManager workspaceManager)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            workspaceManager.Workspace = workspaceManager.Workspace;
+        }
+
         public static TWorkspace GetWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager)
             where TWorkspace : IWorkspace
         {

@@ -72,11 +72,6 @@ namespace Orc.WorkspaceManagement
                 var oldWorkspace = _workspace;
                 var newWorkspace = value;
 
-                if (ObjectHelper.AreEqual(oldWorkspace, newWorkspace))
-                {
-                    return;
-                }
-
                 WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
                 _workspace = value;

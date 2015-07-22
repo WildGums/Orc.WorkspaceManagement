@@ -104,6 +104,9 @@
     <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\selected.png">
       <Link>Resources\Images\selected.png</Link>
     </Resource>
+    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\refresh.png">
+      <Link>Resources\Images\refresh.png</Link>
+    </Resource>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>

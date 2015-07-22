@@ -103,7 +103,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         private void OnSelectedWorkspaceChanged()
         {
             var workspace = SelectedWorkspace;
-            if (workspace != null && !ObjectHelper.AreEqual(workspace, _workspaceManager.Workspace))
+            if (workspace != null)
             {
                 _workspaceManager.Workspace = workspace;
             }
