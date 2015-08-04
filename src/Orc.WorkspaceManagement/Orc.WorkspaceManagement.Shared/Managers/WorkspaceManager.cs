@@ -21,8 +21,6 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-
-
         private readonly IWorkspaceInitializer _workspaceInitializer;
         private readonly IWorkspacesStorageService _workspacesStorageService;
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
@@ -105,12 +103,12 @@ namespace Orc.WorkspaceManagement
         /// Initializes the workspaces by reading them from the <see cref="BaseDirectory"/>.
         /// </summary>
         /// <returns>Task.</returns>
-        public async Task Initialize()
+        public void Initialize()
         {
-            await Initialize(true);
+            Initialize(true);
         }
 
-        public async Task Initialize(bool autoSelect)
+        public void Initialize(bool autoSelect)
         {
             var baseDirectory = BaseDirectory;
 
@@ -248,8 +246,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Saves all the workspaces to disk.
         /// </summary>
-        /// <returns>Task.</returns>
-        public async Task Save()
+        public void Save()
         {
             var baseDirectory = BaseDirectory;
 

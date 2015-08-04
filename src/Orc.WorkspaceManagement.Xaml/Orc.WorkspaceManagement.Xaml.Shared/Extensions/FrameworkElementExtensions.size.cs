@@ -8,9 +8,6 @@
 namespace Orc.WorkspaceManagement
 {
     using System.Windows;
-    using System.Windows.Controls;
-    using Catel.IoC;
-    using Catel.Windows.Controls;
 
     public static partial class FrameworkElementExtensions
     {

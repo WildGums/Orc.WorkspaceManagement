@@ -149,27 +149,27 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheInitializeMethod
         {
             [TestCase]
-            public async Task RaisesInitializingEvent()
+            public void RaisesInitializingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Initializing += (sender, e) => eventRaised = true;
 
-                await workspaceManager.Initialize();
+                workspaceManager.Initialize();
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public async Task RaisesInitializedEvent()
+            public void RaisesInitializedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Initialized += (sender, e) => eventRaised = true;
 
-                await workspaceManager.Initialize();
+                workspaceManager.Initialize();
 
                 Assert.IsTrue(eventRaised);
             }
@@ -205,27 +205,27 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheSaveMethod
         {
             [TestCase]
-            public async Task RaisesSavingEvent()
+            public void RaisesSavingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Saving += (sender, e) => eventRaised = true;
 
-                await workspaceManager.Save();
+                workspaceManager.Save();
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public async Task RaisesSavedEvent()
+            public void RaisesSavedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
                 workspaceManager.Saved += (sender, e) => eventRaised = true;
 
-                await workspaceManager.Save();
+                workspaceManager.Save();
 
                 Assert.IsTrue(eventRaised);
             }

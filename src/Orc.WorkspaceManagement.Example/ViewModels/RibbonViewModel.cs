@@ -28,7 +28,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _selectDirectoryService = selectDirectoryService;
 
             AddWorkspace = new Command(OnAddWorkspaceExecute);
-            SaveWorkspace = new Command(() => OnSaveWorkspaceExecute(), OnSaveWorkspaceCanExecute);
+            SaveWorkspace = new Command(OnSaveWorkspaceExecute, OnSaveWorkspaceCanExecute);
 
             EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new Command(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
@@ -42,14 +42,14 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         #region Commands
         public Command AddWorkspace { get; private set; }
 
-        private async void OnAddWorkspaceExecute()
+        private void OnAddWorkspaceExecute()
         {
             var workspace = new Workspace();
 
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
                 _workspaceManager.Add(workspace, true);
-                await _workspaceManager.Save();
+                _workspaceManager.Save();
             }
         }
 
@@ -60,9 +60,9 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             return (CurrentWorkspace != null);
         }
 
-        private async Task OnSaveWorkspaceExecute()
+        private void OnSaveWorkspaceExecute()
         {
-            await _workspaceManager.StoreAndSave();
+            _workspaceManager.StoreAndSave();
             UpdateCurrentWorkspace();
         }
 
@@ -103,34 +103,34 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         public Command ChooseBaseDirectory { get; private set; }
 
-        public async void OnChooseBaseDirectory()
+        public void OnChooseBaseDirectory()
         {
             _selectDirectoryService.ShowNewFolderButton = true;
 
             if (_selectDirectoryService.DetermineDirectory())
             {
-                await _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
+                _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
             }
         }
         #endregion
 
         #region Methods
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
 
-            await _workspaceManager.Initialize(true);
+            _workspaceManager.Initialize(true);
 
             UpdateCurrentWorkspace();
         }
 
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _workspaceManager.WorkspaceUpdated -= OnCurrentWorkspaceChanged;
 
-            await base.Close();
+            await base.CloseAsync();
         }
 
         private void OnCurrentWorkspaceChanged(object sender, WorkspaceUpdatedEventArgs e)

@@ -66,11 +66,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             return true;
         }
 
-        private async void OnEditWorkspaceExecute(object workspace)
+        private void OnEditWorkspaceExecute(object workspace)
         {
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
-                await _workspaceManager.Save();
+                _workspaceManager.Save();
             }
         }
 
@@ -91,11 +91,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             return true;
         }
 
-        private async void OnRemoveWorkspaceExecute(IWorkspace workspace)
+        private void OnRemoveWorkspaceExecute(IWorkspace workspace)
         {
             _workspaceManager.Remove(workspace);
 
-            await _workspaceManager.Save();
+            _workspaceManager.Save();
         }
         #endregion
 
@@ -109,20 +109,20 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
         }
 
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             _workspaceManager.WorkspacesChanged += OnWorkspacesChanged;
 
             UpdateWorkspaces();
         }
 
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _workspaceManager.WorkspacesChanged -= OnWorkspacesChanged;
 
-            await base.Close();
+            await base.CloseAsync();
         }
 
         private void OnWorkspacesChanged(object sender, EventArgs e)

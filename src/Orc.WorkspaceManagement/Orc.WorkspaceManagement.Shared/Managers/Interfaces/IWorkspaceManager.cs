@@ -9,7 +9,6 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     public interface IWorkspaceManager
     {
@@ -34,12 +33,16 @@ namespace Orc.WorkspaceManagement
         event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
         /// <summary>
-        /// Initializes the workspaces by reading them from the <see cref="WorkspaceManager.BaseDirectory"/>.
+        /// Initializes the workspaces by reading them from the <see cref="WorkspaceManager.BaseDirectory" />.
         /// </summary>
         /// <returns>Task.</returns>
-        Task Initialize();
+        void Initialize();
 
-        Task Initialize(bool autoSelect);
+        /// <summary>
+        /// Initializes the specified automatic select.
+        /// </summary>
+        /// <param name="autoSelect">if set to <c>true</c> [automatic select].</param>
+        void Initialize(bool autoSelect);
 
         /// <summary>
         /// Adds the provider that will provide information to the workspace when the information is requested.
@@ -75,7 +78,6 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Saves all the workspaces to disk.
         /// </summary>
-        /// <returns>Task.</returns>
-        Task Save();
+        void Save();
     }
 }
