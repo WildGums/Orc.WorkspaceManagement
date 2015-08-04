@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceManager.cs" company="Simulation Modelling Services">
-//   Copyright (c) 2008 - 2014 Simulation Modelling Services. All rights reserved.
+// <copyright file="WorkspaceManager.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,23 +9,18 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
     using Catel;
-    using Catel.Data;
+    using Catel.IO;
     using Catel.Logging;
-    using Path = Catel.IO.Path;
 
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly IWorkspaceInitializer _workspaceInitializer;
-        private readonly IWorkspacesStorageService _workspacesStorageService;
-        private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
-
+        private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
+        private readonly IWorkspacesStorageService _workspacesStorageService;
         private IWorkspace _workspace;
 
         #region Constructors
