@@ -2,7 +2,6 @@
 
 using Orc.WorkspaceManagement.Example.Services;
 
-using Orchestra.Shell.Services;
 using Orchestra.Services;
 
 /// <summary>
