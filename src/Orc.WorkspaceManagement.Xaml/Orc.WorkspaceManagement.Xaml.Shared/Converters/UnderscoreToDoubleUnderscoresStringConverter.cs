@@ -14,6 +14,11 @@ namespace Orc.WorkspaceManagement.Converters
     {
         protected override object Convert(string value, Type targetType, object parameter)
         {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
             return value.Replace("_", "__");
         }
     }
