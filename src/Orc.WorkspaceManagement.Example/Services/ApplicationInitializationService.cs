@@ -12,6 +12,7 @@ namespace Orc.WorkspaceManagement.Example.Services
     using Behaviors;
     using Catel;
     using Catel.IoC;
+    using Catel.Threading;
     using Orchestra.Markup;
     using WorkspaceManagement;
 
@@ -26,13 +27,15 @@ namespace Orc.WorkspaceManagement.Example.Services
             _serviceLocator = serviceLocator;
         }
 
-        public override async Task InitializeBeforeCreatingShell()
+        public override Task InitializeBeforeCreatingShellAsync()
         {
-            await InitializeFonts();
-            await RegisterTypes();
+            InitializeFonts();
+            RegisterTypes();
+
+            return TaskHelper.Completed;
         }
 
-        private async Task InitializeFonts()
+        private void InitializeFonts()
         {
             FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/Orc.WorkspaceManagement.Example;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
 
@@ -40,7 +43,7 @@ namespace Orc.WorkspaceManagement.Example.Services
             FontImage.DefaultFontFamily = "FontAwesome";
         }
 
-        private async Task RegisterTypes()
+        private void RegisterTypes()
         {
             _serviceLocator.RegisterType<IWorkspaceInitializer, WorkspaceInitializer>();
         }

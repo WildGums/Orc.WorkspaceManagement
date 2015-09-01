@@ -7,6 +7,8 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Provider that can be registered in the workspace manager to retrieve information about a workspace.
     /// </summary>
@@ -16,12 +18,12 @@ namespace Orc.WorkspaceManagement
         /// Provides the information for the workspace with the current state.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        void ProvideInformation(IWorkspace workspace);
+        Task ProvideInformationAsync(IWorkspace workspace);
 
         /// <summary>
         /// Applies the workspace values in response to a workspace change.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        void ApplyWorkspace(IWorkspace workspace);
+        Task ApplyWorkspaceAsync(IWorkspace workspace);
     }
 }

@@ -7,7 +7,9 @@
 
 namespace Orc.WorkspaceManagement.Test.Mocks
 {
+    using System.Threading.Tasks;
     using Catel;
+    using Catel.Threading;
 
     public class WorkspaceProvider : IWorkspaceProvider
     {
@@ -27,9 +29,24 @@ namespace Orc.WorkspaceManagement.Test.Mocks
             workspace.SetWorkspaceValue(_key, _value);
         }
 
+        public Task ProvideInformationAsync(IWorkspace workspace)
+        {
+            ProvideInformation(workspace);
+
+            return TaskHelper.Completed;
+        }
+
         public void ApplyWorkspace(IWorkspace workspace)
         {
             // location to respond to changes
+        }
+
+        public Task ApplyWorkspaceAsync(IWorkspace workspace)
+        {
+            ApplyWorkspace(workspace);
+
+            return TaskHelper.Completed;
+
         }
     }
 }

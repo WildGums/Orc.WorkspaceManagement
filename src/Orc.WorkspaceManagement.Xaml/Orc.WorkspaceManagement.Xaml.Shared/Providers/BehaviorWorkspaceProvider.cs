@@ -7,8 +7,10 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Threading.Tasks;
     using Behaviors;
     using Catel;
+    using Catel.Threading;
 
     public class BehaviorWorkspaceProvider : WorkspaceProviderBase
     {
@@ -22,14 +24,18 @@ namespace Orc.WorkspaceManagement
             _workspaceBehavior = workspaceBehavior;
         }
 
-        public override void ProvideInformation(IWorkspace workspace)
+        public override Task ProvideInformationAsync(IWorkspace workspace)
         {
             _workspaceBehavior.Save(workspace);
+            
+            return TaskHelper.Completed;
         }
 
-        public override void ApplyWorkspace(IWorkspace workspace)
+        public override Task ApplyWorkspaceAsync(IWorkspace workspace)
         {
             _workspaceBehavior.Load(workspace);
+
+            return TaskHelper.Completed;
         }
     }
 }

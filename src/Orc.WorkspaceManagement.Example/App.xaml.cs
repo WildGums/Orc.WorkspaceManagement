@@ -32,7 +32,7 @@
 
             var serviceLocator = ServiceLocator.Default;
             var shellService = serviceLocator.ResolveType<IShellService>();
-            await shellService.CreateWithSplash<ShellWindow>();
+            await shellService.CreateWithSplashAsync<ShellWindow>();
         }
 
         protected override void OnExit(ExitEventArgs e)

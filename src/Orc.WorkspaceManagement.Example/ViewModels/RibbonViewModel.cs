@@ -11,6 +11,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
     using System.Threading.Tasks;
     using Catel.MVVM;
     using Catel.Services;
+    using Catel.Threading;
     using Orc.WorkspaceManagement.ViewModels;
 
     public class RibbonViewModel : ViewModelBase
@@ -27,12 +28,12 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _uiVisualizerService = uiVisualizerService;
             _selectDirectoryService = selectDirectoryService;
 
-            AddWorkspace = new Command(OnAddWorkspaceExecute);
-            SaveWorkspace = new Command(OnSaveWorkspaceExecute, OnSaveWorkspaceCanExecute);
+            AddWorkspace = new TaskCommand(OnAddWorkspaceExecuteAsync);
+            SaveWorkspace = new TaskCommand(OnSaveWorkspaceExecuteAsync, OnSaveWorkspaceCanExecute);
 
             EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
-            RemoveWorkspace = new Command(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
-            ChooseBaseDirectory = new Command(OnChooseBaseDirectory);
+            RemoveWorkspace = new TaskCommand(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
+            ChooseBaseDirectory = new TaskCommand(OnChooseBaseDirectoryAsync);
         }
 
         #region Properties
@@ -40,29 +41,29 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         #endregion
 
         #region Commands
-        public Command AddWorkspace { get; private set; }
+        public TaskCommand AddWorkspace { get; private set; }
 
-        private void OnAddWorkspaceExecute()
+        private async Task OnAddWorkspaceExecuteAsync()
         {
             var workspace = new Workspace();
 
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
-                _workspaceManager.Add(workspace, true);
+                await _workspaceManager.AddAsync(workspace, true);
                 _workspaceManager.Save();
             }
         }
 
-        public Command SaveWorkspace { get; private set; }
+        public TaskCommand SaveWorkspace { get; private set; }
 
         private bool OnSaveWorkspaceCanExecute()
         {
             return (CurrentWorkspace != null);
         }
 
-        private void OnSaveWorkspaceExecute()
+        private async Task OnSaveWorkspaceExecuteAsync()
         {
-            _workspaceManager.StoreAndSave();
+            await _workspaceManager.StoreAndSaveAsync();
             UpdateCurrentWorkspace();
         }
 
@@ -78,7 +79,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             _uiVisualizerService.ShowDialog<WorkspaceViewModel>(CurrentWorkspace);
         }
 
-        public Command RemoveWorkspace { get; private set; }
+        public TaskCommand RemoveWorkspace { get; private set; }
 
         private bool OnRemoveWorkspaceCanExecute()
         {
@@ -95,22 +96,24 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             return true;
         }
 
-        private void OnRemoveWorkspaceExecute()
+        private async Task OnRemoveWorkspaceExecuteAsync()
         {
-            _workspaceManager.Remove(CurrentWorkspace);
+            await _workspaceManager.RemoveAsync(CurrentWorkspace);
             UpdateCurrentWorkspace();
         }
 
-        public Command ChooseBaseDirectory { get; private set; }
+        public TaskCommand ChooseBaseDirectory { get; private set; }
 
-        public void OnChooseBaseDirectory()
+        public Task OnChooseBaseDirectoryAsync()
         {
             _selectDirectoryService.ShowNewFolderButton = true;
 
             if (_selectDirectoryService.DetermineDirectory())
             {
-                _workspaceManager.SetWorkspaceSchemesDirectory(_selectDirectoryService.DirectoryName);
+                return _workspaceManager.SetWorkspaceSchemesDirectoryAsync(_selectDirectoryService.DirectoryName);
             }
+
+            return TaskHelper.Completed;
         }
         #endregion
 
@@ -121,7 +124,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
             _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
 
-            _workspaceManager.Initialize(true);
+            _workspaceManager.InitializeAsync(true);
 
             UpdateCurrentWorkspace();
         }

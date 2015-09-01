@@ -10,9 +10,11 @@ namespace Orc.WorkspaceManagement
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.IO;
     using Catel.Logging;
+    using Catel.Threading;
 
     public class WorkspaceManager : IWorkspaceManager
     {
@@ -60,19 +62,6 @@ namespace Orc.WorkspaceManagement
         public IWorkspace Workspace
         {
             get { return _workspace; }
-            set
-            {
-                var oldWorkspace = _workspace;
-                var newWorkspace = value;
-
-                WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
-
-                _workspace = value;
-
-                ApplyWorkspaceUsingProviders(_workspace);
-
-                WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
-            }
         }
         #endregion
 
@@ -94,16 +83,30 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspaceManager Members
+        public async Task SetWorkspaceAsync(IWorkspace value)
+        {
+            var oldWorkspace = _workspace;
+            var newWorkspace = value;
+
+            WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
+
+            _workspace = value;
+
+            await ApplyWorkspaceUsingProvidersAsync(_workspace);
+
+            WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
+        }
+
         /// <summary>
         /// Initializes the workspaces by reading them from the <see cref="BaseDirectory"/>.
         /// </summary>
         /// <returns>Task.</returns>
-        public void Initialize()
+        public async Task InitializeAsync()
         {
-            Initialize(true);
+            await InitializeAsync(true);
         }
 
-        public void Initialize(bool autoSelect)
+        public async Task InitializeAsync(bool autoSelect)
         {
             var baseDirectory = BaseDirectory;
 
@@ -119,11 +122,11 @@ namespace Orc.WorkspaceManagement
 
             if (autoSelect && _workspaces.Any())
             {
-                Workspace = _workspaces.FirstOrDefault();
+                await SetWorkspaceAsync(_workspaces.FirstOrDefault());
             }
             else
             {
-                Workspace = null;
+                await SetWorkspaceAsync(null);
             }
 
             Initialized.SafeInvoke(this);
@@ -158,7 +161,7 @@ namespace Orc.WorkspaceManagement
         /// Adds the specified workspace to the list of workspaces.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public void Add(IWorkspace workspace)
+        public async Task AddAsync(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
 
@@ -167,7 +170,7 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
-            _workspaceInitializer.Initialize(workspace);
+            await _workspaceInitializer.InitializeAsync(workspace);
 
             _workspaces.Add(workspace);
 
@@ -180,7 +183,7 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         /// <param name="workspace">The workspace.</param>
         /// <returns><c>true</c> if the workspace is deleted; otherwise <c>false</c>.</returns>
-        public bool Remove(IWorkspace workspace)
+        public async Task<bool> RemoveAsync(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
 
@@ -198,7 +201,7 @@ namespace Orc.WorkspaceManagement
 
             if (ObjectHelper.AreEqual(workspace, Workspace))
             {
-                Workspace = _workspaces.FirstOrDefault();
+                await SetWorkspaceAsync(_workspaces.FirstOrDefault());
             }
 
             if (removed)
@@ -213,7 +216,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Stores the workspace by requesting information.
         /// </summary>
-        public void StoreWorkspace()
+        public async Task StoreWorkspaceAsync()
         {
             Log.Debug("Storing workspace");
 
@@ -233,7 +236,7 @@ namespace Orc.WorkspaceManagement
             // Events first so providers can manipulate data afterwards
             WorkspaceInfoRequested.SafeInvoke(this, new WorkspaceEventArgs(workspace));
 
-            GetInformationFromProviders(workspace);
+            await GetInformationFromProvidersAsync(workspace);
 
             Log.Info("Stored workspace");
         }
@@ -256,13 +259,13 @@ namespace Orc.WorkspaceManagement
             Log.Info("Saved all workspaces to '{0}'", baseDirectory);
         }
 
-        private void GetInformationFromProviders(IWorkspace workspace)
+        private async Task GetInformationFromProvidersAsync(IWorkspace workspace)
         {
             foreach (var provider in _workspaceProviders)
             {
                 try
                 {
-                    provider.ProvideInformation(workspace);
+                    await provider.ProvideInformationAsync(workspace);
                 }
                 catch (Exception ex)
                 {
@@ -271,13 +274,14 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        private void ApplyWorkspaceUsingProviders(IWorkspace workspace)
+
+        private async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
         {
             foreach (var provider in _workspaceProviders)
             {
                 try
                 {
-                    provider.ApplyWorkspace(workspace);
+                    await provider.ApplyWorkspaceAsync(workspace);
                 }
                 catch (Exception ex)
                 {

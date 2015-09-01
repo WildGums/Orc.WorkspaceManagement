@@ -7,6 +7,8 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System;
+    using System.Threading.Tasks;
     using Catel;
 
     /// <summary>
@@ -40,13 +42,13 @@ namespace Orc.WorkspaceManagement
         /// Provides the information for the workspace with the current state.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public abstract void ProvideInformation(IWorkspace workspace);
+        public abstract Task ProvideInformationAsync(IWorkspace workspace);
 
         /// <summary>
         /// Applies the workspace values in response to a workspace change.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public abstract void ApplyWorkspace(IWorkspace workspace);
+        public abstract Task ApplyWorkspaceAsync(IWorkspace workspace);
         #endregion
     }
 }

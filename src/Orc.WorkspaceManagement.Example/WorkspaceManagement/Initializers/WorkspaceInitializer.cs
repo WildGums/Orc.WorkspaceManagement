@@ -7,7 +7,9 @@
 
 namespace Orc.WorkspaceManagement.Example.WorkspaceManagement
 {
+    using System.Threading.Tasks;
     using Catel;
+    using Catel.Threading;
 
     public class WorkspaceInitializer : IWorkspaceInitializer
     {
@@ -18,6 +20,13 @@ namespace Orc.WorkspaceManagement.Example.WorkspaceManagement
 
             workspace.SetWorkspaceValue("AView.Width", 200d);
             workspace.SetWorkspaceValue("BView.Width", 200d);
+        }
+
+        public Task InitializeAsync(IWorkspace workspace)
+        {
+            Initialize(workspace);
+
+            return TaskHelper.Completed;
         }
         #endregion
     }

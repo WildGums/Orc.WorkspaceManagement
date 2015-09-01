@@ -38,7 +38,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
             EditWorkspace = new Command<IWorkspace>(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
-            RemoveWorkspace = new Command<IWorkspace>(OnRemoveWorkspaceExecute, OnRemoveWorkspaceCanExecute);
+            RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
         }
         #endregion
 
@@ -74,7 +74,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
         }
 
-        public Command<IWorkspace> RemoveWorkspace { get; private set; }
+        public TaskCommand<IWorkspace> RemoveWorkspace { get; private set; }
 
         private bool OnRemoveWorkspaceCanExecute(IWorkspace workspace)
         {
@@ -91,21 +91,21 @@ namespace Orc.WorkspaceManagement.ViewModels
             return true;
         }
 
-        private void OnRemoveWorkspaceExecute(IWorkspace workspace)
+        private async Task OnRemoveWorkspaceExecuteAsync(IWorkspace workspace)
         {
-            _workspaceManager.Remove(workspace);
+            await _workspaceManager.RemoveAsync(workspace);
 
             _workspaceManager.Save();
         }
         #endregion
 
         #region Methods
-        private void OnSelectedWorkspaceChanged()
+        private async void OnSelectedWorkspaceChanged()
         {
             var workspace = SelectedWorkspace;
             if (workspace != null)
             {
-                _workspaceManager.Workspace = workspace;
+                await _workspaceManager.SetWorkspaceAsync(workspace);
             }
         }
 

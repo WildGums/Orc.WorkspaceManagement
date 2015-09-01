@@ -20,20 +20,20 @@ namespace Orc.WorkspaceManagement.Test.Extensions
         public class SetWorkspaceSchemesDirectoryMethod
         {
             [Test]
-            public void BaseDirectoryChanged()
+            public async void BaseDirectoryChanged()
             {
                 const string someDirectoryName = "Some directory";
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                workspaceManager.SetWorkspaceSchemesDirectory(someDirectoryName);
+                await workspaceManager.SetWorkspaceSchemesDirectoryAsync(someDirectoryName);
 
                 Assert.AreEqual(someDirectoryName, workspaceManager.BaseDirectory);
             }
 
             [TestCase(1)]
             [TestCase(4)]
-            public void ClearWorkspacesEachTime(int timesToRepeat)
+            public async void ClearWorkspacesEachTime(int timesToRepeat)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -45,7 +45,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 for (var i = 0; i < timesToRepeat; i++)
                 {
-                    workspaceManager.SetWorkspaceSchemesDirectory("Some directory");
+                    await workspaceManager.SetWorkspaceSchemesDirectoryAsync("Some directory");
                 }
 
                 Assert.AreEqual(workspacesCount + 1, workspaceManager.Workspaces.Count());
@@ -53,7 +53,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
             [TestCase("1", "2", "3")]
             [TestCase("1", "2")]
-            public void LoadsCorrectWorkspaces(params string[] titles)
+            public async void LoadsCorrectWorkspaces(params string[] titles)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -61,7 +61,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory("Some directory");
+                await workspaceManager.SetWorkspaceSchemesDirectoryAsync("Some directory");
 
                 var titles2 = workspaceManager.Workspaces.Select(w => w.Title).ToArray();
                 var intersect = titles.Intersect(titles2);
@@ -69,7 +69,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
             }
 
             [Test]
-            public void SetWorkspaceToNullWhenDirectoryIsEmpty()
+            public async void SetWorkspaceToNullWhenDirectoryIsEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -79,13 +79,13 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory(emptyDirectory, false, false);
+                await workspaceManager.SetWorkspaceSchemesDirectoryAsync(emptyDirectory, false, false);
 
                 Assert.AreEqual(null, workspaceManager.Workspace);
             }
 
             [Test]
-            public void SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
+            public async void SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -95,7 +95,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
                 mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] { new Workspace { Title = "Not default 1" }, new Workspace { Title = defaultWorkspace }, new Workspace { Title = "Not default 2" } });
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
-                workspaceManager.SetWorkspaceSchemesDirectory(notEmptyDirectory, defaultWorkspaceName: defaultWorkspace);
+                await workspaceManager.SetWorkspaceSchemesDirectoryAsync(notEmptyDirectory, defaultWorkspaceName: defaultWorkspace);
 
                 Assert.AreEqual(defaultWorkspace, workspaceManager.Workspace.Title);
             }
