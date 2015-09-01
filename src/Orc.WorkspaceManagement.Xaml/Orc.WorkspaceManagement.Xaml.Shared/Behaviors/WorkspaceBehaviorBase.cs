@@ -9,6 +9,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 {
     using System.Windows;
     using Catel.IoC;
+    using Catel.Services;
     using Catel.Windows.Interactivity;
 
     public abstract class WorkspaceBehaviorBase<T> : BehaviorBase<T>, IWorkspaceBehavior
@@ -21,8 +22,9 @@ namespace Orc.WorkspaceManagement.Behaviors
         {
             var dependencyResolver = this.GetDependencyResolver();
             WorkspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
+            var dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
 
-            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this);
+            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService);
         }
         #endregion
 
