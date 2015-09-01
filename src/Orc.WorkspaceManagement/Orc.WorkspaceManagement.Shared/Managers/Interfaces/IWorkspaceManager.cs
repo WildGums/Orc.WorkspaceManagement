@@ -60,14 +60,6 @@ namespace Orc.WorkspaceManagement
         /// <returns><c>true</c> if the workspace provider is deleted; otherwise <c>false</c>.</returns>
         bool RemoveProvider(IWorkspaceProvider workspaceProvider);
 
-/*        /// <summary>
-        /// Adds the specified workspace to the list of workspaces.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "AddAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        void Add(IWorkspace workspace);*/
-
-
         /// <summary>
         /// Adds the specified workspace to the list of workspaces.
         /// </summary>
@@ -80,12 +72,6 @@ namespace Orc.WorkspaceManagement
         /// <param name="workspace">The workspace.</param>
         /// <returns><c>true</c> if the workspace is deleted; otherwise <c>false</c>.</returns>
         Task<bool> RemoveAsync(IWorkspace workspace);
-
-/*        /// <summary>
-        /// Stores the workspace by requesting information.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "StoreWorkspaceAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        void StoreWorkspace();*/
 
         /// <summary>
         /// Stores the workspace by requesting information.

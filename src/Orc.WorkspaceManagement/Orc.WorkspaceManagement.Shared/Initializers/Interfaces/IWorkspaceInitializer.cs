@@ -11,9 +11,6 @@ namespace Orc.WorkspaceManagement
 
     public interface IWorkspaceInitializer
     {
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializeAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        void Initialize(IWorkspace workspace);
-
         Task InitializeAsync(IWorkspace workspace);
     }
 }
