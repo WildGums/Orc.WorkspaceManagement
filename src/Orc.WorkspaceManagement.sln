@@ -1,0 +1,115 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET40", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET40\Orc.WorkspaceManagement.NET40.csproj", "{4258FC75-DD23-4877-A56D-3A077AB57F2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{4750F6DD-3B92-4B5D-8D73-C26303621229}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\readme.txt = ..\lib\readme.txt
+		..\lib\repositories.config = ..\lib\repositories.config
+		..\lib\RestorePackages.bat = ..\lib\RestorePackages.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1FE0D431-A761-4239-B2D6-D32C70723FD2}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		Orc.WorkspaceManagement.sln.DotSettings = Orc.WorkspaceManagement.sln.DotSettings
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests.NET40", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.NET40\Orc.WorkspaceManagement.Tests.NET40.csproj", "{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Example", "Orc.WorkspaceManagement.Example\Orc.WorkspaceManagement.Example.csproj", "{E70E1855-9D61-4063-A209-CA0A150A6F3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Xaml.NET40", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET40\Orc.WorkspaceManagement.Xaml.NET40.csproj", "{933B120F-8D30-44BA-A4F0-6F485DDA64AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{516961BF-FC2B-4FAC-8520-DA8E290B3A78}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{3BA60C73-BAF0-4D2C-90AE-FFE52B20FBFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{877A811D-2473-4485-8CFA-681EE4E6450F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.WorkspaceManagement.Shared", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.shproj", "{D1484A3B-A89E-4B3D-8E37-CE582C902CFA}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.WorkspaceManagement.Xaml.Shared", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.shproj", "{AB7A36ED-0C1C-4B1F-BEC5-9310A6ED9398}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.WorkspaceManagement.Tests.Shared", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.shproj", "{BA2D544B-07C3-4473-B2F0-FF494B2DE38C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET45", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET45\Orc.WorkspaceManagement.NET45.csproj", "{394986D7-A0E1-488E-B1DD-D1FBF51AC17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Xaml.NET45", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET45\Orc.WorkspaceManagement.Xaml.NET45.csproj", "{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests.NET45", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.NET45\Orc.WorkspaceManagement.Tests.NET45.csproj", "{0866E065-F42E-4A61-A99D-86133ABC4E0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core.Xaml", "Core.Xaml", "{C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{7d56caed-9ba7-44c2-89cb-65aff20fd0f0}*SharedItemsImports = 4
+		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{4258fc75-dd23-4877-a56d-3a077ab57f2d}*SharedItemsImports = 4
+		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{d1484a3b-a89e-4b3d-8e37-ce582c902cfa}*SharedItemsImports = 13
+		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{d6415689-67de-4fee-aa72-6d7eedddceb6}*SharedItemsImports = 4
+		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{ab7a36ed-0c1c-4b1f-bec5-9310a6ed9398}*SharedItemsImports = 13
+		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{ba2d544b-07c3-4473-b2f0-ff494b2de38c}*SharedItemsImports = 13
+		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{394986d7-a0e1-488e-b1dd-d1fbf51ac17a}*SharedItemsImports = 4
+		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{933b120f-8d30-44ba-a4f0-6f485dda64ab}*SharedItemsImports = 4
+		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{0866e065-f42e-4a61-a99d-86133abc4e0a}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4258FC75-DD23-4877-A56D-3A077AB57F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4258FC75-DD23-4877-A56D-3A077AB57F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4258FC75-DD23-4877-A56D-3A077AB57F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4258FC75-DD23-4877-A56D-3A077AB57F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70E1855-9D61-4063-A209-CA0A150A6F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70E1855-9D61-4063-A209-CA0A150A6F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70E1855-9D61-4063-A209-CA0A150A6F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70E1855-9D61-4063-A209-CA0A150A6F3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933B120F-8D30-44BA-A4F0-6F485DDA64AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933B120F-8D30-44BA-A4F0-6F485DDA64AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933B120F-8D30-44BA-A4F0-6F485DDA64AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933B120F-8D30-44BA-A4F0-6F485DDA64AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{394986D7-A0E1-488E-B1DD-D1FBF51AC17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{394986D7-A0E1-488E-B1DD-D1FBF51AC17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{394986D7-A0E1-488E-B1DD-D1FBF51AC17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{394986D7-A0E1-488E-B1DD-D1FBF51AC17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4258FC75-DD23-4877-A56D-3A077AB57F2D} = {516961BF-FC2B-4FAC-8520-DA8E290B3A78}
+		{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6} = {877A811D-2473-4485-8CFA-681EE4E6450F}
+		{E70E1855-9D61-4063-A209-CA0A150A6F3E} = {3BA60C73-BAF0-4D2C-90AE-FFE52B20FBFE}
+		{933B120F-8D30-44BA-A4F0-6F485DDA64AB} = {C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}
+		{516961BF-FC2B-4FAC-8520-DA8E290B3A78} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
+		{3BA60C73-BAF0-4D2C-90AE-FFE52B20FBFE} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
+		{877A811D-2473-4485-8CFA-681EE4E6450F} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
+		{D1484A3B-A89E-4B3D-8E37-CE582C902CFA} = {516961BF-FC2B-4FAC-8520-DA8E290B3A78}
+		{AB7A36ED-0C1C-4B1F-BEC5-9310A6ED9398} = {C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}
+		{BA2D544B-07C3-4473-B2F0-FF494B2DE38C} = {877A811D-2473-4485-8CFA-681EE4E6450F}
+		{394986D7-A0E1-488E-B1DD-D1FBF51AC17A} = {516961BF-FC2B-4FAC-8520-DA8E290B3A78}
+		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0} = {C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}
+		{0866E065-F42E-4A61-A99D-86133ABC4E0A} = {877A811D-2473-4485-8CFA-681EE4E6450F}
+		{C0D0E490-5154-49E0-893E-2D5CBA1EFA7A} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
+	EndGlobalSection
+EndGlobal
