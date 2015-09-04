@@ -10,6 +10,7 @@ namespace Orc.WorkspaceManagement
     using System;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Threading;
 
     /// <summary>
     /// Base implementation for workspace providers.
@@ -49,6 +50,11 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         /// <param name="workspace">The workspace.</param>
         public abstract Task ApplyWorkspaceAsync(IWorkspace workspace);
+
+        public virtual Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
+        {
+            return TaskHelper<bool>.FromResult(false);
+        }
         #endregion
     }
 }

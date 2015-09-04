@@ -48,5 +48,10 @@ namespace Orc.WorkspaceManagement.Test.Mocks
             return TaskHelper.Completed;
 
         }
+
+        public Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
+        {
+            return TaskHelper<bool>.FromResult(false);
+        }
     }
 }

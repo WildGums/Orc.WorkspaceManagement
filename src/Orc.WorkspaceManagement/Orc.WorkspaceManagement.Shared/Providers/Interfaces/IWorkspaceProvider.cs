@@ -25,5 +25,12 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         /// <param name="workspace">The workspace.</param>
         Task ApplyWorkspaceAsync(IWorkspace workspace);
+
+        /// <summary>
+        /// Check if workspace was changed
+        /// </summary>
+        /// <param name="workspace">The workspace</param>
+        /// <returns></returns>
+        Task<bool> CheckIsDirtyAsync(IWorkspace workspace);
     }
 }

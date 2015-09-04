@@ -26,7 +26,7 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
-            return (TWorkspace)workspaceManager.Workspace;
+            return (TWorkspace) workspaceManager.Workspace;
         }
 
         public static async Task AddAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
@@ -74,8 +74,8 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
             var defaultWorkspace = (from workspace in workspaceManager.Workspaces
-                                    where string.Equals(workspace.Title, defaultWorkspaceName)
-                                    select workspace).FirstOrDefault();
+                where string.Equals(workspace.Title, defaultWorkspaceName)
+                select workspace).FirstOrDefault();
 
             if (defaultWorkspace == null)
             {
@@ -136,6 +136,27 @@ namespace Orc.WorkspaceManagement
 
             await workspaceManager.StoreWorkspaceAsync();
             workspaceManager.Save();
+        }
+
+        public static async Task<bool> CheckIsDirtyAsync(this IWorkspaceManager workspaceManager)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            var workspace = workspaceManager.Workspace;
+            if (workspace == null)
+            {
+                return true;
+            }
+
+            foreach (var provider in workspaceManager.Providers)
+            {
+                if (await provider.CheckIsDirtyAsync(workspace))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
