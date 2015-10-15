@@ -26,7 +26,25 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
-            return (TWorkspace) workspaceManager.Workspace;
+            return (TWorkspace)workspaceManager.Workspace;
+        }
+
+        public static IWorkspace FindWorkspace(this IWorkspaceManager workspaceManager, string workspaceName)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNullOrWhitespace(() => workspaceName);
+
+            return (from workspace in workspaceManager.Workspaces
+                    where string.Equals(workspace.Title, workspaceName)
+                    select workspace).FirstOrDefault();
+        }
+
+        public static TWorkspace FindWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager, string workspaceName)
+            where TWorkspace : IWorkspace
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            return (TWorkspace) FindWorkspace(workspaceManager, workspaceName);
         }
 
         public static async Task AddAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
@@ -41,7 +59,6 @@ namespace Orc.WorkspaceManagement
                 await workspaceManager.SetWorkspaceAsync(workspace);
             }
         }
-
 
         public static async Task AddProviderAsync(this IWorkspaceManager workspaceManager, IWorkspaceProvider workspaceProvider, bool callApplyWorkspaceForCurrentWorkspace)
         {
@@ -74,8 +91,8 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
             var defaultWorkspace = (from workspace in workspaceManager.Workspaces
-                where string.Equals(workspace.Title, defaultWorkspaceName)
-                select workspace).FirstOrDefault();
+                                    where string.Equals(workspace.Title, defaultWorkspaceName)
+                                    select workspace).FirstOrDefault();
 
             if (defaultWorkspace == null)
             {
