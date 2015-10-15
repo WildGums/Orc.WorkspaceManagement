@@ -15,6 +15,7 @@ namespace Orc.WorkspaceManagement
         bool Persist { get; set; }
         bool CanEdit { get; set; }
         bool CanDelete { get; set; }
+        bool IsVisible { get; set; }
         #endregion
 
         #region Methods

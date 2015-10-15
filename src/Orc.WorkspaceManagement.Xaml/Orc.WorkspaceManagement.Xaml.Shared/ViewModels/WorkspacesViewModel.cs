@@ -134,14 +134,18 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             var finalItems = new List<IWorkspace>();
 
+            var visibleWorkspaces = (from workspace in _workspaceManager.Workspaces
+                                     where workspace.IsVisible
+                                     select workspace).ToList();
+
             // 1) Items that cannot be deleted
-            finalItems.AddRange(from workspace in _workspaceManager.Workspaces
+            finalItems.AddRange(from workspace in visibleWorkspaces
                                 where !workspace.CanDelete
                                 orderby workspace.Title
                                 select workspace);
 
             // 2) Items that can be deleted
-            finalItems.AddRange(from workspace in _workspaceManager.Workspaces
+            finalItems.AddRange(from workspace in visibleWorkspaces
                                 where workspace.CanDelete
                                 orderby workspace.Title
                                 select workspace);

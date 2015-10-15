@@ -21,6 +21,7 @@ namespace Orc.WorkspaceManagement
             Persist = true;
             CanEdit = true;
             CanDelete = true;
+            IsVisible = true;
         }
         #endregion
 
@@ -30,6 +31,7 @@ namespace Orc.WorkspaceManagement
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
+        public bool IsVisible { get; set; }
 
         public void SetWorkspaceValue(string name, object value)
         {
