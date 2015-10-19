@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Workspace.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="Workspace.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,12 +9,13 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
-    using Catel;
     using Catel.Configuration;
     using Catel.Data;
 
     public class Workspace : DynamicConfiguration, IWorkspace
     {
+        [NonSerialized] private object _tag;
+
         #region Constructors
         public Workspace()
         {
@@ -54,6 +55,16 @@ namespace Orc.WorkspaceManagement
             {
                 return defaultValue;
             }
+        }
+
+        public object GetTag()
+        {
+            return _tag;
+        }
+
+        public void SetTag(object tagValue)
+        {
+            _tag = tagValue;
         }
         #endregion
 
