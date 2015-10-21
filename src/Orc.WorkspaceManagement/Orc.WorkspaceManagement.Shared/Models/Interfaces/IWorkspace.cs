@@ -7,6 +7,8 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using Catel.Runtime.Serialization;
+
     public interface IWorkspace
     {
         #region Properties
@@ -16,13 +18,14 @@ namespace Orc.WorkspaceManagement
         bool CanEdit { get; set; }
         bool CanDelete { get; set; }
         bool IsVisible { get; set; }
+
+        [ExcludeFromSerialization]
+        object Tag { get; set; }
         #endregion
 
         #region Methods
         void SetWorkspaceValue(string name, object value);
         T GetWorkspaceValue<T>(string name, T defaultValue);
-        object GetTag();
-        void SetTag(object tagValue);
         #endregion
     }
 }

@@ -11,11 +11,10 @@ namespace Orc.WorkspaceManagement
     using System.Collections.Generic;
     using Catel.Configuration;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class Workspace : DynamicConfiguration, IWorkspace
     {
-        [NonSerialized] private object _tag;
-
         #region Constructors
         public Workspace()
         {
@@ -33,6 +32,9 @@ namespace Orc.WorkspaceManagement
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
         public bool IsVisible { get; set; }
+
+        [ExcludeFromSerialization]
+        public object Tag { get; set; } 
 
         public void SetWorkspaceValue(string name, object value)
         {
@@ -55,16 +57,6 @@ namespace Orc.WorkspaceManagement
             {
                 return defaultValue;
             }
-        }
-
-        public object GetTag()
-        {
-            return _tag;
-        }
-
-        public void SetTag(object tagValue)
-        {
-            _tag = tagValue;
         }
         #endregion
 
