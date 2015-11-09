@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceWatcherBase.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="WorkspaceWatcherBase.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,18 +14,12 @@ namespace Orc.WorkspaceManagement
 
     public abstract class WorkspaceWatcherBase
     {
-        #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private bool _justAddedWorkspace;
-
-        private Stopwatch _switchStopwatch;
-        private Stopwatch _totalStopwatch;
-        #endregion
+        protected readonly IWorkspaceManager WorkspaceManager;
 
         #region Constructors
         protected WorkspaceWatcherBase(IWorkspaceManager workspaceManager)
         {
+            WorkspaceManager = workspaceManager;
             Argument.IsNotNull(() => workspaceManager);
 
             IgnoreSwitchToNewlyCreatedWorkspace = true;
@@ -36,6 +30,9 @@ namespace Orc.WorkspaceManagement
             workspaceManager.WorkspaceAdded += OnWorkspaceAdded;
             workspaceManager.WorkspaceRemoved += OnWorkspaceRemoved;
 
+            workspaceManager.WorkspaceProviderAdded += OnWorkspaceProviderAdded;
+            workspaceManager.WorkspaceProviderRemoved += OnWorkspaceProviderRemoved;
+
             workspaceManager.Saving += OnSaving;
             workspaceManager.Saved += OnSaved;
         }
@@ -43,6 +40,17 @@ namespace Orc.WorkspaceManagement
 
         #region Properties
         protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
+        #endregion
+
+        
+
+        #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private bool _justAddedWorkspace;
+
+        private Stopwatch _switchStopwatch;
+        private Stopwatch _totalStopwatch;
         #endregion
 
         #region Methods
@@ -61,32 +69,34 @@ namespace Orc.WorkspaceManagement
 
         protected virtual void OnWorkspaceUpdating(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
-            
         }
 
         protected virtual void OnWorkspaceUpdated(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
-            
         }
 
         protected virtual void OnWorkspaceAdded(IWorkspace workspace)
         {
-
         }
 
         protected virtual void OnWorkspaceRemoved(IWorkspace workspace)
         {
+        }
 
+        protected virtual void OnWorkspaceProviderAdded(IWorkspaceProvider workspaceProvider)
+        {
+        }
+
+        protected virtual void OnWorkspaceProviderRemoved(IWorkspaceProvider workspaceProvider)
+        {
         }
 
         protected virtual void OnSaving()
         {
-            
         }
 
         protected virtual void OnSaved()
         {
-            
         }
 
         private void OnWorkspaceUpdating(object sender, WorkspaceUpdatedEventArgs e)
@@ -151,6 +161,16 @@ namespace Orc.WorkspaceManagement
         private void OnWorkspaceRemoved(object sender, WorkspaceEventArgs e)
         {
             OnWorkspaceRemoved(e.Workspace);
+        }
+
+        private void OnWorkspaceProviderAdded(object sender, WorkspaceProviderEventArgs e)
+        {
+            OnWorkspaceProviderAdded(e.WorkspaceProvider);
+        }
+
+        private void OnWorkspaceProviderRemoved(object sender, WorkspaceProviderEventArgs e)
+        {
+            OnWorkspaceProviderRemoved(e.WorkspaceProvider);
         }
 
         private void OnSaving(object sender, EventArgs e)

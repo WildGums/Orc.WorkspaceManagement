@@ -124,7 +124,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
             _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
 
-            _workspaceManager.InitializeAsync(true);
+            await _workspaceManager.InitializeAsync(true);
 
             UpdateCurrentWorkspace();
         }

@@ -7,6 +7,9 @@
 
 namespace Orc.WorkspaceManagement.Views
 {
+    using System.Windows;
+    using Catel.MVVM.Views;
+
     /// <summary>
     /// Interaction logic for WorkspacesView.xaml.
     /// </summary>
@@ -19,6 +22,19 @@ namespace Orc.WorkspaceManagement.Views
         public WorkspacesView()
         {
             InitializeComponent();
+        }
+        #endregion
+
+
+        #region Properties
+        public static readonly DependencyProperty ManagerTagProperty =
+           DependencyProperty.Register("ManagerTag", typeof(object), typeof(WorkspacesView), new FrameworkPropertyMetadata(null));
+
+        [ViewToViewModel("Tag", MappingType = ViewToViewModelMappingType.ViewToViewModel)]
+        public object ManagerTag
+        {
+            get { return GetValue(ManagerTagProperty); }
+            set { SetValue(ManagerTagProperty, value); }
         }
         #endregion
     }

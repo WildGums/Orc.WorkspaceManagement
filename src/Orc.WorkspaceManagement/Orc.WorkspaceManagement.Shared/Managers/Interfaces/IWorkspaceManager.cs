@@ -17,6 +17,7 @@ namespace Orc.WorkspaceManagement
         IEnumerable<IWorkspace> Workspaces { get; }
         IWorkspace Workspace { get; }
         IEnumerable<IWorkspaceProvider> Providers { get; }
+        object Tag { get; set; }
 
         event EventHandler<EventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
@@ -27,6 +28,9 @@ namespace Orc.WorkspaceManagement
         event EventHandler<EventArgs> WorkspacesChanged;
         event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
         event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+
+        event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
+        event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
 
         event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
 

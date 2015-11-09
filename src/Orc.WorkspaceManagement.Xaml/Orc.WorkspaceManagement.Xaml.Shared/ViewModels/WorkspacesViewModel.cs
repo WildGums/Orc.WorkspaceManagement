@@ -13,6 +13,7 @@ namespace Orc.WorkspaceManagement.ViewModels
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
@@ -22,18 +23,21 @@ namespace Orc.WorkspaceManagement.ViewModels
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region Fields
-        private readonly IWorkspaceManager _workspaceManager;
+        private IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IServiceLocator _serviceLocator;
         #endregion
 
         #region Constructors
-        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService)
+        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => serviceLocator);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
+            _serviceLocator = serviceLocator;
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
@@ -46,6 +50,8 @@ namespace Orc.WorkspaceManagement.ViewModels
         public FastObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
 
         public IWorkspace SelectedWorkspace { get; set; }
+
+        public object Tag { get; set; }
         #endregion
 
         #region Commands
@@ -100,6 +106,21 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
+        private void OnTagChanged()
+        {
+            SelectedWorkspace = null;
+            var availableWorkspaces = AvailableWorkspaces;
+            availableWorkspaces.Clear();
+
+            _workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Tag);
+            if (_workspaceManager == null)
+            {
+                return;
+            }
+
+            AvailableWorkspaces = new FastObservableCollection<IWorkspace>(_workspaceManager.Workspaces);
+        }
+
         private async void OnSelectedWorkspaceChanged()
         {
             var workspace = SelectedWorkspace;

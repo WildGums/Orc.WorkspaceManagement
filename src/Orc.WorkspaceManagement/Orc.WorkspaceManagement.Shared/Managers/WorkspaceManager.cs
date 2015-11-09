@@ -20,6 +20,7 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly IWorkspaceInitializer _workspaceInitializer;
+        private readonly IWorkspaceProviderLocator _workspaceProviderLocator;
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private readonly IWorkspacesStorageService _workspacesStorageService;
@@ -30,12 +31,15 @@ namespace Orc.WorkspaceManagement
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
         /// <param name="workspaceInitializer">The workspace initializer.</param>
+        /// <param name="workspaceProviderLocator"></param>
         /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
-        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService)
+        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceProviderLocator workspaceProviderLocator, IWorkspacesStorageService workspacesStorageService)
         {
             Argument.IsNotNull(() => workspaceInitializer);
+            Argument.IsNotNull(() => workspaceProviderLocator);
 
             _workspaceInitializer = workspaceInitializer;
+            _workspaceProviderLocator = workspaceProviderLocator;
             _workspacesStorageService = workspacesStorageService;
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
@@ -53,6 +57,8 @@ namespace Orc.WorkspaceManagement
         {
             get { return _workspaceProviders.ToArray(); }
         }
+
+        public object Tag { get; set; }
 
         public IEnumerable<IWorkspace> Workspaces
         {
@@ -75,6 +81,8 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<EventArgs> WorkspacesChanged;
         public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
         public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+        public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
+        public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
 
         public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
 
@@ -120,6 +128,12 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.AddRange(workspaces);
 
+            var workspaceProviders = await _workspaceProviderLocator.ResolveAllWorkspaceProvidersAsync(Tag);
+            foreach (var workspaceProvider in workspaceProviders)
+            {
+                AddProvider(workspaceProvider);
+            }
+
             if (autoSelect && _workspaces.Any())
             {
                 await SetWorkspaceAsync(_workspaces.FirstOrDefault());
@@ -143,6 +157,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceProvider);
 
             _workspaceProviders.Add(workspaceProvider);
+            WorkspaceProviderAdded.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
         }
 
         /// <summary>
@@ -154,7 +169,13 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceProvider);
 
-            return _workspaceProviders.Remove(workspaceProvider);
+            if (_workspaceProviders.Remove(workspaceProvider))
+            {
+                WorkspaceProviderRemoved.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

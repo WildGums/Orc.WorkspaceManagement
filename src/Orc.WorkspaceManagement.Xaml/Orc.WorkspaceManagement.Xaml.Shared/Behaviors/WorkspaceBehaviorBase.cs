@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement.Behaviors
 {
     using System.Windows;
+    using System.Windows.Media.Animation;
     using Catel.IoC;
     using Catel.Services;
     using Catel.Windows.Interactivity;
@@ -24,7 +25,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             WorkspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
             var dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
 
-            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService);
+            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService, this.GetServiceLocator());
         }
         #endregion
 

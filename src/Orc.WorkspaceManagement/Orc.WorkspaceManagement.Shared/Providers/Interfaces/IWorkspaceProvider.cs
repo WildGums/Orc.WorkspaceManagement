@@ -14,6 +14,8 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public interface IWorkspaceProvider
     {
+        object Tag { get; set; }
+
         /// <summary>
         /// Provides the information for the workspace with the current state.
         /// </summary>

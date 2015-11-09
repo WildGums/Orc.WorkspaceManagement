@@ -29,6 +29,8 @@ namespace Orc.WorkspaceManagement.Test.Mocks
             workspace.SetWorkspaceValue(_key, _value);
         }
 
+        public object Tag { get; set; }
+
         public Task ProvideInformationAsync(IWorkspace workspace)
         {
             ProvideInformation(workspace);
