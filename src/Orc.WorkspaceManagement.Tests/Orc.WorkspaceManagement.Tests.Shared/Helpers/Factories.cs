@@ -7,7 +7,6 @@
 
 namespace Orc.WorkspaceManagement.Test
 {
-    using Catel.IoC;
     using Moq;
 
     public static class Factories
@@ -21,9 +20,9 @@ namespace Orc.WorkspaceManagement.Test
                     workspacesStorageService = Mock.Of<IWorkspacesStorageService>();
                 }
 
-                var serviceLocator = ServiceLocator.Default;
-                var workspaceProviderLocator = serviceLocator.ResolveType<IWorkspaceProviderLocator>();
-                return new WorkspaceManagement.WorkspaceManager(new EmptyWorkspaceInitializer(), workspaceProviderLocator, workspacesStorageService);
+                var workspaceProviderLocator = new WorkspaceProviderLocator();
+                return new WorkspaceManagement.WorkspaceManager(new EmptyWorkspaceInitializer(), workspaceProviderLocator, workspacesStorageService,
+                    new WorkspaceManagerInitializer(workspacesStorageService, workspaceProviderLocator));
             }
         }
     }

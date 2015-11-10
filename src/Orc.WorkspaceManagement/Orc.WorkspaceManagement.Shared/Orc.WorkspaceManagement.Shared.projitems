@@ -17,6 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IWorkspaceManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\Interfaces\IWorkspaceInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\Interfaces\IWorkspaceManagerInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\WorkspaceManagerInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Locators\Interfaces\IWorkspaceProviderLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Locators\WorkspaceProviderLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Interfaces\IWorkspaceManager.cs" />

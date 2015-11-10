@@ -51,6 +51,8 @@ namespace Orc.WorkspaceManagement
         /// <param name="autoSelect">if set to <c>true</c> [automatic select].</param>
         Task InitializeAsync(bool autoSelect);
 
+        Task<bool> IsInitializedAsync();
+
         /// <summary>
         /// Adds the provider that will provide information to the workspace when the information is requested.
         /// </summary>

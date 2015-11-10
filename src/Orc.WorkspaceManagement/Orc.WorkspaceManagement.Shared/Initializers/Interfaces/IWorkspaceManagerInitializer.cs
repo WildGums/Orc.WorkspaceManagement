@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceProviderLocator.cs" company="Wild Gums">
+// <copyright file="IWorkspaceManagerInitializer.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,12 +7,10 @@
 
 namespace Orc.WorkspaceManagement
 {
-    using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IWorkspaceProviderLocator
+    public interface IWorkspaceManagerInitializer
     {
-        IEnumerable<Task<IWorkspaceProvider>> ResolveAllWorkspaceProviders(object tag = null);
+        Task InitializeAsync(IWorkspaceManager workspaceManager);
     }
 }

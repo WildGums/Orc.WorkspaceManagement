@@ -4,6 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET40 || SL5
+#define USE_TASKEX
+#endif
 
 namespace Orc.WorkspaceManagement
 {
@@ -24,29 +27,36 @@ namespace Orc.WorkspaceManagement
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private readonly IWorkspacesStorageService _workspacesStorageService;
+        private readonly IWorkspaceManagerInitializer _workspaceManagerInitializer;
+        private readonly AsyncLock _lockObject = new AsyncLock();
+        private bool _isInitialized;
         private IWorkspace _workspace;
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
         /// <param name="workspaceInitializer">The workspace initializer.</param>
         /// <param name="workspaceProviderLocator"></param>
         /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
-        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceProviderLocator workspaceProviderLocator, IWorkspacesStorageService workspacesStorageService)
+        /// <param name="workspaceManagerInitializer">The workspace initializer</param>
+        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceProviderLocator workspaceProviderLocator, IWorkspacesStorageService workspacesStorageService,
+            IWorkspaceManagerInitializer workspaceManagerInitializer)
         {
             Argument.IsNotNull(() => workspaceInitializer);
             Argument.IsNotNull(() => workspaceProviderLocator);
+            Argument.IsNotNull(() => workspaceManagerInitializer);
 
             _workspaceInitializer = workspaceInitializer;
             _workspaceProviderLocator = workspaceProviderLocator;
             _workspacesStorageService = workspacesStorageService;
+            _workspaceManagerInitializer = workspaceManagerInitializer;
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the base directory to store the workspaces in.
         /// </summary>
@@ -69,9 +79,9 @@ namespace Orc.WorkspaceManagement
         {
             get { return _workspace; }
         }
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         public event EventHandler<EventArgs> Initializing;
         public event EventHandler<EventArgs> Initialized;
 
@@ -88,9 +98,9 @@ namespace Orc.WorkspaceManagement
 
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdating;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
-        #endregion
+#endregion
 
-        #region IWorkspaceManager Members
+#region IWorkspaceManager Members
         public async Task SetWorkspaceAsync(IWorkspace value)
         {
             var oldWorkspace = _workspace;
@@ -116,36 +126,60 @@ namespace Orc.WorkspaceManagement
 
         public async Task InitializeAsync(bool autoSelect)
         {
-            var baseDirectory = BaseDirectory;
-
-            Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
-
-            Initializing.SafeInvoke(this);
-
-            _workspaces.Clear();
-
-            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
-
-            _workspaces.AddRange(workspaces);
-
-            var workspaceProviders = await _workspaceProviderLocator.ResolveAllWorkspaceProvidersAsync(Tag);
-            foreach (var workspaceProvider in workspaceProviders)
+            if (await IsInitializedAsync())
             {
-                AddProvider(workspaceProvider);
+                return;
             }
 
-            if (autoSelect && _workspaces.Any())
+            using (await _lockObject.LockAsync())
             {
-                await SetWorkspaceAsync(_workspaces.FirstOrDefault());
+                var baseDirectory = BaseDirectory;
+
+                Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
+
+                Initializing.SafeInvoke(this);
+
+                _workspaces.Clear();
+
+                await _workspaceManagerInitializer.InitializeAsync(this);
+
+                /*var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
+
+                _workspaces.AddRange(workspaces);
+
+#if USE_TASKEX
+                var workspaceProviders = await TaskShim.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(Tag));
+#else
+                var workspaceProviders = await Task.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(Tag));
+#endif
+
+                foreach (var workspaceProvider in workspaceProviders)
+                {
+                    AddProvider(workspaceProvider);
+                }*/
+
+                if (autoSelect && _workspaces.Any())
+                {
+                    await SetWorkspaceAsync(_workspaces.FirstOrDefault());
+                }
+                else
+                {
+                    await SetWorkspaceAsync(null);
+                }
+
+                _isInitialized = true;
+                Initialized.SafeInvoke(this);
+
+                Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
             }
-            else
+        }
+
+        public async Task<bool> IsInitializedAsync()
+        {
+            using (await _lockObject.LockAsync())
             {
-                await SetWorkspaceAsync(null);
+                return _isInitialized;
             }
-
-            Initialized.SafeInvoke(this);
-
-            Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
         }
 
         /// <summary>
@@ -181,7 +215,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Adds the specified workspace to the list of workspaces.
         /// </summary>
-        /// <param name="workspace">The workspace.</param>
+        /// <param name="workspace">The workspace.</param>        
         public async Task AddAsync(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
@@ -310,6 +344,6 @@ namespace Orc.WorkspaceManagement
                 }
             }
         }
-        #endregion
+#endregion
     }
 }

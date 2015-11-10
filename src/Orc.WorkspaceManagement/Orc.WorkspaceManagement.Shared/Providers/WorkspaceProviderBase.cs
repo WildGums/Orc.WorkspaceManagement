@@ -29,7 +29,7 @@ namespace Orc.WorkspaceManagement
         [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderBase(IWorkspaceManager, IServiceLocator)", TreatAsErrorFromVersion = "1.0",
             RemoveInVersion = "2.0")]
         protected WorkspaceProviderBase(IWorkspaceManager workspaceManager)
-           // : this(workspaceManager, ServiceLocator.Default)
+            : this(workspaceManager, ServiceLocator.Default)
         {
         }
 
