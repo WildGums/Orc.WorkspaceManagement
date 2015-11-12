@@ -17,6 +17,7 @@ namespace Orc.WorkspaceManagement.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
+    using Catel.Threading;
 
     public class WorkspacesViewModel : ViewModelBase
     {
@@ -26,18 +27,22 @@ namespace Orc.WorkspaceManagement.ViewModels
         private IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IServiceLocator _serviceLocator;
+        private readonly IDispatcherService _dispatcherService;
         #endregion
 
         #region Constructors
-        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, IServiceLocator serviceLocator)
+        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, 
+            IServiceLocator serviceLocator, IDispatcherService dispatcherService)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => dispatcherService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
             _serviceLocator = serviceLocator;
+            _dispatcherService = dispatcherService;
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
@@ -51,7 +56,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         public IWorkspace SelectedWorkspace { get; set; }
 
-        public object Tag { get; set; }
+        public object ManagerTag { get; set; }
         #endregion
 
         #region Commands
@@ -106,23 +111,20 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
-        private void OnTagChanged()
+        private async void OnManagerTagChanged()
         {
-            SelectedWorkspace = null;
-            var availableWorkspaces = AvailableWorkspaces;
-            availableWorkspaces.Clear();
-
-            _workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Tag);
-            if (_workspaceManager == null)
-            {
-                return;
-            }
-
-            AvailableWorkspaces = new FastObservableCollection<IWorkspace>(_workspaceManager.Workspaces);
+            await DeactivateWorkspaceManagerAsync();
+            ActivateWorkspaceManager();
+            await UpdateCurrentWorkspaceAsync();
         }
 
         private async void OnSelectedWorkspaceChanged()
         {
+            if (_settingSelectedWokspace)
+            {
+                return;
+            }
+
             var workspace = SelectedWorkspace;
             if (workspace != null)
             {
@@ -141,13 +143,65 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         protected override async Task CloseAsync()
         {
-            _workspaceManager.WorkspacesChanged -= OnWorkspacesChanged;
-
-            await base.CloseAsync();
+            await DeactivateWorkspaceManagerAsync();
+            ActivateWorkspaceManager();
+            await UpdateCurrentWorkspaceAsync();
         }
 
         private void OnWorkspacesChanged(object sender, EventArgs e)
         {
+            UpdateWorkspaces();
+        }
+
+        private bool _settingSelectedWokspace;
+
+        private async Task SetSelectedWorkspaceAsync(IWorkspace workspace)
+        {
+            try
+            {
+                _settingSelectedWokspace = true;
+                await _dispatcherService.InvokeAsync(() => SelectedWorkspace = workspace);
+            }
+            finally
+            {
+                _settingSelectedWokspace = false;
+            }
+        }
+
+        private IWorkspaceManager GetWorkspaceManager()
+        {
+            if (_workspaceManager == null)
+            {
+                SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(ManagerTag));
+            }
+
+            return _workspaceManager;
+        }
+
+        private void SetWorkspaceManager(IWorkspaceManager workspaceManager)
+        {
+            if (_workspaceManager != null)
+            {
+                _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
+            }
+
+            _workspaceManager = workspaceManager;
+            _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
+        }
+
+        private async Task DeactivateWorkspaceManagerAsync()
+        {
+            await SetSelectedWorkspaceAsync(null);
+            var workspaceManager = GetWorkspaceManager();
+            workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
+
+            AvailableWorkspaces.Clear();
+            _workspaceManager = null;
+        }
+
+        private void ActivateWorkspaceManager()
+        {
+            SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(ManagerTag));
             UpdateWorkspaces();
         }
 
@@ -175,6 +229,13 @@ namespace Orc.WorkspaceManagement.ViewModels
             {
                 AvailableWorkspaces.ReplaceRange(finalItems);
             }
+        }
+
+        private async Task UpdateCurrentWorkspaceAsync()
+        {
+            var workspaceManager = GetWorkspaceManager();
+
+            await SetSelectedWorkspaceAsync(workspaceManager != null ? workspaceManager.Workspace : null);
         }
         #endregion
     }

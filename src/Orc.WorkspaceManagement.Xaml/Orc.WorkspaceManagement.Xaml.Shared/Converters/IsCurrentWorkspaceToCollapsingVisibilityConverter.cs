@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,15 +16,14 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         #region Fields
-        private readonly IWorkspaceManager _workspaceManager;
+        private readonly IServiceLocator _serviceLocator;
         #endregion
 
         #region Constructors
         public IsCurrentWorkspaceToCollapsingVisibilityConverter()
             : base(Visibility.Collapsed)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _workspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
+            _serviceLocator = this.GetServiceLocator();
         }
         #endregion
 
@@ -37,7 +36,8 @@ namespace Orc.WorkspaceManagement.Converters
                 return false;
             }
 
-            return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
+            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Tag);
+            return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion
     }

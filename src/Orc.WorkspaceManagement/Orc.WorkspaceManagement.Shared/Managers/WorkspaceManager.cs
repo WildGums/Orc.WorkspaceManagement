@@ -30,9 +30,8 @@ namespace Orc.WorkspaceManagement
         private readonly IWorkspaceManagerInitializer _workspaceManagerInitializer;
         private readonly AsyncLock _lockObject = new AsyncLock();
         private bool _isInitialized;
-        private IWorkspace _workspace;
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
@@ -75,11 +74,8 @@ namespace Orc.WorkspaceManagement
             get { return _workspaces.ToArray(); }
         }
 
-        public IWorkspace Workspace
-        {
-            get { return _workspace; }
-        }
-#endregion
+        public IWorkspace Workspace { get; private set; }
+        #endregion
 
 #region Events
         public event EventHandler<EventArgs> Initializing;
@@ -103,14 +99,14 @@ namespace Orc.WorkspaceManagement
 #region IWorkspaceManager Members
         public async Task SetWorkspaceAsync(IWorkspace value)
         {
-            var oldWorkspace = _workspace;
+            var oldWorkspace = Workspace;
             var newWorkspace = value;
 
             WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
-            _workspace = value;
+            Workspace = value;
 
-            await ApplyWorkspaceUsingProvidersAsync(_workspace);
+            await ApplyWorkspaceUsingProvidersAsync(Workspace);
 
             WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
         }
