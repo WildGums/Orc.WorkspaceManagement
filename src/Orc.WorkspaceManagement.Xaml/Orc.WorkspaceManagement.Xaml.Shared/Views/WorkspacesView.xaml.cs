@@ -30,9 +30,9 @@ namespace Orc.WorkspaceManagement.Views
 
         #region Properties
         public static readonly DependencyProperty ManagerTagProperty =
-           DependencyProperty.Register("ManagerTag", typeof(object), typeof(WorkspacesView), new FrameworkPropertyMetadata(OnTagChanged));
+           DependencyProperty.Register("ManagerTag", typeof(object), typeof(WorkspacesView), new FrameworkPropertyMetadata(OnManagerTagChanged));
 
-        private static void OnTagChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnManagerTagChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var workspacesView = d as WorkspacesView;
             if (workspacesView != null)

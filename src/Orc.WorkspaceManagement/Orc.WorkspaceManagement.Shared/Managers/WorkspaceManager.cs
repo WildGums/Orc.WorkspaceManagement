@@ -30,6 +30,7 @@ namespace Orc.WorkspaceManagement
         private readonly IWorkspaceManagerInitializer _workspaceManagerInitializer;
         private readonly AsyncLock _lockObject = new AsyncLock();
         private bool _isInitialized;
+        private IWorkspace _workspace;
 
         #region Constructors
         /// <summary>
@@ -74,7 +75,11 @@ namespace Orc.WorkspaceManagement
             get { return _workspaces.ToArray(); }
         }
 
-        public IWorkspace Workspace { get; private set; }
+        public IWorkspace Workspace
+        {
+            get { return _workspace; }
+            private set { _workspace = value; }
+        }
         #endregion
 
 #region Events
@@ -122,37 +127,28 @@ namespace Orc.WorkspaceManagement
 
         public async Task InitializeAsync(bool autoSelect)
         {
+#if DEBUG
+            Log.Debug(string.Format("Trying to initialize WorkspaceManager (Tag == \"{0}\")", Tag ?? "null"));
+#endif
             if (await IsInitializedAsync())
             {
+#if DEBUG
+                Log.Debug(string.Format("The WorkspaceManager (Tag == \"{0}\") was already initialized before.", Tag??"null"));
+#endif
                 return;
             }
 
             using (await _lockObject.LockAsync())
             {
                 var baseDirectory = BaseDirectory;
-
-                Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
-
+#if DEBUG
+                Log.Debug(string.Format("Initializing WorkspaceManager (Tag == \"{0}\") from '{1}'", Tag ?? "null", baseDirectory));
+#endif
                 Initializing.SafeInvoke(this);
 
                 _workspaces.Clear();
 
                 await _workspaceManagerInitializer.InitializeAsync(this);
-
-                /*var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
-
-                _workspaces.AddRange(workspaces);
-
-#if USE_TASKEX
-                var workspaceProviders = await TaskShim.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(Tag));
-#else
-                var workspaceProviders = await Task.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(Tag));
-#endif
-
-                foreach (var workspaceProvider in workspaceProviders)
-                {
-                    AddProvider(workspaceProvider);
-                }*/
 
                 if (autoSelect && _workspaces.Any())
                 {
@@ -185,6 +181,9 @@ namespace Orc.WorkspaceManagement
         public void AddProvider(IWorkspaceProvider workspaceProvider)
         {
             Argument.IsNotNull(() => workspaceProvider);
+#if DEBUG
+            Log.Debug(string.Format("Adding provider {0} to the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Tag ?? "null"));
+#endif
 
             _workspaceProviders.Add(workspaceProvider);
             WorkspaceProviderAdded.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
@@ -198,6 +197,10 @@ namespace Orc.WorkspaceManagement
         public bool RemoveProvider(IWorkspaceProvider workspaceProvider)
         {
             Argument.IsNotNull(() => workspaceProvider);
+
+#if DEBUG
+            Log.Debug(string.Format("Removing provider {0} from the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Tag ?? "null"));
+#endif
 
             if (_workspaceProviders.Remove(workspaceProvider))
             {
@@ -216,17 +219,20 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspace);
 
-            if (_workspaces.Contains(workspace))
+            if (!_workspaces.Contains(workspace))
             {
-                return;
+#if DEBUG
+                Log.Debug(string.Format("Adding workspace \"{0}\" to the WorkspaceManager (Tag == \"{1}\")", workspace.Title, Tag ?? "null"));
+#endif
+                await _workspaceInitializer.InitializeAsync(workspace);
+
+                _workspaces.Add(workspace);
+
+                WorkspaceAdded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
+                WorkspacesChanged.SafeInvoke(this);
             }
 
-            await _workspaceInitializer.InitializeAsync(workspace);
-
-            _workspaces.Add(workspace);
-
-            WorkspaceAdded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-            WorkspacesChanged.SafeInvoke(this);
+            workspace.Tag = Tag;
         }
 
         /// <summary>
@@ -247,6 +253,10 @@ namespace Orc.WorkspaceManagement
             {
                 return false;
             }
+
+#if DEBUG
+            Log.Debug(string.Format("Removing workspace \"{0}\" from the WorkspaceManager (Tag == \"{1}\")", workspace.Title, Tag ?? "null"));
+#endif
 
             var removed = _workspaces.Remove(workspace);
 

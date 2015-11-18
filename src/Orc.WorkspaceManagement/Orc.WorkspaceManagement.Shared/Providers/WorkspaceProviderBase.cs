@@ -18,7 +18,7 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public abstract class WorkspaceProviderBase : IWorkspaceProvider
     {
-        private readonly IServiceLocator _serviceLocator;
+        protected readonly IServiceLocator ServiceLocator;
         private object _tag;
 
         #region Constructors
@@ -29,7 +29,7 @@ namespace Orc.WorkspaceManagement
         [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderBase(IWorkspaceManager, IServiceLocator)", TreatAsErrorFromVersion = "1.0",
             RemoveInVersion = "2.0")]
         protected WorkspaceProviderBase(IWorkspaceManager workspaceManager)
-            : this(workspaceManager, ServiceLocator.Default)
+            : this(workspaceManager, Catel.IoC.ServiceLocator.Default)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => serviceLocator);
 
-            _serviceLocator = serviceLocator;
+            ServiceLocator = serviceLocator;
 
             WorkspaceManager = workspaceManager;
         }
@@ -63,7 +63,7 @@ namespace Orc.WorkspaceManagement
             get { return _tag; }
             set
             {
-                var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(value);
+                var workspaceManager = ServiceLocator.ResolveType<IWorkspaceManager>(value);
                 if (workspaceManager == null)
                 {
                     throw new PropertyNotNullableException("WorkspaceManager", typeof(IWorkspaceManager));

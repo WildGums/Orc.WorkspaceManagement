@@ -117,17 +117,15 @@ namespace Orc.WorkspaceManagement
 
             if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
-                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, autoSelect);
+                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, false);
             }
 
-            if (autoSelect && (workspaceManager.Workspace == null || !string.Equals(workspaceManager.Workspace.Title, defaultWorkspaceName)))
+            if (autoSelect && workspaceManager.Workspace == null && workspaceManager.Workspaces.Any())
             {
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName)));
-            }
+                var workspace = workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName))
+                    ?? workspaceManager.Workspaces.FirstOrDefault();
 
-            if (autoSelect && workspaceManager.Workspace == null)
-            {
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.FirstOrDefault());
+                await workspaceManager.SetWorkspaceAsync(workspace);
             }
         }
 
