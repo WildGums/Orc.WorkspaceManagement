@@ -1,4 +1,11 @@
-﻿using Catel.IoC;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ModuleInitializer.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+using Catel.IoC;
 using Orc.WorkspaceManagement;
 
 /// <summary>
@@ -15,8 +22,6 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
         serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
-        serviceLocator.RegisterType<IWorkspaceManagerInitializer, WorkspaceManagerInitializer>();
-        serviceLocator.RegisterType<IWorkspaceProviderLocator, WorkspaceProviderLocator>();
         serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
     }
 }

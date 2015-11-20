@@ -18,20 +18,15 @@ namespace Orc.WorkspaceManagement
     using Catel.IoC;
     using Catel.IO;
     using Catel.Logging;
-    using Catel.Threading;
 
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly IWorkspaceInitializer _workspaceInitializer;
-        private readonly IWorkspaceProviderLocator _workspaceProviderLocator;
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private IWorkspacesStorageService _workspacesStorageService;
-        private readonly IWorkspaceManagerInitializer _workspaceManagerInitializer;
         private readonly IServiceLocator _serviceLocator;
-        private readonly AsyncLock _lockObject = new AsyncLock();
-        private bool _isInitialized;
         private IWorkspace _workspace;
         private object _tag;
 
@@ -40,22 +35,16 @@ namespace Orc.WorkspaceManagement
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
         /// <param name="workspaceInitializer">The workspace initializer.</param>
-        /// <param name="workspaceProviderLocator"></param>
         /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
-        /// <param name="workspaceManagerInitializer">The workspace initializer</param>
         /// <param name="serviceLocator"></param>
-        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceProviderLocator workspaceProviderLocator, IWorkspacesStorageService workspacesStorageService,
-            IWorkspaceManagerInitializer workspaceManagerInitializer, IServiceLocator serviceLocator)
+        public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService,
+            IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => workspaceInitializer);
-            Argument.IsNotNull(() => workspaceProviderLocator);
-            Argument.IsNotNull(() => workspaceManagerInitializer);
             Argument.IsNotNull(() => serviceLocator);
 
             _workspaceInitializer = workspaceInitializer;
-            _workspaceProviderLocator = workspaceProviderLocator;
             _workspacesStorageService = workspacesStorageService;
-            _workspaceManagerInitializer = workspaceManagerInitializer;
             _serviceLocator = serviceLocator;
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
@@ -141,51 +130,33 @@ namespace Orc.WorkspaceManagement
 
         public async Task InitializeAsync(bool autoSelect)
         {
-#if DEBUG
-            Log.Debug(string.Format("Trying to initialize WorkspaceManager (Tag == \"{0}\")", Tag ?? "null"));
-#endif
-            if (await IsInitializedAsync())
+            var baseDirectory = BaseDirectory;
+
+            Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
+
+            Initializing.SafeInvoke(this);
+
+            _workspaces.Clear();
+
+            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
+            foreach (var workspace in workspaces)
             {
-#if DEBUG
-                Log.Debug(string.Format("The WorkspaceManager (Tag == \"{0}\") was already initialized before.", Tag??"null"));
-#endif
-                return;
+                workspace.Tag = Tag;
+                _workspaces.Add(workspace);
             }
 
-            using (await _lockObject.LockAsync())
+            if (autoSelect && _workspaces.Any())
             {
-                var baseDirectory = BaseDirectory;
-#if DEBUG
-                Log.Debug(string.Format("Initializing WorkspaceManager (Tag == \"{0}\") from '{1}'", Tag ?? "null", baseDirectory));
-#endif
-                Initializing.SafeInvoke(this);
-
-                _workspaces.Clear();
-
-                await _workspaceManagerInitializer.InitializeAsync(this);
-
-                if (autoSelect && _workspaces.Any())
-                {
-                    await SetWorkspaceAsync(_workspaces.FirstOrDefault());
-                }
-                else
-                {
-                    await SetWorkspaceAsync(null);
-                }
-
-                _isInitialized = true;
-                Initialized.SafeInvoke(this);
-
-                Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
+                await SetWorkspaceAsync(_workspaces.FirstOrDefault());
             }
-        }
-
-        public async Task<bool> IsInitializedAsync()
-        {
-            using (await _lockObject.LockAsync())
+            else
             {
-                return _isInitialized;
+                await SetWorkspaceAsync(null);
             }
+
+            Initialized.SafeInvoke(this);
+
+            Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
         }
 
         /// <summary>
@@ -235,9 +206,6 @@ namespace Orc.WorkspaceManagement
 
             if (!_workspaces.Contains(workspace))
             {
-#if DEBUG
-                Log.Debug(string.Format("Adding workspace \"{0}\" to the WorkspaceManager (Tag == \"{1}\")", workspace.Title, Tag ?? "null"));
-#endif
                 await _workspaceInitializer.InitializeAsync(workspace);
 
                 _workspaces.Add(workspace);
@@ -267,10 +235,6 @@ namespace Orc.WorkspaceManagement
             {
                 return false;
             }
-
-#if DEBUG
-            Log.Debug(string.Format("Removing workspace \"{0}\" from the WorkspaceManager (Tag == \"{1}\")", workspace.Title, Tag ?? "null"));
-#endif
 
             var removed = _workspaces.Remove(workspace);
 

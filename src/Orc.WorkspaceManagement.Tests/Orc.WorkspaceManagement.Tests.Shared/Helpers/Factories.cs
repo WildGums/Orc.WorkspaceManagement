@@ -21,13 +21,10 @@ namespace Orc.WorkspaceManagement.Test
                     workspacesStorageService = Mock.Of<IWorkspacesStorageService>();
                 }
 
-                var workspaceProviderLocator = new WorkspaceProviderLocator();
                 var serviceLocator = ServiceLocator.Default;
                 var emptyWorkspaceInitializer = new EmptyWorkspaceInitializer();
-                var workspaceManagerInitializer = new WorkspaceManagerInitializer(workspaceProviderLocator, serviceLocator);
 
-                return new WorkspaceManagement.WorkspaceManager(emptyWorkspaceInitializer, workspaceProviderLocator, workspacesStorageService,
-                    workspaceManagerInitializer, serviceLocator);
+                return new WorkspaceManagement.WorkspaceManager(emptyWorkspaceInitializer, workspacesStorageService, serviceLocator);
             }
         }
     }
