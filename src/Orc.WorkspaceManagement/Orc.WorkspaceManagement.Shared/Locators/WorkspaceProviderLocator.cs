@@ -13,7 +13,7 @@ namespace Orc.WorkspaceManagement
 
     public class WorkspaceProviderLocator : IWorkspaceProviderLocator
     {
-        public virtual IEnumerable<Task<IWorkspaceProvider>> ResolveAllWorkspaceProviders(object tag = null)
+        public virtual IEnumerable<Task<IWorkspaceProvider>> ResolveAllProviders(object tag = null)
         {
             return Enumerable.Empty<Task<IWorkspaceProvider>>();
         }

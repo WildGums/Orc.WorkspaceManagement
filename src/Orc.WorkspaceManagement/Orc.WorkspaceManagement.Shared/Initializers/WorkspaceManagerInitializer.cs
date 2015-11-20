@@ -12,20 +12,22 @@ namespace Orc.WorkspaceManagement
 {
     using System.Threading.Tasks;
     using Catel;
+    using Catel.IoC;
+    using Catel.IO;
     using Catel.Threading;
 
     public class WorkspaceManagerInitializer : IWorkspaceManagerInitializer
     {
-        private readonly IWorkspacesStorageService _workspacesStorageService;
         private readonly IWorkspaceProviderLocator _workspaceProviderLocator;
+        protected readonly IServiceLocator ServiceLocator;
 
-        public WorkspaceManagerInitializer(IWorkspacesStorageService workspacesStorageService, IWorkspaceProviderLocator workspaceProviderLocator)
-        {
-            Argument.IsNotNull(() => workspacesStorageService);
+        public WorkspaceManagerInitializer(IWorkspaceProviderLocator workspaceProviderLocator, IServiceLocator serviceLocator)
+        {           
             Argument.IsNotNull(() => workspaceProviderLocator);
+            Argument.IsNotNull(() => serviceLocator);
 
-            _workspacesStorageService = workspacesStorageService;
             _workspaceProviderLocator = workspaceProviderLocator;
+            ServiceLocator = serviceLocator;
         }
 
         public async Task InitializeAsync(IWorkspaceManager workspaceManager)
@@ -39,8 +41,10 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
+            var workspacesStorageService = ServiceLocator.ResolveType<IWorkspacesStorageService>(workspaceManager.Tag);
+
             var baseDirectory = workspaceManager.BaseDirectory;
-            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
+            var workspaces = workspacesStorageService.LoadWorkspaces(baseDirectory);
 
             foreach (var workspace in workspaces)
             {
@@ -53,9 +57,9 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
 #if USE_TASKEX
-            var workspaceProviders = await TaskShim.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(workspaceManager.Tag));
+            var workspaceProviders = await TaskShim.WhenAll(_workspaceProviderLocator.ResolveAllProviders(workspaceManager.Tag));
 #else
-            var workspaceProviders = await Task.WhenAll(_workspaceProviderLocator.ResolveAllWorkspaceProviders(workspaceManager.Tag));
+            var workspaceProviders = await Task.WhenAll(_workspaceProviderLocator.ResolveAllProviders(workspaceManager.Tag));
 #endif
 
             foreach (var workspaceProvider in workspaceProviders)

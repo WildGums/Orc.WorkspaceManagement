@@ -13,6 +13,6 @@ namespace Orc.WorkspaceManagement
 
     public interface IWorkspaceProviderLocator
     {
-        IEnumerable<Task<IWorkspaceProvider>> ResolveAllWorkspaceProviders(object tag = null);
+        IEnumerable<Task<IWorkspaceProvider>> ResolveAllProviders(object tag = null);
     }
 }

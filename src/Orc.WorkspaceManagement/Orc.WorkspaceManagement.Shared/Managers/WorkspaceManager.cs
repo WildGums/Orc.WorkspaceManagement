@@ -15,6 +15,7 @@ namespace Orc.WorkspaceManagement
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.IoC;
     using Catel.IO;
     using Catel.Logging;
     using Catel.Threading;
@@ -26,11 +27,13 @@ namespace Orc.WorkspaceManagement
         private readonly IWorkspaceProviderLocator _workspaceProviderLocator;
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
-        private readonly IWorkspacesStorageService _workspacesStorageService;
+        private IWorkspacesStorageService _workspacesStorageService;
         private readonly IWorkspaceManagerInitializer _workspaceManagerInitializer;
+        private readonly IServiceLocator _serviceLocator;
         private readonly AsyncLock _lockObject = new AsyncLock();
         private bool _isInitialized;
         private IWorkspace _workspace;
+        private object _tag;
 
         #region Constructors
         /// <summary>
@@ -40,17 +43,20 @@ namespace Orc.WorkspaceManagement
         /// <param name="workspaceProviderLocator"></param>
         /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
         /// <param name="workspaceManagerInitializer">The workspace initializer</param>
+        /// <param name="serviceLocator"></param>
         public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspaceProviderLocator workspaceProviderLocator, IWorkspacesStorageService workspacesStorageService,
-            IWorkspaceManagerInitializer workspaceManagerInitializer)
+            IWorkspaceManagerInitializer workspaceManagerInitializer, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => workspaceInitializer);
             Argument.IsNotNull(() => workspaceProviderLocator);
             Argument.IsNotNull(() => workspaceManagerInitializer);
+            Argument.IsNotNull(() => serviceLocator);
 
             _workspaceInitializer = workspaceInitializer;
             _workspaceProviderLocator = workspaceProviderLocator;
             _workspacesStorageService = workspacesStorageService;
             _workspaceManagerInitializer = workspaceManagerInitializer;
+            _serviceLocator = serviceLocator;
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
@@ -68,7 +74,15 @@ namespace Orc.WorkspaceManagement
             get { return _workspaceProviders.ToArray(); }
         }
 
-        public object Tag { get; set; }
+        public object Tag
+        {
+            get { return _tag; }
+            set
+            {
+                _tag = value;
+                _workspacesStorageService = _serviceLocator.ResolveType<IWorkspacesStorageService>(_tag);
+            }
+        }
 
         public IEnumerable<IWorkspace> Workspaces
         {
