@@ -28,21 +28,24 @@ namespace Orc.WorkspaceManagement.ViewModels
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IServiceLocator _serviceLocator;
         private readonly IDispatcherService _dispatcherService;
+        private readonly IMessageService _messageService;
         #endregion
 
         #region Constructors
         public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, 
-            IServiceLocator serviceLocator, IDispatcherService dispatcherService)
+            IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(() => messageService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
             _serviceLocator = serviceLocator;
             _dispatcherService = dispatcherService;
+            _messageService = messageService;
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 

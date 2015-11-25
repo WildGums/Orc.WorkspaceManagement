@@ -6,6 +6,8 @@
 
 
 using Catel.IoC;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.WorkspaceManagement;
 
 /// <summary>
@@ -23,5 +25,8 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
         serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
         serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement", "Orc.WorkspaceManagement.Properties", "Resources"));
     }
 }
