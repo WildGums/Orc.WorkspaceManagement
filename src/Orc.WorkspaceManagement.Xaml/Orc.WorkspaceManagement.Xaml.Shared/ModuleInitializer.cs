@@ -16,6 +16,6 @@ public static class ModuleInitializer
         var serviceLocator = ServiceLocator.Default;
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
-        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement.Xaml", "Orc.WorkspaceManagement.Xaml.Properties", "Resources"));
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement.Xaml", "Orc.WorkspaceManagement.Properties", "Resources"));
     }
 }

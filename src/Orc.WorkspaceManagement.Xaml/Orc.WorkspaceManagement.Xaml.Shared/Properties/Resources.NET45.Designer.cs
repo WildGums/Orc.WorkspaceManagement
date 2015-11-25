@@ -59,5 +59,23 @@ namespace Orc.WorkspaceManagement.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        internal static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove the workspace?.
+        /// </summary>
+        internal static string AreYouSureYouWantToRemoveTheWorkspace {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToRemoveTheWorkspace", resourceCulture);
+            }
+        }
     }
 }

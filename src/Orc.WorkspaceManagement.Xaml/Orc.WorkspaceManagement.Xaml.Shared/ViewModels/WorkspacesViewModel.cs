@@ -29,23 +29,27 @@ namespace Orc.WorkspaceManagement.ViewModels
         private readonly IServiceLocator _serviceLocator;
         private readonly IDispatcherService _dispatcherService;
         private readonly IMessageService _messageService;
+        private readonly ILanguageService _languageService;
         #endregion
 
         #region Constructors
         public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, 
-            IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService)
+            IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
+            ILanguageService languageService)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => dispatcherService);
             Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => languageService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
             _serviceLocator = serviceLocator;
             _dispatcherService = dispatcherService;
             _messageService = messageService;
+            _languageService = languageService;
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
@@ -107,6 +111,12 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task OnRemoveWorkspaceExecuteAsync(IWorkspace workspace)
         {
+            if (await _messageService.ShowAsync(_languageService.GetString("AreYouSureYouWantToRemoveTheWorkspace"),
+                _languageService.GetString("AreYouSure"), MessageButton.YesNo, MessageImage.Question) == MessageResult.No)
+            {
+                return;
+            }
+
             await _workspaceManager.RemoveAsync(workspace);
 
             _workspaceManager.Save();
