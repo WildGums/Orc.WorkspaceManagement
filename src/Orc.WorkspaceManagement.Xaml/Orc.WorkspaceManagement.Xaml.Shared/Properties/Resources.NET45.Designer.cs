@@ -63,63 +63,63 @@ namespace Orc.WorkspaceManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
-        internal static string AreYouSure {
+        internal static string WorkspaceManagement_AreYouSure {
             get {
-                return ResourceManager.GetString("AreYouSure", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_AreYouSure", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove the workspace?.
         /// </summary>
-        internal static string AreYouSureYouWantToRemoveTheWorkspace {
+        internal static string WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace {
             get {
-                return ResourceManager.GetString("AreYouSureYouWantToRemoveTheWorkspace", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Create new workspace.
         /// </summary>
-        internal static string CreateNewWorkspace {
+        internal static string WorkspaceManagement_CreateNewWorkspace {
             get {
-                return ResourceManager.GetString("CreateNewWorkspace", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_CreateNewWorkspace", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
-        internal static string Edit {
+        internal static string WorkspaceManagement_Edit {
             get {
-                return ResourceManager.GetString("Edit", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_Edit", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Edit workspace {0}.
         /// </summary>
-        internal static string EditWorkspace {
+        internal static string WorkspaceManagement_EditWorkspace {
             get {
-                return ResourceManager.GetString("EditWorkspace", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_EditWorkspace", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
-        internal static string Remove {
+        internal static string WorkspaceManagement_Remove {
             get {
-                return ResourceManager.GetString("Remove", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_Remove", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
-        internal static string Title {
+        internal static string WorkspaceManagement_Title {
             get {
-                return ResourceManager.GetString("Title", resourceCulture);
+                return ResourceManager.GetString("WorkspaceManagement_Title", resourceCulture);
             }
         }
     }

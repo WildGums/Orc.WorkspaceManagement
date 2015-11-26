@@ -23,7 +23,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             Workspace = workspace;
 
-            Title = !string.IsNullOrEmpty(workspace.Title) ? string.Format(languageService.GetString("EditWorkspace"), workspace.Title) : languageService.GetString("CreateNewWorkspace");
+            Title = !string.IsNullOrEmpty(workspace.Title) ? string.Format(languageService.GetString("WorkspaceManagement_EditWorkspace"), workspace.Title) : languageService.GetString("WorkspaceManagement_CreateNewWorkspace");
         }
 
         [Model]
