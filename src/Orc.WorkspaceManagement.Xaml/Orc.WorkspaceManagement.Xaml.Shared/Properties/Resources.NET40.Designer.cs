@@ -77,5 +77,50 @@ namespace Orc.WorkspaceManagement.Properties {
                 return ResourceManager.GetString("AreYouSureYouWantToRemoveTheWorkspace", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new workspace.
+        /// </summary>
+        internal static string CreateNewWorkspace {
+            get {
+                return ResourceManager.GetString("CreateNewWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit workspace {0}.
+        /// </summary>
+        internal static string EditWorkspace {
+            get {
+                return ResourceManager.GetString("EditWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
     }
 }

@@ -10,18 +10,20 @@ namespace Orc.WorkspaceManagement.ViewModels
     using Catel;
     using Catel.Fody;
     using Catel.MVVM;
+    using Catel.Services;
 
     public class WorkspaceViewModel : ViewModelBase
     {
-        public WorkspaceViewModel(IWorkspace workspace)
+        public WorkspaceViewModel(IWorkspace workspace, ILanguageService languageService)
         {
             Argument.IsNotNull(() => workspace);
+            Argument.IsNotNull(() => languageService);
 
             DeferValidationUntilFirstSaveCall = true;
 
             Workspace = workspace;
 
-            Title = !string.IsNullOrEmpty(workspace.Title) ? string.Format("Edit workspace {0}", workspace.Title) : "Create new workspace";
+            Title = !string.IsNullOrEmpty(workspace.Title) ? string.Format(languageService.GetString("EditWorkspace"), workspace.Title) : languageService.GetString("CreateNewWorkspace");
         }
 
         [Model]
