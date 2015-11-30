@@ -43,7 +43,7 @@ To create a custom workspace initializer, see the example below:
 
     public class WorkspaceInitializer : IWorkspaceInitializer
     {
-        public void InitializeAsync(IWorkspace workspace)
+        public Task InitializeAsync(IWorkspace workspace)
         {
             workspace.SetValue("AView.Width", 200d);
             workspace.SetValue("BView.Width", 200d);
