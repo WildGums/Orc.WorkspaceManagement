@@ -43,10 +43,11 @@ To create a custom workspace initializer, see the example below:
 
     public class WorkspaceInitializer : IWorkspaceInitializer
     {
-        public void Initialize(IWorkspace workspace)
+        public void InitializeAsync(IWorkspace workspace)
         {
             workspace.SetValue("AView.Width", 200d);
             workspace.SetValue("BView.Width", 200d);
+            return TaskHelper.Completed;
         }
     }
 
@@ -61,7 +62,7 @@ Next it can be registered in the ServiceLocator (so it will automatically be inj
 
 Because the workspace manager is using async, the initialization is a separate method. This gives the developer the option to load the workspaces whenever it is required. To read the stored workspaces from disk, use the code below:
 
-	await workspaceManager.Initialize(); 
+	await workspaceManager.InitializeAsync(); 
 
 # Retrieving a list of all workspaces
 
@@ -81,7 +82,7 @@ Storing information in a workspace is the responsibility of every single compone
 
 To store information in a workspace, set the workspace to be updated as current workspace. Then let the user (or software) customize all components. Call the following method to raise the *WorkspaceInfoRequested* event to update the workspace:
 
-    workspaceManager.StoreWorkspace();
+    await workspaceManager.StoreWorkspaceAsync();
 
 **Note that a workspace is only updated, not saved to disk by this method**.
 
@@ -100,14 +101,16 @@ Create a provider as shown in the example below:
             _ribbon = ribbon;
         }
 
-        public void ProvideInformation(IWorkspace workspace)
+        public Task ProvideInformationAsync(IWorkspace workspace)
         {
             workspace.SetWorkspaceValue("Ribbon.IsMinimized", _ribbon.IsMinimized);
+            return TaskHelper.Completed;
         }
 
-        public void ApplyWorkspace(IWorkspace workspace)
+        public Task ApplyWorkspaceAsync(IWorkspace workspace)
         {
             _ribbon.IsMinimized = workspace.GetWorkspaceValue("Ribbon.IsMinimized", false);
+            return TaskHelper.Completed;
         }
     }
 
@@ -147,7 +150,7 @@ Using events is a bit more work, but can accomplish the same:
 
 To save all workspaces to disk, use the code below:
 
-    await workspaceManager.Save();
+    workspaceManager.Save();
 
 -- 
 
