@@ -41,7 +41,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspaceAddedAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.AddAsync(new Workspace());
 
@@ -54,7 +54,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.AddAsync(new Workspace());
 
@@ -117,7 +117,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.RemoveAsync(workspace);
 
@@ -137,7 +137,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.RemoveAsync(workspace);
 
@@ -149,27 +149,27 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheInitializeMethod
         {
             [TestCase]
-            public void RaisesInitializingEvent()
+            public async Task RaisesInitializingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.Initializing += (sender, e) => eventRaised = true;
+                workspaceManager.InitializingAsync += async (sender, e) => eventRaised = true;
 
-                workspaceManager.InitializeAsync();
+                await workspaceManager.InitializeAsync();
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public void RaisesInitializedEvent()
+            public async Task RaisesInitializedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.Initialized += (sender, e) => eventRaised = true;
+                workspaceManager.InitializedAsync += async (sender, e) => eventRaised = true;
 
-                workspaceManager.InitializeAsync();
+                await workspaceManager.InitializeAsync();
 
                 Assert.IsTrue(eventRaised);
             }
@@ -193,7 +193,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.SetWorkspaceAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceInfoRequested += (sender, e) => eventRaised = true;
+                workspaceManager.WorkspaceInfoRequestedAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.StoreWorkspaceAsync();
 
@@ -205,27 +205,27 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheSaveMethod
         {
             [TestCase]
-            public void RaisesSavingEvent()
+            public async Task RaisesSavingEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.Saving += (sender, e) => eventRaised = true;
+                workspaceManager.SavingAsync += async (sender, e) => eventRaised = true;
 
-                workspaceManager.Save();
+                await workspaceManager.SaveAsync();
 
                 Assert.IsTrue(eventRaised);
             }
 
             [TestCase]
-            public void RaisesSavedEvent()
+            public async Task RaisesSavedEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.Saved += (sender, e) => eventRaised = true;
+                workspaceManager.SavedAsync += async (sender, e) => eventRaised = true;
 
-                workspaceManager.Save();
+                await workspaceManager.SaveAsync();
 
                 Assert.IsTrue(eventRaised);
             }
@@ -241,7 +241,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheAddProviderMethod
         {
             [TestCase]
-            public async void CallsProviderWhenStoringWorkspace()
+            public async Task CallsProviderWhenStoringWorkspace()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
                 var workspace = new Workspace
@@ -252,7 +252,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace, true);
 
                 var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                workspaceManager.AddProvider(workspaceProvider);
+                await workspaceManager.AddProviderAsync(workspaceProvider);
 
                 await workspaceManager.StoreWorkspaceAsync();
 
@@ -264,7 +264,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheRemoveProviderMethod
         {
             [TestCase]
-            public async void CorrectlyRemovesProviderWhenStoringWorkspace()
+            public async Task CorrectlyRemovesProviderWhenStoringWorkspace()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
                 var workspace = new Workspace
@@ -275,8 +275,8 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace, true);
 
                 var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                workspaceManager.AddProvider(workspaceProvider);
-                workspaceManager.RemoveProvider(workspaceProvider);
+                await workspaceManager.AddProviderAsync(workspaceProvider);
+                await workspaceManager.RemoveProviderAsync(workspaceProvider);
 
                 await workspaceManager.StoreWorkspaceAsync();
 

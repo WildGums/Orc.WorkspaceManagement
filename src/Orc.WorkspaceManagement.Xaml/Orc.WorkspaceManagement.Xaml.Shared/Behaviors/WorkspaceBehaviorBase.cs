@@ -44,22 +44,22 @@ namespace Orc.WorkspaceManagement.Behaviors
         #endregion
 
         #region Methods
-        protected override void OnAssociatedObjectLoaded()
-        {
-            base.OnAssociatedObjectLoaded();
-
-            WorkspaceManager.AddProvider(_workspaceProvider);
+        protected override async void OnAssociatedObjectLoaded()
+        {           
+            await WorkspaceManager.AddProviderAsync(_workspaceProvider);
 
             var workspace = WorkspaceManager.Workspace;
             if (workspace != null)
             {
                 LoadSettings(workspace, KeyPrefix);
             }
+
+            base.OnAssociatedObjectLoaded();
         }
 
-        protected override void OnAssociatedObjectUnloaded()
+        protected override async void OnAssociatedObjectUnloaded()
         {
-            WorkspaceManager.RemoveProvider(_workspaceProvider);
+            await WorkspaceManager.RemoveProviderAsync(_workspaceProvider);
 
             base.OnAssociatedObjectUnloaded();
         }

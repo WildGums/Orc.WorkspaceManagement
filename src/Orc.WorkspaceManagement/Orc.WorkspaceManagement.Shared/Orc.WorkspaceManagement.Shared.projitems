@@ -13,7 +13,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceProviderEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceUpdatedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceUpdatingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidWorkspaceException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\WorkspaceException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\WorkspaceManagementInitializationException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IWorkspaceManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\Interfaces\IWorkspaceInitializer.cs" />
