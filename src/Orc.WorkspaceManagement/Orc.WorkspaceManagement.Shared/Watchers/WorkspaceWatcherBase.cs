@@ -42,8 +42,6 @@ namespace Orc.WorkspaceManagement
         protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
         #endregion
 
-        
-
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
