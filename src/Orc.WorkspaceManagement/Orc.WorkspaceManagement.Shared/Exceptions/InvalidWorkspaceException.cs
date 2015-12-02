@@ -12,7 +12,7 @@ namespace Orc.WorkspaceManagement
     public class InvalidWorkspaceException : WorkspaceException
     {
         public InvalidWorkspaceException(IWorkspace workspace)
-            : base(workspace, $"Workspace '{ObjectToStringHelper.ToString(workspace)}' is invalid at this stage")
+            : base(workspace, string.Format("Workspace '{0}' is invalid at this stage",ObjectToStringHelper.ToString(workspace)))
         {
         }
     }
