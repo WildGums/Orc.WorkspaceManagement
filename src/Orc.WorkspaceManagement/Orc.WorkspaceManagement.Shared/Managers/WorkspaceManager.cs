@@ -87,45 +87,45 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Events
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(InitializingAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> Initializing;
         public event AsyncEventHandler<CancelEventArgs> InitializingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(InitializedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> Initialized;
         public event AsyncEventHandler<EventArgs> InitializedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(SavingAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> Saving;
         public event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(SavedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> Saved;
         public event AsyncEventHandler<EventArgs> SavedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspacesChangedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspacesChangedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> WorkspacesChanged;
         public event AsyncEventHandler<EventArgs> WorkspacesChangedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceAddedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
         public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceAddedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceRemovedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
         public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceRemovedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceProviderAddedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
         public event AsyncEventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAddedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceProviderRemovedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
         public event AsyncEventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemovedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceInfoRequestedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceInfoRequestedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
         public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceInfoRequestedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceUpdatingAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceUpdatingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdating;
         public event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(WorkspaceUpdatedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceUpdatedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         public event AsyncEventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdatedAsync;
         #endregion
@@ -378,7 +378,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Saves all the workspaces to disk.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(SaveAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "SaveAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public void Save()
         {
             var baseDirectory = BaseDirectory;

@@ -102,7 +102,7 @@ namespace Orc.WorkspaceManagement
             return false;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceUpdatingAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceUpdatingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceUpdating(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
         }
@@ -112,7 +112,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper<bool>.FromResult(true);
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceUpdatedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceUpdatedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceUpdated(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
         }
@@ -122,7 +122,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper.Completed;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceAddedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceAdded(IWorkspace workspace)
         {
         }
@@ -132,7 +132,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper.Completed;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceRemovedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceRemoved(IWorkspace workspace)
         {
         }
@@ -142,7 +142,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper.Completed;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceProviderAddedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceProviderAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceProviderAdded(IWorkspaceProvider workspaceProvider)
         {
         }
@@ -152,7 +152,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper.Completed;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnWorkspaceProviderRemovedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnWorkspaceProviderRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnWorkspaceProviderRemoved(IWorkspaceProvider workspaceProvider)
         {
         }
@@ -162,7 +162,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper.Completed;
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnSavingAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnSavingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnSaving()
         {
         }
@@ -172,7 +172,7 @@ namespace Orc.WorkspaceManagement
             return TaskHelper<bool>.FromResult(true);
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(OnSavedAsync), TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnSavedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         protected virtual void OnSaved()
         {
         }
