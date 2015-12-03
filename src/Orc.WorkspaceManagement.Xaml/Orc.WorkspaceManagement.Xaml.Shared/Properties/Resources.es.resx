@@ -121,7 +121,7 @@
     <value>Are you sure?</value>
   </data>
   <data name="WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace" xml:space="preserve">
-    <value>Are you sure you want to remove the workspace?</value>
+    <value>Are you sure you want to remove workspace '{0}'?</value>
   </data>
   <data name="WorkspaceManagement_CreateNewWorkspace" xml:space="preserve">
     <value>Create new workspace</value>

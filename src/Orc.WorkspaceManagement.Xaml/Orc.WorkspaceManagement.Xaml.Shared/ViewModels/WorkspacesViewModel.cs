@@ -111,7 +111,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task OnRemoveWorkspaceExecuteAsync(IWorkspace workspace)
         {
-            if (await _messageService.ShowAsync(_languageService.GetString("WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace"),
+            if (await _messageService.ShowAsync(string.Format(_languageService.GetString("WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace"), workspace.Title),
                 _languageService.GetString("WorkspaceManagement_AreYouSure"), MessageButton.YesNo, MessageImage.Question) == MessageResult.No)
             {
                 return;

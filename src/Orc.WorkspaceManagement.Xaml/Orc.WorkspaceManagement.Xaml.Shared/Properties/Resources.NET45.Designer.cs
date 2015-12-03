@@ -70,7 +70,7 @@ namespace Orc.WorkspaceManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove the workspace?.
+        ///   Looks up a localized string similar to Are you sure you want to remove workspace &apos;{0}&apos;?.
         /// </summary>
         internal static string WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace {
             get {
