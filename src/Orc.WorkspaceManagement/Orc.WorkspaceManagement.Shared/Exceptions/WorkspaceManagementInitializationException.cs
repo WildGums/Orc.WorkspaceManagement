@@ -17,6 +17,6 @@ namespace Orc.WorkspaceManagement
             WorkspaceManager = workspaceManager;
         }
 
-        public IWorkspaceManager WorkspaceManager { get; set; }
+        public IWorkspaceManager WorkspaceManager { get; private set; }
     }
 }

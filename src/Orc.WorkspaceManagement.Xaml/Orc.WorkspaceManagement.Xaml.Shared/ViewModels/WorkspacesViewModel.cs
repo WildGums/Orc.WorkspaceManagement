@@ -53,7 +53,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
 
-            EditWorkspace = new TaskCommand<IWorkspace>(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
+            EditWorkspace = new TaskCommand<IWorkspace>(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
         }
         #endregion
@@ -84,7 +84,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             return true;
         }
 
-        private async Task OnEditWorkspaceExecute(object workspace)
+        private async Task OnEditWorkspaceExecuteAsync(object workspace)
         {
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
