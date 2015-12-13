@@ -10,6 +10,7 @@ namespace Orc.WorkspaceManagement
     using System.Threading.Tasks;
     using Behaviors;
     using Catel;
+    using Catel.IoC;
     using Catel.Services;
     using Catel.Threading;
 
@@ -18,8 +19,9 @@ namespace Orc.WorkspaceManagement
         private readonly IWorkspaceBehavior _workspaceBehavior;
         private readonly IDispatcherService _dispatcherService;
 
-        public BehaviorWorkspaceProvider(IWorkspaceManager workspaceManager, IWorkspaceBehavior workspaceBehavior, IDispatcherService dispatcherService) 
-            : base(workspaceManager)
+        public BehaviorWorkspaceProvider(IWorkspaceManager workspaceManager, IWorkspaceBehavior workspaceBehavior, IDispatcherService dispatcherService,
+            IServiceLocator serviceLocator) 
+            : base(workspaceManager, serviceLocator)
         {
             Argument.IsNotNull(() => workspaceBehavior);
             Argument.IsNotNull(() => dispatcherService);

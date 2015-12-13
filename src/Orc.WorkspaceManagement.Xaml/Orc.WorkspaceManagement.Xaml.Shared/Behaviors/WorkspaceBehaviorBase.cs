@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement.Behaviors
 {
     using System.Windows;
+    using System.Windows.Media.Animation;
     using Catel.IoC;
     using Catel.Services;
     using Catel.Windows.Interactivity;
@@ -24,7 +25,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             WorkspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
             var dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
 
-            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService);
+            _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService, this.GetServiceLocator());
         }
         #endregion
 
@@ -43,22 +44,22 @@ namespace Orc.WorkspaceManagement.Behaviors
         #endregion
 
         #region Methods
-        protected override void OnAssociatedObjectLoaded()
+        protected override async void OnAssociatedObjectLoaded()
         {
             base.OnAssociatedObjectLoaded();
 
-            WorkspaceManager.AddProvider(_workspaceProvider);
+            await WorkspaceManager.AddProviderAsync(_workspaceProvider);
 
             var workspace = WorkspaceManager.Workspace;
             if (workspace != null)
             {
                 LoadSettings(workspace, KeyPrefix);
-            }
+            }            
         }
 
-        protected override void OnAssociatedObjectUnloaded()
+        protected override async void OnAssociatedObjectUnloaded()
         {
-            WorkspaceManager.RemoveProvider(_workspaceProvider);
+            await WorkspaceManager.RemoveProviderAsync(_workspaceProvider);
 
             base.OnAssociatedObjectUnloaded();
         }

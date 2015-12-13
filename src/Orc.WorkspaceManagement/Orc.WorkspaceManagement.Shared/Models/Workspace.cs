@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Workspace.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="Workspace.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,9 +9,9 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
-    using Catel;
     using Catel.Configuration;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class Workspace : DynamicConfiguration, IWorkspace
     {
@@ -21,6 +21,7 @@ namespace Orc.WorkspaceManagement
             Persist = true;
             CanEdit = true;
             CanDelete = true;
+            IsVisible = true;
         }
         #endregion
 
@@ -30,6 +31,10 @@ namespace Orc.WorkspaceManagement
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
+        public bool IsVisible { get; set; }
+
+        [ExcludeFromSerialization]
+        public object Tag { get; set; } 
 
         public void SetWorkspaceValue(string name, object value)
         {

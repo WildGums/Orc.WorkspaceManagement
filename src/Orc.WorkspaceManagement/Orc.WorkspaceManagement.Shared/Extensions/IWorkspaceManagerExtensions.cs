@@ -18,7 +18,7 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
-            return workspaceManager.SetWorkspaceAsync(workspaceManager.Workspace);
+            return workspaceManager.TrySetWorkspaceAsync(workspaceManager.Workspace);
         }
 
         public static TWorkspace GetWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager)
@@ -27,6 +27,24 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
             return (TWorkspace)workspaceManager.Workspace;
+        }
+
+        public static IWorkspace FindWorkspace(this IWorkspaceManager workspaceManager, string workspaceName)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNullOrWhitespace(() => workspaceName);
+
+            return (from workspace in workspaceManager.Workspaces
+                    where string.Equals(workspace.Title, workspaceName)
+                    select workspace).FirstOrDefault();
+        }
+
+        public static TWorkspace FindWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager, string workspaceName)
+            where TWorkspace : IWorkspace
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            return (TWorkspace) FindWorkspace(workspaceManager, workspaceName);
         }
 
         public static async Task AddAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
@@ -38,17 +56,16 @@ namespace Orc.WorkspaceManagement
 
             if (autoSelect)
             {
-                await workspaceManager.SetWorkspaceAsync(workspace);
+                await workspaceManager.TrySetWorkspaceAsync(workspace);
             }
         }
-
 
         public static async Task AddProviderAsync(this IWorkspaceManager workspaceManager, IWorkspaceProvider workspaceProvider, bool callApplyWorkspaceForCurrentWorkspace)
         {
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => workspaceProvider);
 
-            workspaceManager.AddProvider(workspaceProvider);
+            await workspaceManager.AddProviderAsync(workspaceProvider);
 
             if (callApplyWorkspaceForCurrentWorkspace)
             {
@@ -96,21 +113,22 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
-            await workspaceManager.InitializeAsync(false);
+            if (!await workspaceManager.TryInitializeAsync(false))
+            {
+                return;
+            }
 
             if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
-                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, autoSelect);
+                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, false);
             }
 
-            if (autoSelect && (workspaceManager.Workspace == null || !string.Equals(workspaceManager.Workspace.Title, defaultWorkspaceName)))
+            if (autoSelect && workspaceManager.Workspace == null && workspaceManager.Workspaces.Any())
             {
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName)));
-            }
+                var workspace = workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName))
+                    ?? workspaceManager.Workspaces.FirstOrDefault();
 
-            if (autoSelect && workspaceManager.Workspace == null)
-            {
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.FirstOrDefault());
+                await workspaceManager.TrySetWorkspaceAsync(workspace);
             }
         }
 
@@ -135,7 +153,49 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
             await workspaceManager.StoreWorkspaceAsync();
-            workspaceManager.Save();
+            await workspaceManager.SaveAsync();
+        }
+
+        public static async Task<bool> CheckIsDirtyAsync(this IWorkspaceManager workspaceManager)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+
+            var workspace = workspaceManager.Workspace;
+            if (workspace == null)
+            {
+                return true;
+            }
+
+            foreach (var provider in workspaceManager.Providers)
+            {
+                if (await provider.CheckIsDirtyAsync(workspace))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static async Task<bool> IsWorkspaceDirtyAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace)
+        {
+            Argument.IsNotNull(() => workspaceManager);
+            Argument.IsNotNull(() => workspace);
+
+            if (workspaceManager.Providers == null)
+            {
+                return false;
+            }
+
+            foreach (var provider in workspaceManager.Providers)
+            {
+                if (await provider.CheckIsDirtyAsync(workspace))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

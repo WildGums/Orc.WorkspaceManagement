@@ -30,7 +30,7 @@ namespace Orc.WorkspaceManagement.Example.Logging
             _textBox.Dispatcher.Invoke(new Action(() => _textBox.Clear()));
         }
 
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             _textBox.Dispatcher.Invoke(new Action(() =>
             {
@@ -38,6 +38,8 @@ namespace Orc.WorkspaceManagement.Example.Logging
                 _textBox.AppendText(Environment.NewLine);
                 _textBox.ScrollToEnd();
             }));
+
+            base.Write(log, message, logEvent, extraData, logData, time);
         }
     }
 }

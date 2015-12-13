@@ -47,9 +47,9 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         protected override void OnAssociatedObjectLoaded()
         {
-            GetDefaultValues();
-
             base.OnAssociatedObjectLoaded();
+
+            GetDefaultValues();
         }
 
         private void GetDefaultValues()

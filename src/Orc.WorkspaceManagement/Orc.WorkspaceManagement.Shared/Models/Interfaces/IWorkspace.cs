@@ -1,12 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspace.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="IWorkspace.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 namespace Orc.WorkspaceManagement
 {
+    using Catel.Runtime.Serialization;
+
     public interface IWorkspace
     {
         #region Properties
@@ -15,6 +17,10 @@ namespace Orc.WorkspaceManagement
         bool Persist { get; set; }
         bool CanEdit { get; set; }
         bool CanDelete { get; set; }
+        bool IsVisible { get; set; }
+
+        [ExcludeFromSerialization]
+        object Tag { get; set; }
         #endregion
 
         #region Methods

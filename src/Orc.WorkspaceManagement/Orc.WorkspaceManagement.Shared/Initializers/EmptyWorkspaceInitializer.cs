@@ -12,11 +12,6 @@ namespace Orc.WorkspaceManagement
 
     public class EmptyWorkspaceInitializer : IWorkspaceInitializer
     {
-        public void Initialize(IWorkspace workspace)
-        {
-            // nothing
-        }
-
         public Task InitializeAsync(IWorkspace workspace)
         {
             // nothing

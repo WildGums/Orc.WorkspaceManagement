@@ -6,13 +6,17 @@
     <SharedGUID>d1484a3b-a89e-4b3d-8e37-ce582c902cfa</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Orc.WorkspaceManagement.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Orc.WorkspaceManagement</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceProviderEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceUpdatedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\WorkspaceUpdatingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidWorkspaceException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\WorkspaceException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\WorkspaceManagementInitializationException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IWorkspaceManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\EmptyWorkspaceInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializers\Interfaces\IWorkspaceInitializer.cs" />

@@ -14,6 +14,8 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public interface IWorkspaceProvider
     {
+        object Tag { get; set; }
+
         /// <summary>
         /// Provides the information for the workspace with the current state.
         /// </summary>
@@ -25,5 +27,12 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         /// <param name="workspace">The workspace.</param>
         Task ApplyWorkspaceAsync(IWorkspace workspace);
+
+        /// <summary>
+        /// Check if workspace was changed
+        /// </summary>
+        /// <param name="workspace">The workspace</param>
+        /// <returns></returns>
+        Task<bool> CheckIsDirtyAsync(IWorkspace workspace);
     }
 }

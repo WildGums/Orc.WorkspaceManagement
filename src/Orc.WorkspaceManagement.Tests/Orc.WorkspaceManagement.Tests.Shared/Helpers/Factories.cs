@@ -1,26 +1,31 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Factories.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2015 Orchestra development team. All rights reserved.
+// <copyright file="Factories.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Orc.WorkspaceManagement.Test
 {
-    using System.Collections.Generic;
+    using Catel.IoC;
     using Moq;
 
     public static class Factories
     {
-         public static class WorkspaceManager
-         {
-             public static IWorkspaceManager WithEmptyInitializer(IWorkspacesStorageService workspacesStorageService = null)
-             {
-                 if (workspacesStorageService == null)
-                 {
-                     workspacesStorageService = Mock.Of<IWorkspacesStorageService>();
-                 }
+        public static class WorkspaceManager
+        {
+            public static IWorkspaceManager WithEmptyInitializer(IWorkspacesStorageService workspacesStorageService = null)
+            {
+                if (workspacesStorageService == null)
+                {
+                    workspacesStorageService = Mock.Of<IWorkspacesStorageService>();
+                }
 
-                 return new WorkspaceManagement.WorkspaceManager(new EmptyWorkspaceInitializer(), workspacesStorageService);
-             }
-         }        
+                var serviceLocator = ServiceLocator.Default;
+                var emptyWorkspaceInitializer = new EmptyWorkspaceInitializer();
+
+                return new WorkspaceManagement.WorkspaceManager(emptyWorkspaceInitializer, workspacesStorageService, serviceLocator);
+            }
+        }
     }
 }

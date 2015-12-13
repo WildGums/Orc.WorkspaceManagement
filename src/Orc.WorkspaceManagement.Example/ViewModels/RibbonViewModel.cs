@@ -50,7 +50,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
                 await _workspaceManager.AddAsync(workspace, true);
-                _workspaceManager.Save();
+                await _workspaceManager.SaveAsync();
             }
         }
 
@@ -122,23 +122,25 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             await base.InitializeAsync();
 
-            _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
+            _workspaceManager.WorkspaceUpdatedAsync += OnCurrentWorkspaceChangedAsync;
 
-            _workspaceManager.InitializeAsync(true);
+            await _workspaceManager.InitializeAsync(true);
 
             UpdateCurrentWorkspace();
         }
 
         protected override async Task CloseAsync()
         {
-            _workspaceManager.WorkspaceUpdated -= OnCurrentWorkspaceChanged;
+            _workspaceManager.WorkspaceUpdatedAsync -= OnCurrentWorkspaceChangedAsync;
 
             await base.CloseAsync();
         }
 
-        private void OnCurrentWorkspaceChanged(object sender, WorkspaceUpdatedEventArgs e)
+        private Task OnCurrentWorkspaceChangedAsync(object sender, WorkspaceUpdatedEventArgs e)
         {
             UpdateCurrentWorkspace();
+
+            return TaskHelper.Completed;
         }
 
         private void UpdateCurrentWorkspace()

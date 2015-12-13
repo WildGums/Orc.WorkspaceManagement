@@ -29,6 +29,8 @@ namespace Orc.WorkspaceManagement.Test.Mocks
             workspace.SetWorkspaceValue(_key, _value);
         }
 
+        public object Tag { get; set; }
+
         public Task ProvideInformationAsync(IWorkspace workspace)
         {
             ProvideInformation(workspace);
@@ -47,6 +49,11 @@ namespace Orc.WorkspaceManagement.Test.Mocks
 
             return TaskHelper.Completed;
 
+        }
+
+        public Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
+        {
+            return TaskHelper<bool>.FromResult(false);
         }
     }
 }
