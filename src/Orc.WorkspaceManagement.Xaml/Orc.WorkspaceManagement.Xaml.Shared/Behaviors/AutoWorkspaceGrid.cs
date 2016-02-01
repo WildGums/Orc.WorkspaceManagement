@@ -105,7 +105,13 @@ namespace Orc.WorkspaceManagement.Behaviors
                 GridLength gridLength;
                 if (string.Equals(rowValue, "unknown"))
                 {
-                    gridLength = FromStringToGridLength(_defaultValues[string.Format("row_{0}_default", index)]);
+                    var key = string.Format("row_{0}_default", index);
+                    if (!_defaultValues.ContainsKey(key))
+                    {
+                        continue;
+                    }
+
+                    gridLength = FromStringToGridLength(_defaultValues[key]);
                 }
                 else
                 {
@@ -129,7 +135,13 @@ namespace Orc.WorkspaceManagement.Behaviors
                 GridLength gridLength;
                 if (string.Equals(columnValue, "unknown"))
                 {
-                    gridLength = FromStringToGridLength(_defaultValues[string.Format("column_{0}_default", index)]);
+                    var key = string.Format("column_{0}_default", index);
+                    if (!_defaultValues.ContainsKey(key))
+                    {
+                        continue;
+                    }
+
+                    gridLength = FromStringToGridLength(_defaultValues[key]);
                 }
                 else
                 {
