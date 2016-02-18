@@ -19,7 +19,8 @@ namespace Orc.WorkspaceManagement
         IEnumerable<IWorkspace> Workspaces { get; }
         IWorkspace Workspace { get; }
         IEnumerable<IWorkspaceProvider> Providers { get; }
-        object Tag { get; set; }
+
+        object Scope { get; set; }
 
         [ObsoleteEx(ReplacementTypeOrMember = "InitializingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         event EventHandler<EventArgs> Initializing;

@@ -14,6 +14,8 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public interface IWorkspaceProvider
     {
+        object Scope { get; set; }
+
         object Tag { get; set; }
 
         /// <summary>

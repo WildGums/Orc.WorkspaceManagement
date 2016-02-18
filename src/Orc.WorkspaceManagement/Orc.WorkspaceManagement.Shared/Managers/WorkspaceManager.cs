@@ -29,7 +29,7 @@ namespace Orc.WorkspaceManagement
         private IWorkspacesStorageService _workspacesStorageService;
         private readonly IServiceLocator _serviceLocator;
         private IWorkspace _workspace;
-        private object _tag;
+        private object _scope;
 
         #region Constructors
         /// <summary>
@@ -50,9 +50,9 @@ namespace Orc.WorkspaceManagement
 
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets or sets the base directory to store the workspaces in.
         /// </summary>
@@ -64,13 +64,13 @@ namespace Orc.WorkspaceManagement
             get { return _workspaceProviders.ToArray(); }
         }
 
-        public object Tag
+        public object Scope
         {
-            get { return _tag; }
+            get { return _scope; }
             set
             {
-                _tag = value;
-                _workspacesStorageService = _serviceLocator.ResolveType<IWorkspacesStorageService>(_tag);
+                _scope = value;
+                _workspacesStorageService = _serviceLocator.ResolveType<IWorkspacesStorageService>(_scope);
             }
         }
 
@@ -137,7 +137,7 @@ namespace Orc.WorkspaceManagement
 
             if (!await TrySetWorkspaceAsync(value))
             {
-                throw Log.ErrorAndCreateException<WorkspaceException>(new WorkspaceException(value), 
+                throw Log.ErrorAndCreateException<WorkspaceException>(new WorkspaceException(value),
                     "Unable to set value to Workspace property.");
             }
         }
@@ -194,7 +194,7 @@ namespace Orc.WorkspaceManagement
             var baseDirectory = BaseDirectory;
 
             Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
-            
+
             var cancelEventArgs = new CancelEventArgs();
             await InitializingAsync.SafeInvokeAsync(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
@@ -209,7 +209,7 @@ namespace Orc.WorkspaceManagement
             var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
             foreach (var workspace in workspaces)
             {
-                workspace.Tag = Tag;
+                workspace.Scope = Scope;
                 _workspaces.Add(workspace);
             }
 
@@ -238,7 +238,7 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceProvider);
 #if DEBUG
-            Log.Debug(string.Format("Adding provider {0} to the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Tag ?? "null"));
+            Log.Debug(string.Format("Adding provider {0} to the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
 #endif
 
             _workspaceProviders.Add(workspaceProvider);
@@ -262,7 +262,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceProvider);
 
 #if DEBUG
-            Log.Debug(string.Format("Removing provider {0} from the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Tag ?? "null"));
+            Log.Debug(string.Format("Removing provider {0} from the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
 #endif
 
             if (_workspaceProviders.Remove(workspaceProvider))
@@ -305,7 +305,7 @@ namespace Orc.WorkspaceManagement
                 await WorkspacesChangedAsync.SafeInvokeAsync(this);
             }
 
-            workspace.Tag = Tag;
+            workspace.Scope = Scope;
         }
 
         /// <summary>
@@ -449,6 +449,6 @@ namespace Orc.WorkspaceManagement
                 }
             }
         }
-#endregion
+        #endregion
     }
 }

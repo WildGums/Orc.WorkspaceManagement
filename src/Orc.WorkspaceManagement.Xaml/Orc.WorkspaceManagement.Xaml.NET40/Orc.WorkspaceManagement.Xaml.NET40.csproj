@@ -119,6 +119,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.de.resx">

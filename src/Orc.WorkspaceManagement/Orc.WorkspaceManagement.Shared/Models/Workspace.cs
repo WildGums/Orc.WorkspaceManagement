@@ -34,7 +34,10 @@ namespace Orc.WorkspaceManagement
         public bool IsVisible { get; set; }
 
         [ExcludeFromSerialization]
-        public object Tag { get; set; } 
+        public object Scope { get; set; }
+
+        [ExcludeFromSerialization]
+        public object Tag { get; set; }
 
         public void SetWorkspaceValue(string name, object value)
         {

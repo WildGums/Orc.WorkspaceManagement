@@ -20,7 +20,7 @@ namespace Orc.WorkspaceManagement
         bool IsVisible { get; set; }
 
         [ExcludeFromSerialization]
-        object Tag { get; set; }
+        object Scope { get; set; }
         #endregion
 
         #region Methods

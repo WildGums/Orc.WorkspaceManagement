@@ -36,7 +36,7 @@ namespace Orc.WorkspaceManagement.Converters
                 return false;
             }
 
-            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Tag);
+            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
             return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion

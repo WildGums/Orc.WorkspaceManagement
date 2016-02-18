@@ -132,6 +132,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <Import Project="..\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems" Label="Shared" Condition="Exists('..\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
