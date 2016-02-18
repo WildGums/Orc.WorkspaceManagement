@@ -63,7 +63,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         public IWorkspace SelectedWorkspace { get; set; }
 
-        public object ManagerTag { get; set; }
+        public object Scope { get; set; }
         #endregion
 
         #region Commands
@@ -124,7 +124,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
-        private async void OnManagerTagChanged()
+        private async void OnScopeChanged()
         {
             await DeactivateWorkspaceManagerAsync();
             ActivateWorkspaceManager();
@@ -187,7 +187,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             if (_workspaceManager == null)
             {
-                SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(ManagerTag));
+                SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(Scope));
             }
 
             return _workspaceManager;
@@ -216,7 +216,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void ActivateWorkspaceManager()
         {
-            SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(ManagerTag));
+            SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(Scope));
             UpdateWorkspaces();
         }
 

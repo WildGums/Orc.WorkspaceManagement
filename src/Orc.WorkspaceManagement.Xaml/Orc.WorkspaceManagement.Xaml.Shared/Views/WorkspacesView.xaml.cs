@@ -4,10 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Orc.WorkspaceManagement.Views
 {
-    using System.Runtime.CompilerServices;
     using System.Windows;
     using Catel.MVVM.Views;
     using ViewModels;
@@ -27,29 +25,26 @@ namespace Orc.WorkspaceManagement.Views
         }
         #endregion
 
-
         #region Properties
-        public static readonly DependencyProperty ManagerTagProperty =
-           DependencyProperty.Register("ManagerTag", typeof(object), typeof(WorkspacesView), new FrameworkPropertyMetadata(OnManagerTagChanged));
-
-        private static void OnManagerTagChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
+        public object Scope
         {
-            var workspacesView = d as WorkspacesView;
-            if (workspacesView != null)
-            {
-                var viewModel = (WorkspacesViewModel)workspacesView.ViewModel;
-                if (viewModel != null)
-                {
-                    viewModel.ManagerTag = workspacesView.ManagerTag;
-                }
-            }
+            get { return GetValue(ScopeProperty); }
+            set { SetValue(ScopeProperty, value); }
         }
 
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
-        public object ManagerTag
+        public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register("Scope", typeof(object),
+            typeof(WorkspacesView), new FrameworkPropertyMetadata((sender, e) => ((WorkspacesView)sender).OnScopeChanged(e)));
+        #endregion
+
+        #region Methods
+        private void OnScopeChanged(DependencyPropertyChangedEventArgs e)
         {
-            get { return GetValue(ManagerTagProperty); }
-            set { SetValue(ManagerTagProperty, value); }
+            var vm = ViewModel as WorkspacesViewModel;
+            if (vm != null)
+            {
+                vm.Scope = Scope;
+            }
         }
         #endregion
     }
