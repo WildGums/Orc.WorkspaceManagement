@@ -8,9 +8,10 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
-
+    using Catel.Threading;
 #if DEBUG
     using System.Diagnostics;
 #endif
@@ -38,7 +39,7 @@ namespace Orc.WorkspaceManagement
 
             IgnoreSwitchToNewlyCreatedWorkspace = true;
 
-            workspaceManager.WorkspaceUpdating += OnWorkspaceUpdating;
+            workspaceManager.WorkspaceUpdatingAsync += OnWorkspaceUpdatingAsync;
             workspaceManager.WorkspaceUpdated += OnWorkspaceUpdated;
 
             workspaceManager.WorkspaceAdded += OnWorkspaceAdded;
@@ -47,7 +48,7 @@ namespace Orc.WorkspaceManagement
             workspaceManager.WorkspaceProviderAdded += OnWorkspaceProviderAdded;
             workspaceManager.WorkspaceProviderRemoved += OnWorkspaceProviderRemoved;
 
-            workspaceManager.Saving += OnSaving;
+            workspaceManager.SavingAsync += OnSavingAsync;
             workspaceManager.Saved += OnSaved;
         }
         #endregion
@@ -59,7 +60,7 @@ namespace Orc.WorkspaceManagement
         #region Methods
         public void Dispose()
         {
-            WorkspaceManager.WorkspaceUpdating -= OnWorkspaceUpdating;
+            WorkspaceManager.WorkspaceUpdatingAsync -= OnWorkspaceUpdatingAsync;
             WorkspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
 
             WorkspaceManager.WorkspaceAdded -= OnWorkspaceAdded;
@@ -68,7 +69,7 @@ namespace Orc.WorkspaceManagement
             WorkspaceManager.WorkspaceProviderAdded -= OnWorkspaceProviderAdded;
             WorkspaceManager.WorkspaceProviderRemoved -= OnWorkspaceProviderRemoved;
 
-            WorkspaceManager.Saving -= OnSaving;
+            WorkspaceManager.SavingAsync -= OnSavingAsync;
             WorkspaceManager.Saved -= OnSaved;
         }
 
@@ -85,9 +86,9 @@ namespace Orc.WorkspaceManagement
             return false;
         }
 
-        protected virtual bool OnWorkspaceUpdating(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
+        protected virtual Task<bool> OnWorkspaceUpdatingAsync(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
         {
-            return true;
+            return TaskHelper<bool>.FromResult(true);
         }
 
         protected virtual void OnWorkspaceUpdated(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
@@ -110,16 +111,16 @@ namespace Orc.WorkspaceManagement
         {
         }
 
-        protected virtual bool OnSaving()
+        protected virtual Task<bool> OnSavingAsync()
         {
-            return true;
+            return TaskHelper<bool>.FromResult(true);
         }
 
         protected virtual void OnSaved()
         {
         }
 
-        private void OnWorkspaceUpdating(object sender, WorkspaceUpdatingEventArgs e)
+        private async Task OnWorkspaceUpdatingAsync(object sender, WorkspaceUpdatingEventArgs e)
         {
 #if DEBUG
             if (_switchStopwatch != null)
@@ -140,7 +141,7 @@ namespace Orc.WorkspaceManagement
 
             if (!ShouldIgnoreWorkspaceChange())
             {
-                e.Cancel = !OnWorkspaceUpdating(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
+                e.Cancel = !await OnWorkspaceUpdatingAsync(e.OldWorkspace, e.NewWorkspace, e.IsRefresh);
             }
             else
             {
@@ -198,9 +199,9 @@ namespace Orc.WorkspaceManagement
             OnWorkspaceProviderRemoved(e.WorkspaceProvider);
         }
 
-        private void OnSaving(object sender, CancelEventArgs e)
+        private async Task OnSavingAsync(object sender, CancelEventArgs e)
         {
-            e.Cancel = !OnSaving();
+            e.Cancel = !await OnSavingAsync();
         }
 
         private void OnSaved(object sender, EventArgs e)

@@ -205,12 +205,12 @@ namespace Orc.WorkspaceManagement.Test.Managers
         public class TheSaveMethod
         {
             [TestCase]
-            public async Task RaisesSavingEvent()
+            public async Task RaisesSavingAsyncEvent()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.Saving += (sender, e) => eventRaised = true;
+                workspaceManager.SavingAsync += async (sender, e) => eventRaised = true;
 
                 await workspaceManager.SaveAsync();
 

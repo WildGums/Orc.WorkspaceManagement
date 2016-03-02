@@ -25,7 +25,7 @@ namespace Orc.WorkspaceManagement
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
 
-        event EventHandler<CancelEventArgs> Saving;
+        event AsyncEventHandler<CancelEventArgs> SavingAsync;
         event EventHandler<EventArgs> Saved;
 
         event EventHandler<EventArgs> WorkspacesChanged;
@@ -38,7 +38,7 @@ namespace Orc.WorkspaceManagement
 
         event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
 
-        event EventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdating;
+        event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
         event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
 
         Task SetWorkspaceAsync(IWorkspace value);

@@ -90,7 +90,7 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<CancelEventArgs> Initializing;
         public event EventHandler<EventArgs> Initialized;
 
-        public event EventHandler<CancelEventArgs> Saving;
+        public event AsyncEventHandler<CancelEventArgs> SavingAsync;
         public event EventHandler<EventArgs> Saved;
 
         public event EventHandler<EventArgs> WorkspacesChanged;
@@ -103,7 +103,7 @@ namespace Orc.WorkspaceManagement
 
         public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
 
-        public event EventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdating;
+        public event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         #endregion
 
@@ -125,7 +125,7 @@ namespace Orc.WorkspaceManagement
             var newWorkspace = value;
 
             var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
-            WorkspaceUpdating.SafeInvoke(this, workspaceUpdatingEventArgs);
+            await WorkspaceUpdatingAsync.SafeInvokeAsync(this, workspaceUpdatingEventArgs);
             if (workspaceUpdatingEventArgs.Cancel)
             {
                 return false;
@@ -344,7 +344,7 @@ namespace Orc.WorkspaceManagement
             Log.Debug("Saving all workspaces to '{0}'", baseDirectory);
 
             var cancelEventArgs = new CancelEventArgs();
-            Saving.SafeInvoke(this, cancelEventArgs);
+            await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
                 return false;
