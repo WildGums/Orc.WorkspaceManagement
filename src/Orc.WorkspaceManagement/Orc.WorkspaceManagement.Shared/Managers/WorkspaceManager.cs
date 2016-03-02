@@ -87,47 +87,24 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Events
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        public event EventHandler<EventArgs> Initializing;
-        public event AsyncEventHandler<CancelEventArgs> InitializingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        public event EventHandler<CancelEventArgs> Initializing;
         public event EventHandler<EventArgs> Initialized;
-        public event AsyncEventHandler<EventArgs> InitializedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        public event EventHandler<EventArgs> Saving;
-        public event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        public event EventHandler<CancelEventArgs> Saving;
         public event EventHandler<EventArgs> Saved;
-        public event AsyncEventHandler<EventArgs> SavedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspacesChangedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<EventArgs> WorkspacesChanged;
-        public event AsyncEventHandler<EventArgs> WorkspacesChangedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+
         public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
-        public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceAddedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
-        public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceRemovedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderAddedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
-        public event AsyncEventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAddedAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderRemovedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
-        public event AsyncEventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemovedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceInfoRequestedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
         public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
-        public event AsyncEventHandler<WorkspaceEventArgs> WorkspaceInfoRequestedAsync;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceUpdatingAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdating;
-        public event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceUpdatedAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
+        public event EventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdating;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
-        public event AsyncEventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdatedAsync;
         #endregion
 
         #region IWorkspaceManager Members
@@ -148,20 +125,17 @@ namespace Orc.WorkspaceManagement
             var newWorkspace = value;
 
             var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
-            await WorkspaceUpdatingAsync.SafeInvokeAsync(this, workspaceUpdatingEventArgs);
+            WorkspaceUpdating.SafeInvoke(this, workspaceUpdatingEventArgs);
             if (workspaceUpdatingEventArgs.Cancel)
             {
                 return false;
             }
-
-            WorkspaceUpdating.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
-
+            
             Workspace = value;
 
             await ApplyWorkspaceUsingProvidersAsync(Workspace);
 
             WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
-            await WorkspaceUpdatedAsync.SafeInvokeAsync(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
             return true;
         }
@@ -175,11 +149,6 @@ namespace Orc.WorkspaceManagement
             return InitializeAsync(true);
         }
 
-        public Task<bool> TryInitializeAsync()
-        {
-            return TryInitializeAsync(true);
-        }
-
         public async Task InitializeAsync(bool autoSelect)
         {
             if (!await TryInitializeAsync(autoSelect))
@@ -189,6 +158,11 @@ namespace Orc.WorkspaceManagement
             }
         }
 
+        public Task<bool> TryInitializeAsync()
+        {
+            return TryInitializeAsync(true);
+        }
+
         public async Task<bool> TryInitializeAsync(bool autoSelect)
         {
             var baseDirectory = BaseDirectory;
@@ -196,13 +170,11 @@ namespace Orc.WorkspaceManagement
             Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
 
             var cancelEventArgs = new CancelEventArgs();
-            await InitializingAsync.SafeInvokeAsync(this, cancelEventArgs);
+            Initializing.SafeInvoke(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
                 return false;
             }
-
-            Initializing.SafeInvoke(this);
 
             _workspaces.Clear();
 
@@ -222,7 +194,6 @@ namespace Orc.WorkspaceManagement
                 await TrySetWorkspaceAsync(null);
             }
 
-            await InitializedAsync.SafeInvokeAsync(this);
             Initialized.SafeInvoke(this);
 
             Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
@@ -241,15 +212,12 @@ namespace Orc.WorkspaceManagement
             Log.Debug(string.Format("Adding provider {0} to the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
 #endif
 
-            _workspaceProviders.Add(workspaceProvider);
+            lock (_workspaceProviders)
+            {
+                _workspaceProviders.Add(workspaceProvider);
+            }
+
             WorkspaceProviderAdded.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
-        }
-
-        public Task AddProviderAsync(IWorkspaceProvider workspaceProvider)
-        {
-            AddProvider(workspaceProvider);
-
-            return WorkspaceProviderAddedAsync.SafeInvokeAsync(this, new WorkspaceProviderEventArgs(workspaceProvider));
         }
 
         /// <summary>
@@ -265,20 +233,16 @@ namespace Orc.WorkspaceManagement
             Log.Debug(string.Format("Removing provider {0} from the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
 #endif
 
-            if (_workspaceProviders.Remove(workspaceProvider))
+            var removed = false;
+
+            lock (_workspaceProviders)
             {
-                WorkspaceProviderRemoved.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
-                return true;
+                removed = _workspaceProviders.Remove(workspaceProvider);
             }
 
-            return false;
-        }
-
-        public async Task<bool> RemoveProviderAsync(IWorkspaceProvider workspaceProvider)
-        {
-            if (RemoveProvider(workspaceProvider))
+            if (removed)
             {
-                await WorkspaceProviderRemovedAsync.SafeInvokeAsync(this, new WorkspaceProviderEventArgs(workspaceProvider));
+                WorkspaceProviderRemoved.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
                 return true;
             }
 
@@ -288,7 +252,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Adds the specified workspace to the list of workspaces.
         /// </summary>
-        /// <param name="workspace">The workspace.</param>        
+        /// <param name="workspace">The workspace.</param>
         public async Task AddAsync(IWorkspace workspace)
         {
             Argument.IsNotNull(() => workspace);
@@ -300,9 +264,7 @@ namespace Orc.WorkspaceManagement
                 _workspaces.Add(workspace);
 
                 WorkspaceAdded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-                await WorkspaceAddedAsync.SafeInvokeAsync(this, new WorkspaceEventArgs(workspace));
                 WorkspacesChanged.SafeInvoke(this);
-                await WorkspacesChangedAsync.SafeInvokeAsync(this);
             }
 
             workspace.Scope = Scope;
@@ -337,9 +299,7 @@ namespace Orc.WorkspaceManagement
             if (removed)
             {
                 WorkspaceRemoved.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-                await WorkspaceRemovedAsync.SafeInvokeAsync(this, new WorkspaceEventArgs(workspace));
                 WorkspacesChanged.SafeInvoke(this);
-                await WorkspacesChangedAsync.SafeInvokeAsync(this);
             }
 
             return removed;
@@ -368,7 +328,6 @@ namespace Orc.WorkspaceManagement
             // Events first so providers can manipulate data afterwards
             var workspaceEventArgs = new WorkspaceEventArgs(workspace);
             WorkspaceInfoRequested.SafeInvoke(this, workspaceEventArgs);
-            await WorkspaceInfoRequestedAsync.SafeInvokeAsync(this, workspaceEventArgs);
 
             await GetInformationFromProvidersAsync(workspace);
 
@@ -378,22 +337,6 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Saves all the workspaces to disk.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "SaveAsync", TreatAsErrorFromVersion = "1.0", RemoveInVersion = "2.0")]
-        public void Save()
-        {
-            var baseDirectory = BaseDirectory;
-
-            Log.Debug("Saving all workspaces to '{0}'", baseDirectory);
-
-            Saving.SafeInvoke(this);
-
-            _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
-
-            Saved.SafeInvoke(this);
-
-            Log.Info("Saved all workspaces to '{0}'", baseDirectory);
-        }
-
         public async Task<bool> SaveAsync()
         {
             var baseDirectory = BaseDirectory;
@@ -401,17 +344,14 @@ namespace Orc.WorkspaceManagement
             Log.Debug("Saving all workspaces to '{0}'", baseDirectory);
 
             var cancelEventArgs = new CancelEventArgs();
-            await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
+            Saving.SafeInvoke(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
                 return false;
             }
 
-            Saving.SafeInvoke(this);
-
             _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
 
-            await SavedAsync.SafeInvokeAsync(this);
             Saved.SafeInvoke(this);
 
             Log.Info("Saved all workspaces to '{0}'", baseDirectory);
@@ -419,9 +359,22 @@ namespace Orc.WorkspaceManagement
             return true;
         }
 
+        private List<IWorkspaceProvider> GetWorkspaceProviders()
+        {
+            var providers = new List<IWorkspaceProvider>();
+
+            lock (_workspaceProviders)
+            {
+                providers.AddRange(_workspaceProviders);
+            }
+
+            return providers;
+        }
+
         private async Task GetInformationFromProvidersAsync(IWorkspace workspace)
         {
-            foreach (var provider in _workspaceProviders)
+            var workspaceProviders = GetWorkspaceProviders();
+            foreach (var provider in workspaceProviders)
             {
                 try
                 {
@@ -437,7 +390,8 @@ namespace Orc.WorkspaceManagement
 
         private async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
         {
-            foreach (var provider in _workspaceProviders)
+            var workspaceProviders = GetWorkspaceProviders();
+            foreach (var provider in workspaceProviders)
             {
                 try
                 {

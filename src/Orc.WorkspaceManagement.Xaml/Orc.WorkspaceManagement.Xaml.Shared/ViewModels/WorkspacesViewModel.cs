@@ -149,23 +149,17 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             await base.InitializeAsync();
 
-            _workspaceManager.WorkspacesChangedAsync += OnWorkspacesChangedAsync;
-
-            UpdateWorkspaces();
+            ActivateWorkspaceManager();
         }
 
         protected override async Task CloseAsync()
         {
             await DeactivateWorkspaceManagerAsync();
-            ActivateWorkspaceManager();
-            await UpdateCurrentWorkspaceAsync();
         }
 
-        private Task OnWorkspacesChangedAsync(object sender, EventArgs e)
+        private void OnWorkspacesChanged(object sender, EventArgs e)
         {
             UpdateWorkspaces();
-
-            return TaskHelper.Completed;
         }
 
         private bool _settingSelectedWokspace;
@@ -197,27 +191,31 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             if (_workspaceManager != null)
             {
-                _workspaceManager.WorkspaceUpdatedAsync -= OnWorkspacesChangedAsync;
+                _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
             }
 
             _workspaceManager = workspaceManager;
-            _workspaceManager.WorkspaceUpdatedAsync += OnWorkspacesChangedAsync;
-        }
-
-        private async Task DeactivateWorkspaceManagerAsync()
-        {
-            await SetSelectedWorkspaceAsync(null);
-            var workspaceManager = GetWorkspaceManager();
-            workspaceManager.WorkspaceUpdatedAsync -= OnWorkspacesChangedAsync;
-
-            AvailableWorkspaces.Clear();
-            _workspaceManager = null;
+            _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
         }
 
         private void ActivateWorkspaceManager()
         {
             SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(Scope));
+
             UpdateWorkspaces();
+        }
+
+        private async Task DeactivateWorkspaceManagerAsync()
+        {
+            await SetSelectedWorkspaceAsync(null);
+
+            if (_workspaceManager != null)
+            {
+                _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
+                _workspaceManager = null;
+            }
+
+            AvailableWorkspaces.Clear();
         }
 
         private void UpdateWorkspaces()

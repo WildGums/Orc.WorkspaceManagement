@@ -65,7 +65,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => workspaceProvider);
 
-            await workspaceManager.AddProviderAsync(workspaceProvider);
+            workspaceManager.AddProvider(workspaceProvider);
 
             if (callApplyWorkspaceForCurrentWorkspace)
             {

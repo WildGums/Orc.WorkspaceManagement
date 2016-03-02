@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\NET40\Orc.WorkspaceManagement\Orc.WorkspaceManagement.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591;1998</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

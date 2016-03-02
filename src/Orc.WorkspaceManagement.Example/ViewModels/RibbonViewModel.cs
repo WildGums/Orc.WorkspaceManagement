@@ -122,7 +122,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             await base.InitializeAsync();
 
-            _workspaceManager.WorkspaceUpdatedAsync += OnCurrentWorkspaceChangedAsync;
+            _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
 
             await _workspaceManager.InitializeAsync(true);
 
@@ -131,16 +131,14 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         protected override async Task CloseAsync()
         {
-            _workspaceManager.WorkspaceUpdatedAsync -= OnCurrentWorkspaceChangedAsync;
+            _workspaceManager.WorkspaceUpdated -= OnCurrentWorkspaceChanged;
 
             await base.CloseAsync();
         }
 
-        private Task OnCurrentWorkspaceChangedAsync(object sender, WorkspaceUpdatedEventArgs e)
+        private void OnCurrentWorkspaceChanged(object sender, WorkspaceUpdatedEventArgs e)
         {
             UpdateCurrentWorkspace();
-
-            return TaskHelper.Completed;
         }
 
         private void UpdateCurrentWorkspace()

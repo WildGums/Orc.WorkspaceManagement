@@ -41,7 +41,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceAddedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
 
                 await workspaceManager.AddAsync(new Workspace());
 
@@ -54,7 +54,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
                 await workspaceManager.AddAsync(new Workspace());
 
@@ -117,7 +117,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
                 await workspaceManager.RemoveAsync(workspace);
 
@@ -137,7 +137,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspacesChangedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
                 await workspaceManager.RemoveAsync(workspace);
 
@@ -154,7 +154,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.InitializingAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.Initializing += (sender, e) => eventRaised = true;
 
                 await workspaceManager.InitializeAsync();
 
@@ -167,7 +167,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.InitializedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.Initialized += (sender, e) => eventRaised = true;
 
                 await workspaceManager.InitializeAsync();
 
@@ -193,7 +193,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.SetWorkspaceAsync(workspace);
 
                 var eventRaised = false;
-                workspaceManager.WorkspaceInfoRequestedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.WorkspaceInfoRequested += (sender, e) => eventRaised = true;
 
                 await workspaceManager.StoreWorkspaceAsync();
 
@@ -210,7 +210,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.SavingAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.Saving += (sender, e) => eventRaised = true;
 
                 await workspaceManager.SaveAsync();
 
@@ -223,7 +223,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
                 var eventRaised = false;
-                workspaceManager.SavedAsync += async (sender, e) => eventRaised = true;
+                workspaceManager.Saved += (sender, e) => eventRaised = true;
 
                 await workspaceManager.SaveAsync();
 
@@ -252,7 +252,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace, true);
 
                 var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                await workspaceManager.AddProviderAsync(workspaceProvider);
+                workspaceManager.AddProvider(workspaceProvider);
 
                 await workspaceManager.StoreWorkspaceAsync();
 
@@ -275,8 +275,8 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 await workspaceManager.AddAsync(workspace, true);
 
                 var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                await workspaceManager.AddProviderAsync(workspaceProvider);
-                await workspaceManager.RemoveProviderAsync(workspaceProvider);
+                workspaceManager.AddProvider(workspaceProvider);
+                workspaceManager.RemoveProvider(workspaceProvider);
 
                 await workspaceManager.StoreWorkspaceAsync();
 
