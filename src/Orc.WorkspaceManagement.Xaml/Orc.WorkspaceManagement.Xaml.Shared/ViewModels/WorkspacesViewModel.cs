@@ -118,7 +118,6 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
 
             await _workspaceManager.RemoveAsync(workspace);
-
             await _workspaceManager.SaveAsync();
         }
         #endregion
@@ -154,7 +153,9 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         protected override async Task CloseAsync()
         {
-            await DeactivateWorkspaceManagerAsync();
+            await DeactivateWorkspaceManagerAsync(false);
+
+            await base.CloseAsync();
         }
 
         private void OnWorkspacesChanged(object sender, EventArgs e)
@@ -205,14 +206,18 @@ namespace Orc.WorkspaceManagement.ViewModels
             UpdateWorkspaces();
         }
 
-        private async Task DeactivateWorkspaceManagerAsync()
+        private async Task DeactivateWorkspaceManagerAsync(bool setToNull = true)
         {
             await SetSelectedWorkspaceAsync(null);
 
             if (_workspaceManager != null)
             {
                 _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
-                _workspaceManager = null;
+
+                if (setToNull)
+                {
+                    _workspaceManager = null;
+                }
             }
 
             AvailableWorkspaces.Clear();
