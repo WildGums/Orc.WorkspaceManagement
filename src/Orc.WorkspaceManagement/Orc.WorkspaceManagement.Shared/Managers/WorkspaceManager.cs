@@ -208,8 +208,9 @@ namespace Orc.WorkspaceManagement
         public void AddProvider(IWorkspaceProvider workspaceProvider)
         {
             Argument.IsNotNull(() => workspaceProvider);
+
 #if DEBUG
-            Log.Debug(string.Format("Adding provider {0} to the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
+            Log.Debug($"Adding provider {workspaceProvider.GetType()} to the WorkspaceManager (Scope = '{Scope ?? "null"}')");
 #endif
 
             lock (_workspaceProviders)

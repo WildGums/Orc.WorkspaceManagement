@@ -26,7 +26,7 @@ namespace Orc.WorkspaceManagement
 
             if (Directory.Exists(path))
             {
-                foreach (var workspaceFile in Directory.GetFiles(path, string.Format("*{0}", WorkspaceFileExtension)))
+                foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
                 {
                     var workspace = LoadWorkspaceFromFile(workspaceFile);
                     if (workspace != null)
@@ -51,7 +51,7 @@ namespace Orc.WorkspaceManagement
 
             Log.Debug("Deleting previous workspace files");
 
-            foreach (var workspaceFile in Directory.GetFiles(path, string.Format("*{0}", WorkspaceFileExtension)))
+            foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
             {
                 try
                 {
@@ -74,7 +74,7 @@ namespace Orc.WorkspaceManagement
                     continue;
                 }
 
-                var workspaceFile = Path.Combine(path, string.Format("{0}{1}", workspace.Title.GetSlug(), WorkspaceFileExtension));
+                var workspaceFile = Path.Combine(path, $"{workspace.Title.GetSlug()}{WorkspaceFileExtension}");
 
                 Log.Debug("Saving workspace '{0}' to '{1}'", workspace, workspaceFile);
 
