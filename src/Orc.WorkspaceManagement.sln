@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET40", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET40\Orc.WorkspaceManagement.NET40.csproj", "{4258FC75-DD23-4877-A56D-3A077AB57F2D}"
 EndProject
@@ -40,15 +40,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core.Xaml", "Core.Xaml", "{C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET46", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET46\Orc.WorkspaceManagement.NET46.csproj", "{532182B7-46EC-4ED6-9E06-5D46119EA2B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Xaml.NET46", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET46\Orc.WorkspaceManagement.Xaml.NET46.csproj", "{7526649F-FB5C-4D95-BB33-617C88ABB49A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests.NET46", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.NET46\Orc.WorkspaceManagement.Tests.NET46.csproj", "{F46CEE37-DB86-4147-80BE-4141D875F7C8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{7d56caed-9ba7-44c2-89cb-65aff20fd0f0}*SharedItemsImports = 4
 		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{4258fc75-dd23-4877-a56d-3a077ab57f2d}*SharedItemsImports = 4
 		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{d1484a3b-a89e-4b3d-8e37-ce582c902cfa}*SharedItemsImports = 13
 		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{d6415689-67de-4fee-aa72-6d7eedddceb6}*SharedItemsImports = 4
+		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{7526649f-fb5c-4d95-bb33-617c88abb49a}*SharedItemsImports = 4
 		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{ab7a36ed-0c1c-4b1f-bec5-9310a6ed9398}*SharedItemsImports = 13
 		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{ba2d544b-07c3-4473-b2f0-ff494b2de38c}*SharedItemsImports = 13
 		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{394986d7-a0e1-488e-b1dd-d1fbf51ac17a}*SharedItemsImports = 4
+		Orc.WorkspaceManagement\Orc.WorkspaceManagement.Shared\Orc.WorkspaceManagement.Shared.projitems*{532182b7-46ec-4ed6-9e06-5d46119ea2b9}*SharedItemsImports = 4
+		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{f46cee37-db86-4147-80be-4141d875f7c8}*SharedItemsImports = 4
 		Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems*{933b120f-8d30-44ba-a4f0-6f485dda64ab}*SharedItemsImports = 4
 		Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.Shared\Orc.WorkspaceManagement.Tests.Shared.projitems*{0866e065-f42e-4a61-a99d-86133abc4e0a}*SharedItemsImports = 4
 	EndGlobalSection
@@ -85,6 +94,18 @@ Global
 		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0866E065-F42E-4A61-A99D-86133ABC4E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{532182B7-46EC-4ED6-9E06-5D46119EA2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{532182B7-46EC-4ED6-9E06-5D46119EA2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{532182B7-46EC-4ED6-9E06-5D46119EA2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{532182B7-46EC-4ED6-9E06-5D46119EA2B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7526649F-FB5C-4D95-BB33-617C88ABB49A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7526649F-FB5C-4D95-BB33-617C88ABB49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7526649F-FB5C-4D95-BB33-617C88ABB49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7526649F-FB5C-4D95-BB33-617C88ABB49A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F46CEE37-DB86-4147-80BE-4141D875F7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46CEE37-DB86-4147-80BE-4141D875F7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46CEE37-DB86-4147-80BE-4141D875F7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46CEE37-DB86-4147-80BE-4141D875F7C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +125,8 @@ Global
 		{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0} = {C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}
 		{0866E065-F42E-4A61-A99D-86133ABC4E0A} = {877A811D-2473-4485-8CFA-681EE4E6450F}
 		{C0D0E490-5154-49E0-893E-2D5CBA1EFA7A} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
+		{532182B7-46EC-4ED6-9E06-5D46119EA2B9} = {516961BF-FC2B-4FAC-8520-DA8E290B3A78}
+		{7526649F-FB5C-4D95-BB33-617C88ABB49A} = {C0D0E490-5154-49E0-893E-2D5CBA1EFA7A}
+		{F46CEE37-DB86-4147-80BE-4141D875F7C8} = {877A811D-2473-4485-8CFA-681EE4E6450F}
 	EndGlobalSection
 EndGlobal

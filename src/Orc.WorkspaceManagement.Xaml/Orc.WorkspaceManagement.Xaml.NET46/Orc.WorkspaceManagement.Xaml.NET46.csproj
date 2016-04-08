@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D56CAED-9BA7-44C2-89CB-65AFF20FD0F0}</ProjectGuid>
+    <ProjectGuid>{7526649F-FB5C-4D95-BB33-617C88ABB49A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Orc.WorkspaceManagement</RootNamespace>
-    <AssemblyName>Orc.WorkspaceManagement.Xaml</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Orc.WorkspaceManagement.Xaml.NET46</RootNamespace>
+    <AssemblyName>Orc.WorkspaceManagement.Xaml.NET46</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -18,28 +18,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\NET45\Orc.WorkspaceManagement.Xaml\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET;NET45</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\NET45\Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\NET45\Orc.WorkspaceManagement.Xaml\</OutputPath>
-    <DefineConstants>TRACE;NET;NET45</DefineConstants>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1591;1998</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\release\NET45\Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Core">
-      <HintPath>..\..\..\lib\Catel.Core.4.5.0-unstable0246\lib\net45\Catel.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Core.4.5.0-unstable0246\lib\net46\Catel.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Catel.Fody.Attributes">
@@ -47,15 +41,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Catel.MVVM">
-      <HintPath>..\..\..\lib\Catel.MVVM.4.5.0-unstable0246\lib\net45\Catel.MVVM.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.MVVM.4.5.0-unstable0246\lib\net46\Catel.MVVM.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\..\..\lib\Catel.MVVM.4.5.0-unstable0246\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.MVVM.4.5.0-unstable0246\lib\net46\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xaml" />
@@ -63,24 +57,22 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.NET45.Designer.cs">
-      <Link>Properties\Resources.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ModuleInitializer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET46\Orc.WorkspaceManagement.NET46.csproj">
+      <Project>{532182b7-46ec-4ed6-9e06-5d46119ea2b9}</Project>
+      <Name>Orc.WorkspaceManagement.NET46</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\edit.png">
       <Link>Resources\Images\edit.png</Link>
+    </Resource>
+    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\refresh.png">
+      <Link>Resources\Images\refresh.png</Link>
     </Resource>
     <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\remove.png">
       <Link>Resources\Images\remove.png</Link>
@@ -88,16 +80,16 @@
     <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\selected.png">
       <Link>Resources\Images\selected.png</Link>
     </Resource>
-    <Resource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Resources\Images\refresh.png">
-      <Link>Resources\Images\refresh.png</Link>
-    </Resource>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET45\Orc.WorkspaceManagement.NET45.csproj">
-      <Project>{394986d7-a0e1-488e-b1dd-d1fbf51ac17a}</Project>
-      <Name>Orc.WorkspaceManagement.NET45</Name>
-    </ProjectReference>
+    <Compile Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.NET46.Designer.cs">
+      <Link>Properties\Resources.NET46.Designer.cs</Link>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.de.resx">
@@ -115,21 +107,24 @@
     <EmbeddedResource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.NET45.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.NET46.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Orc.WorkspaceManagement.Xaml.Shared\Properties\Resources.ru.resx">
       <Link>Properties\Resources.ru.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="..\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems" Label="Shared" Condition="Exists('..\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems')" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="..\Orc.WorkspaceManagement.Xaml.Shared\Orc.WorkspaceManagement.Xaml.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets'))" />
   </Target>
-  <Import Project="..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Managers\WorkspaceManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\WorkspaceProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WorkspaceFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>
