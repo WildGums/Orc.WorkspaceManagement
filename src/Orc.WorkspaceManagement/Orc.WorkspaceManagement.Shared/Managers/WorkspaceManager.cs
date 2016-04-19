@@ -4,10 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET40 || SL5
-#define USE_TASKEX
-#endif
-
 namespace Orc.WorkspaceManagement
 {
     using System;
@@ -23,11 +19,14 @@ namespace Orc.WorkspaceManagement
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly IWorkspaceInitializer _workspaceInitializer;
+        private readonly IServiceLocator _serviceLocator;
+
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
+
         private IWorkspacesStorageService _workspacesStorageService;
-        private readonly IServiceLocator _serviceLocator;
         private IWorkspace _workspace;
         private object _scope;
 
@@ -48,11 +47,14 @@ namespace Orc.WorkspaceManagement
             _workspacesStorageService = workspacesStorageService;
             _serviceLocator = serviceLocator;
 
+            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
         }
         #endregion
 
         #region Properties
+        public int UniqueIdentifier { get; private set; }
+
         /// <summary>
         /// Gets or sets the base directory to store the workspaces in.
         /// </summary>

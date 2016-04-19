@@ -6,6 +6,7 @@
 
 namespace Orc.WorkspaceManagement.Views
 {
+    using System;
     using System.Windows;
     using Catel.MVVM.Views;
     using ViewModels;
@@ -45,6 +46,16 @@ namespace Orc.WorkspaceManagement.Views
             {
                 vm.Scope = Scope;
             }
+        }
+
+        protected override void OnLoaded(EventArgs e)
+        {
+            base.OnLoaded(e);
+        }
+
+        protected override void OnViewModelChanged()
+        {
+            base.OnViewModelChanged();
         }
         #endregion
     }

@@ -182,7 +182,8 @@ namespace Orc.WorkspaceManagement.ViewModels
         {
             if (_workspaceManager == null)
             {
-                SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(Scope));
+                var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Scope);
+                SetWorkspaceManager(workspaceManager);
             }
 
             return _workspaceManager;
@@ -201,7 +202,8 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void ActivateWorkspaceManager()
         {
-            SetWorkspaceManager(_serviceLocator.ResolveType<IWorkspaceManager>(Scope));
+            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Scope);
+            SetWorkspaceManager(workspaceManager);
 
             UpdateWorkspaces();
         }
