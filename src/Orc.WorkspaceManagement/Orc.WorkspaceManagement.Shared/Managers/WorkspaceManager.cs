@@ -233,7 +233,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceProvider);
 
 #if DEBUG
-            Log.Debug(string.Format("Removing provider {0} from the WorkspaceManager (Tag == \"{1}\")", workspaceProvider.GetType(), Scope ?? "null"));
+            Log.Debug($"Removing provider {workspaceProvider.GetType()} from the WorkspaceManager (Tag == \"{Scope ?? "null"}\")");
 #endif
 
             var removed = false;
@@ -311,11 +311,18 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Stores the workspace by requesting information.
         /// </summary>
-        public async Task StoreWorkspaceAsync()
+        public Task StoreWorkspaceAsync()
+        {
+            return StoreWorkspaceAsync(Workspace);
+        }
+
+        /// <summary>
+        /// Stores the workspace by requesting information.
+        /// </summary>
+        public async Task StoreWorkspaceAsync(IWorkspace workspace)
         {
             Log.Debug("Storing workspace");
 
-            var workspace = Workspace;
             if (workspace == null)
             {
                 Log.Error("Workspace is empty, cannot store workspace");
@@ -389,7 +396,6 @@ namespace Orc.WorkspaceManagement
                 }
             }
         }
-
 
         private async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
         {

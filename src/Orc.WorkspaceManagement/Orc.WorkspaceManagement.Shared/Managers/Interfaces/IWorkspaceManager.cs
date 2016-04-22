@@ -95,5 +95,10 @@ namespace Orc.WorkspaceManagement
         /// Saves all the workspaces to disk.
         /// </summary>
         Task<bool> SaveAsync();
+
+        /// <summary>
+        /// Stores the workspace by requesting information.
+        /// </summary>
+        Task StoreWorkspaceAsync(IWorkspace workspace);
     }
 }
