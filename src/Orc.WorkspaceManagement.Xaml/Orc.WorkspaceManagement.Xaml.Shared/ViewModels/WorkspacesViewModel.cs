@@ -76,6 +76,11 @@ namespace Orc.WorkspaceManagement.ViewModels
                 return false;
             }
 
+            if (!workspace.Persist)
+            {
+                return false;
+            }
+
             if (!workspace.CanEdit)
             {
                 return false;
