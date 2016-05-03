@@ -18,6 +18,7 @@ namespace Orc.WorkspaceManagement
     public class WorkspacesStorageService : IWorkspacesStorageService
     {
         private const string WorkspaceFileExtension = ".xml";
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         public IEnumerable<IWorkspace> LoadWorkspaces(string path)
@@ -28,13 +29,46 @@ namespace Orc.WorkspaceManagement
             {
                 foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
                 {
-                    var workspace = LoadWorkspaceFromFile(workspaceFile);
+                    var workspace = LoadWorkspace(workspaceFile);
                     if (workspace != null)
                     {
                         yield return workspace;
                     }
                 }
             }
+        }
+
+        public IWorkspace LoadWorkspace(string fileName)
+        {
+            Argument.IsNotNullOrEmpty(() => fileName);
+
+            IWorkspace result = null;
+
+            try
+            {
+                Log.Debug("Loading workspace from '{0}'", fileName);
+
+                using (var fileStream = new FileStream(fileName, FileMode.Open))
+                {
+                    var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml);
+                    if (workspace == null || string.IsNullOrEmpty(workspace.Title))
+                    {
+                        Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
+                    }
+                    else
+                    {
+                        result = workspace;
+
+                        Log.Debug("Loaded workspace");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load workspace from '{0}'", fileName);
+            }
+
+            return result;
         }
 
         public void SaveWorkspaces(string path, IEnumerable<IWorkspace> workspaces)
@@ -67,52 +101,33 @@ namespace Orc.WorkspaceManagement
 
             foreach (var workspace in workspaces)
             {
-                if (!workspace.Persist)
-                {
-                    Log.Debug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
-
-                    continue;
-                }
-
-                var workspaceFile = Path.Combine(path, $"{workspace.Title.GetSlug()}{WorkspaceFileExtension}");
-
-                Log.Debug("Saving workspace '{0}' to '{1}'", workspace, workspaceFile);
-
-                ((Workspace) workspace).SaveAsXml(workspaceFile);
+                var fileName = GetWorkspaceFileName(path, workspace);
+                SaveWorkspace(fileName, workspace);
             }
         }
 
-        private static IWorkspace LoadWorkspaceFromFile(string workspaceFile)
+        public void SaveWorkspace(string fileName, IWorkspace workspace)
         {
-            Argument.IsNotNullOrEmpty(() => workspaceFile);
+            Argument.IsNotNullOrEmpty(() => fileName);
+            Argument.IsNotNull(() => workspace);
 
-            IWorkspace result = null;
-
-            try
+            if (!workspace.Persist)
             {
-                Log.Debug("Loading workspace from '{0}'", workspaceFile);
-
-                using (var fileStream = new FileStream(workspaceFile, FileMode.Open))
-                {
-                    var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml);
-                    if (workspace == null || string.IsNullOrEmpty(workspace.Title))
-                    {
-                        Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", workspaceFile);
-                    }
-                    else
-                    {
-                        result = workspace;
-
-                        Log.Debug("Loaded workspace");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load workspace from '{0}'", workspaceFile);
+                Log.Debug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
+                return;
             }
 
-            return result;
+            Log.Debug("Saving workspace '{0}' to '{1}'", workspace, fileName);
+
+            ((Workspace)workspace).SaveAsXml(fileName);
+        }
+
+        public string GetWorkspaceFileName(string directory, IWorkspace workspace)
+        {
+            Argument.IsNotNull(() => workspace);
+
+            var workspaceFile = Path.Combine(directory, $"{workspace.Title.GetSlug()}{WorkspaceFileExtension}");
+            return workspaceFile;
         }
     }
 }

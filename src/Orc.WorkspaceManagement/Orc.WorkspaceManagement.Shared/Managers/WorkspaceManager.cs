@@ -126,18 +126,28 @@ namespace Orc.WorkspaceManagement
             var oldWorkspace = Workspace;
             var newWorkspace = value;
 
+            Log.Debug($"Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
+
             var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
             await WorkspaceUpdatingAsync.SafeInvokeAsync(this, workspaceUpdatingEventArgs);
             if (workspaceUpdatingEventArgs.Cancel)
             {
+                Log.Debug("Changing workspace was canceled");
                 return false;
             }
             
-            Workspace = value;
+            Workspace = newWorkspace;
 
-            await ApplyWorkspaceUsingProvidersAsync(Workspace);
+            await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
 
             WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
+
+            if (oldWorkspace != null)
+            {
+                Log.Debug($"Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
+
+                await ReloadWorkspaceAsync(oldWorkspace);
+            }
 
             return true;
         }
@@ -309,6 +319,46 @@ namespace Orc.WorkspaceManagement
         }
 
         /// <summary>
+        /// Reloads the workspace by reading the information from the original location.
+        /// </summary>
+        public Task ReloadWorkspaceAsync()
+        {
+            return ReloadWorkspaceAsync(Workspace);
+        }
+
+        /// <summary>
+        /// Stores the workspace by requesting information.
+        /// </summary>
+        public async Task ReloadWorkspaceAsync(IWorkspace workspace)
+        {
+            Log.Debug($"Reloading workspace '{workspace}'");
+
+             if (workspace == null)
+            {
+                Log.Error("Workspace is empty, cannot reload workspace");
+                return;
+            }
+
+            if (!workspace.CanEdit)
+            {
+                Log.Warning("Workspace is read-only, cannot reload workspace");
+                return;
+            }
+
+            var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
+            var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
+            if (workspaceFromDisk == null)
+            {
+                Log.Warning($"Failed to reload workspace '{workspace}'");
+                return;
+            }
+
+            workspace.SynchronizeWithWorkspace(workspaceFromDisk);
+
+            Log.Info($"Reloaded workspace '{workspace}'");
+        }
+
+        /// <summary>
         /// Stores the workspace by requesting information.
         /// </summary>
         public Task StoreWorkspaceAsync()
@@ -321,7 +371,7 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public async Task StoreWorkspaceAsync(IWorkspace workspace)
         {
-            Log.Debug("Storing workspace");
+            Log.Debug($"Storing workspace '{workspace}'");
 
             if (workspace == null)
             {
@@ -341,7 +391,8 @@ namespace Orc.WorkspaceManagement
 
             await GetInformationFromProvidersAsync(workspace);
 
-            Log.Info("Stored workspace");
+            Log.Info($"Stored workspace '{workspace}'");
+            Log.Status("Stored workspace");
         }
 
         /// <summary>

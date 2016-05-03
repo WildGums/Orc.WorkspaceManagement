@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Collections.Generic;
     using Catel.Runtime.Serialization;
 
     public interface IWorkspace
@@ -27,5 +28,8 @@ namespace Orc.WorkspaceManagement
         void SetWorkspaceValue(string name, object value);
         T GetWorkspaceValue<T>(string name, T defaultValue);
         #endregion
+
+        void ClearWorkspaceValues();
+        List<string> GetAllWorkspaceValueNames();
     }
 }

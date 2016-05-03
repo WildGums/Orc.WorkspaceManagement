@@ -6,7 +6,7 @@
     <SharedGUID>ba2d544b-07c3-4473-b2f0-ff494b2de38c</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Orc.WorkspaceManagement.Tests.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Orc.WorkspaceManagement.Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\WorkspaceNameHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\WorkspaceManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\WorkspaceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WorkspaceExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WorkspaceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

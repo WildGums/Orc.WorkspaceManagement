@@ -13,5 +13,8 @@ namespace Orc.WorkspaceManagement
     {
         IEnumerable<IWorkspace> LoadWorkspaces(string path);
         void SaveWorkspaces(string path, IEnumerable<IWorkspace> workspaces);
+        IWorkspace LoadWorkspace(string fileName);
+        void SaveWorkspace(string fileName, IWorkspace workspace);
+        string GetWorkspaceFileName(string directory, IWorkspace workspace);
     }
 }
