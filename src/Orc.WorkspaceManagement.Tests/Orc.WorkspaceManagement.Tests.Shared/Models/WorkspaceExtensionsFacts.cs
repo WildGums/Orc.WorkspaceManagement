@@ -27,9 +27,6 @@ namespace Orc.WorkspaceManagement.Tests.Models
 
             workspaceA.SynchronizeWithWorkspace(workspaceB);
 
-            var workspaceProperties = workspaceA.GetAllWorkspaceValueNames();
-
-            Assert.AreEqual(6, workspaceProperties.Count);
             Assert.AreEqual(0, workspaceA.GetWorkspaceValue("A", 0));
             Assert.AreEqual(0, workspaceA.GetWorkspaceValue("B", 0));
             Assert.AreEqual(0, workspaceA.GetWorkspaceValue("C", 0));
