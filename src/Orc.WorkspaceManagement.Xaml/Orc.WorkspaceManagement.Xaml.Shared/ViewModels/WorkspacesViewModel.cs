@@ -33,7 +33,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Constructors
-        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService, 
+        public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService,
             IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
             ILanguageService languageService)
         {
@@ -128,6 +128,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
+#pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
         private async void OnScopeChanged()
         {
             await DeactivateWorkspaceManagerAsync();
@@ -148,6 +149,7 @@ namespace Orc.WorkspaceManagement.ViewModels
                 await _workspaceManager.TrySetWorkspaceAsync(workspace);
             }
         }
+#pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
 
         protected override async Task InitializeAsync()
         {
@@ -235,20 +237,20 @@ namespace Orc.WorkspaceManagement.ViewModels
             var finalItems = new List<IWorkspace>();
 
             var visibleWorkspaces = (from workspace in _workspaceManager.Workspaces
-                                     where workspace.IsVisible
-                                     select workspace).ToList();
+                where workspace.IsVisible
+                select workspace).ToList();
 
             // 1) Items that cannot be deleted
             finalItems.AddRange(from workspace in visibleWorkspaces
-                                where !workspace.CanDelete
-                                orderby workspace.Title
-                                select workspace);
+                where !workspace.CanDelete
+                orderby workspace.Title
+                select workspace);
 
             // 2) Items that can be deleted
             finalItems.AddRange(from workspace in visibleWorkspaces
-                                where workspace.CanDelete
-                                orderby workspace.Title
-                                select workspace);
+                where workspace.CanDelete
+                orderby workspace.Title
+                select workspace);
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
@@ -256,11 +258,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
         }
 
-        private async Task UpdateCurrentWorkspaceAsync()
+        private Task UpdateCurrentWorkspaceAsync()
         {
             var workspaceManager = GetWorkspaceManager();
 
-            await SetSelectedWorkspaceAsync(workspaceManager != null ? workspaceManager.Workspace : null);
+            return SetSelectedWorkspaceAsync(workspaceManager?.Workspace);
         }
         #endregion
     }

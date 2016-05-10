@@ -20,7 +20,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
         public class SetWorkspaceSchemesDirectoryMethod
         {
             [Test]
-            public async void BaseDirectoryChanged()
+            public async Task BaseDirectoryChanged()
             {
                 const string someDirectoryName = "Some directory";
 
@@ -33,7 +33,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
             [TestCase(1)]
             [TestCase(4)]
-            public async void ClearWorkspacesEachTime(int timesToRepeat)
+            public async Task ClearWorkspacesEachTime(int timesToRepeat)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -53,7 +53,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
             [TestCase("1", "2", "3")]
             [TestCase("1", "2")]
-            public async void LoadsCorrectWorkspaces(params string[] titles)
+            public async Task LoadsCorrectWorkspaces(params string[] titles)
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -69,7 +69,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
             }
 
             [Test]
-            public async void SetWorkspaceToNullWhenDirectoryIsEmpty()
+            public async Task SetWorkspaceToNullWhenDirectoryIsEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
@@ -85,7 +85,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
             }
 
             [Test]
-            public async void SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
+            public async Task SetWorkspaceToDefaultWhenDirectoryIsNotEmpty()
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 

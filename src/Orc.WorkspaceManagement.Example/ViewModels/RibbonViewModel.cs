@@ -129,11 +129,11 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             UpdateCurrentWorkspace();
         }
 
-        protected override async Task CloseAsync()
+        protected override Task CloseAsync()
         {
             _workspaceManager.WorkspaceUpdated -= OnCurrentWorkspaceChanged;
 
-            await base.CloseAsync();
+            return base.CloseAsync();
         }
 
         private void OnCurrentWorkspaceChanged(object sender, WorkspaceUpdatedEventArgs e)
