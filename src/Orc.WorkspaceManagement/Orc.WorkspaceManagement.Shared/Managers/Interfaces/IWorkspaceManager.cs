@@ -19,7 +19,7 @@ namespace Orc.WorkspaceManagement
         IEnumerable<IWorkspace> Workspaces { get; }
         IWorkspace Workspace { get; }
         IEnumerable<IWorkspaceProvider> Providers { get; }
-
+        string DefaultWorkspaceTitle { get; set; }
         object Scope { get; set; }
 
         event EventHandler<CancelEventArgs> Initializing;

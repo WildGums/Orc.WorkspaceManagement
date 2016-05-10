@@ -90,6 +90,8 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspaceManager);
 
+            workspaceManager.DefaultWorkspaceTitle = defaultWorkspaceName;
+
             var defaultWorkspace = (from workspace in workspaceManager.Workspaces
                                     where string.Equals(workspace.Title, defaultWorkspaceName)
                                     select workspace).FirstOrDefault();
@@ -118,9 +120,11 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
+            workspaceManager.DefaultWorkspaceTitle = defaultWorkspaceName;
+
             if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
-                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, false);
+                await workspaceManager.EnsureDefaultWorkspaceAsync(defaultWorkspaceName, false);
             }
 
             if (autoSelect && workspaceManager.Workspace == null && workspaceManager.Workspaces.Any())

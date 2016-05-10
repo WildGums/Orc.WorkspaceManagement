@@ -49,6 +49,7 @@ namespace Orc.WorkspaceManagement
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
             BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
+            DefaultWorkspaceTitle = "Default";
         }
         #endregion
 
@@ -86,6 +87,8 @@ namespace Orc.WorkspaceManagement
             get { return _workspace; }
             private set { _workspace = value; }
         }
+
+        public string DefaultWorkspaceTitle { get; set; }
         #endregion
 
         #region Events
@@ -142,7 +145,7 @@ namespace Orc.WorkspaceManagement
 
             WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
-            if (oldWorkspace != null)
+            if (oldWorkspace != null && !string.Equals(oldWorkspace.Title, DefaultWorkspaceTitle, StringComparison.InvariantCultureIgnoreCase))
             {
                 Log.Debug($"Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
 
