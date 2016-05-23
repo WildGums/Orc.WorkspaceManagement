@@ -275,6 +275,8 @@ namespace Orc.WorkspaceManagement
 
             if (!_workspaces.Contains(workspace))
             {
+                Log.Debug($"Adding workspace '{workspace}'");
+
                 await _workspaceInitializer.InitializeAsync(workspace);
 
                 _workspaces.Add(workspace);
@@ -295,13 +297,17 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspace);
 
+            Log.Debug($"Deleting workspace '{workspace}'");
+
             if (!_workspaces.Contains(workspace))
             {
+                Log.Debug($"Can't delete workspace '{workspace}', workspace is not contained by the manager");
                 return false;
             }
 
             if (!workspace.CanDelete)
             {
+                Log.Debug($"Can't delete workspace '{workspace}', CanDelete = false");
                 return false;
             }
 
