@@ -11,8 +11,10 @@ namespace Orc.WorkspaceManagement
     using System.Collections.Generic;
     using System.IO;
     using Catel;
+    using Catel.Configuration;
     using Catel.Data;
     using Catel.Logging;
+    using Catel.Runtime.Serialization;
     using Path = Catel.IO.Path;
 
     public class WorkspacesStorageService : IWorkspacesStorageService
@@ -21,12 +23,26 @@ namespace Orc.WorkspaceManagement
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+private readonly ISerializationManager _serializationManager;
+
+        public WorkspacesStorageService(ISerializationManager serializationManager)
+        {
+            Argument.IsNotNull(() => serializationManager);
+
+            _serializationManager = serializationManager;
+        }
+
         public IEnumerable<IWorkspace> LoadWorkspaces(string path)
         {
             Argument.IsNotNullOrEmpty(() => path);
 
             if (Directory.Exists(path))
             {
+                // Note: since Catel caches serializable members of an object, we might have introduced new dynamic members,
+                // so we need to clear the cache in order to make sure we always (deserialize) the right members
+                _serializationManager.Clear(typeof(Workspace));
+                _serializationManager.Clear(typeof(DynamicConfiguration));
+
                 foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
                 {
                     var workspace = LoadWorkspace(workspaceFile);
