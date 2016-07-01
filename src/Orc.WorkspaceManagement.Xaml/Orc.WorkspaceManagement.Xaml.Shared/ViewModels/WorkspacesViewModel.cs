@@ -254,7 +254,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
-                AvailableWorkspaces.ReplaceRange(finalItems);
+                ((ICollection<IWorkspace>)AvailableWorkspaces).ReplaceRange(finalItems);
             }
         }
 
