@@ -18,6 +18,7 @@ namespace Orc.WorkspaceManagement.ViewModels
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Threading;
+    using Catel.Data;
 
     public class WorkspacesViewModel : ViewModelBase
     {
@@ -89,10 +90,25 @@ namespace Orc.WorkspaceManagement.ViewModels
             return true;
         }
 
-        private async Task OnEditWorkspaceExecuteAsync(object workspace)
+        private async Task OnEditWorkspaceExecuteAsync(IWorkspace workspace)
         {
+            var modelValidation = workspace as IModelValidation;
+
+            EventHandler<ValidationEventArgs> handler = null;
+            handler = (object sender, ValidationEventArgs e) =>
+            {
+                if (_workspaceManager.Workspaces.Where(x => string.Equals(x.Title, workspace.Title) && x != workspace).Any())
+                {
+                    e.ValidationContext.AddFieldValidationResult(FieldValidationResult.CreateError("Title", "Workspace with current title already exists"));
+                }
+            };
+
+            modelValidation.Validating += handler;
+
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
+                modelValidation.Validating -= handler;
+
                 await _workspaceManager.SaveAsync();
             }
         }
@@ -237,20 +253,20 @@ namespace Orc.WorkspaceManagement.ViewModels
             var finalItems = new List<IWorkspace>();
 
             var visibleWorkspaces = (from workspace in _workspaceManager.Workspaces
-                where workspace.IsVisible
-                select workspace).ToList();
+                                     where workspace.IsVisible
+                                     select workspace).ToList();
 
             // 1) Items that cannot be deleted
             finalItems.AddRange(from workspace in visibleWorkspaces
-                where !workspace.CanDelete
-                orderby workspace.Title
-                select workspace);
+                                where !workspace.CanDelete
+                                orderby workspace.Title
+                                select workspace);
 
             // 2) Items that can be deleted
             finalItems.AddRange(from workspace in visibleWorkspaces
-                where workspace.CanDelete
-                orderby workspace.Title
-                select workspace);
+                                where workspace.CanDelete
+                                orderby workspace.Title
+                                select workspace);
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
