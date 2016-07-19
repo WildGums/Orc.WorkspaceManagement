@@ -20,13 +20,16 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly IWorkspaceManager _workspaceManager;
+        private readonly IMessageService _messageService;
 
-        public RibbonViewModel(IWorkspaceManager workspaceManager, IViewModelFactory viewModelFactory, IUIVisualizerService uiVisualizerService, ISelectDirectoryService selectDirectoryService)
+        public RibbonViewModel(IWorkspaceManager workspaceManager, IViewModelFactory viewModelFactory,
+            IUIVisualizerService uiVisualizerService, ISelectDirectoryService selectDirectoryService, IMessageService messageService)
         {
             _workspaceManager = workspaceManager;
             _viewModelFactory = viewModelFactory;
             _uiVisualizerService = uiVisualizerService;
             _selectDirectoryService = selectDirectoryService;
+            _messageService = messageService;
 
             AddWorkspace = new TaskCommand(OnAddWorkspaceExecuteAsync);
             SaveWorkspace = new TaskCommand(OnSaveWorkspaceExecuteAsync, OnSaveWorkspaceCanExecute);
@@ -49,6 +52,21 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
+                var oldWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
+
+                if (oldWorkspace != null)
+                {
+                    if (await _messageService.ShowAsync(
+                        $"Workspace '{workspace}' already exists. Are you sure you want to replace it with new one?",
+                        "Are you sure?",
+                        MessageButton.YesNo) != MessageResult.Yes)
+                    {
+                        return;
+                    }
+
+                    await _workspaceManager.RemoveAsync(oldWorkspace);
+                }
+
                 await _workspaceManager.AddAsync(workspace, true);
                 await _workspaceManager.SaveAsync();
             }
