@@ -99,7 +99,8 @@ namespace Orc.WorkspaceManagement.ViewModels
             {
                 if (_workspaceManager.Workspaces.Where(x => string.Equals(x.Title, workspace.Title) && x != workspace).Any())
                 {
-                    e.ValidationContext.AddFieldValidationResult(FieldValidationResult.CreateError("Title", "Workspace with current title already exists"));
+                    e.ValidationContext.AddFieldValidationResult(FieldValidationResult.CreateError("Title",
+                        _languageService.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
                 }
             };
 

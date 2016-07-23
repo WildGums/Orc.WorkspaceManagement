@@ -52,19 +52,18 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
-                var oldWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
-
-                if (oldWorkspace != null)
+                var existingWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
+                if (existingWorkspace != null)
                 {
                     if (await _messageService.ShowAsync(
-                        $"Workspace '{workspace}' already exists. Are you sure you want to replace it with new one?",
+                        $"Workspace '{workspace}' already exists. Are you sure you want to overwrite the existing workspace?",
                         "Are you sure?",
                         MessageButton.YesNo) != MessageResult.Yes)
                     {
                         return;
                     }
 
-                    await _workspaceManager.RemoveAsync(oldWorkspace);
+                    await _workspaceManager.RemoveAsync(existingWorkspace);
                 }
 
                 await _workspaceManager.AddAsync(workspace, true);
