@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement.ViewModels
 {
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Fody;
     using Catel.MVVM;
@@ -20,6 +21,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             Argument.IsNotNull(() => languageService);
 
             DeferValidationUntilFirstSaveCall = true;
+            SuspendValidation = false;
 
             Workspace = workspace;
 

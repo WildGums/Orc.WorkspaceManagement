@@ -27,6 +27,8 @@ namespace Orc.WorkspaceManagement
             CanEdit = true;
             CanDelete = true;
             IsVisible = true;
+
+            SuspendValidation = false;
         }
         #endregion
 

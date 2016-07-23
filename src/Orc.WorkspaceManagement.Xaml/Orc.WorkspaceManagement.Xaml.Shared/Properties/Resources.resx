@@ -138,4 +138,7 @@
   <data name="WorkspaceManagement_Title" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists" xml:space="preserve">
+    <value>Workspace with current title already exists</value>
+  </data>
 </root>

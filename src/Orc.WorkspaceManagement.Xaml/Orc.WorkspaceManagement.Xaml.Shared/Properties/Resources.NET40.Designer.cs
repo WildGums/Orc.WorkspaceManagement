@@ -122,5 +122,14 @@ namespace Orc.WorkspaceManagement.Properties {
                 return ResourceManager.GetString("WorkspaceManagement_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace with current title already exists.
+        /// </summary>
+        internal static string WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists {
+            get {
+                return ResourceManager.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists", resourceCulture);
+            }
+        }
     }
 }
