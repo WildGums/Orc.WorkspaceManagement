@@ -66,7 +66,7 @@ private readonly ISerializationManager _serializationManager;
 
                 using (var fileStream = new FileStream(fileName, FileMode.Open))
                 {
-                    var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml);
+                    var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml, null);
                     if (workspace == null || string.IsNullOrEmpty(workspace.Title))
                     {
                         Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
