@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceProviderBase.cs" company="Wild Gums">
-//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// <copyright file="WorkspaceProviderBase.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,8 +18,11 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public abstract class WorkspaceProviderBase : IWorkspaceProvider
     {
+        #region Fields
         protected readonly IServiceLocator ServiceLocator;
-        private object _tag;
+
+        private object _scope;
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -58,9 +61,9 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspaceProvider Members
-        public virtual object Tag
+        public virtual object Scope
         {
-            get { return _tag; }
+            get { return _scope; }
             set
             {
                 var workspaceManager = ServiceLocator.ResolveType<IWorkspaceManager>(value);
@@ -70,9 +73,11 @@ namespace Orc.WorkspaceManagement
                 }
 
                 WorkspaceManager = workspaceManager;
-                _tag = value;
+                _scope = value;
             }
         }
+
+        public object Tag { get; set; }
 
         /// <summary>
         /// Provides the information for the workspace with the current state.

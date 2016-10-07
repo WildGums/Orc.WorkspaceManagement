@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" company="Wild Gums">
-//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// <copyright file="IsCurrentWorkspaceToCollapsingVisibilityConverter.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ namespace Orc.WorkspaceManagement.Converters
                 return false;
             }
 
-            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Tag);
+            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
             return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion

@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceProvider.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="IWorkspaceProvider.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,6 +14,8 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public interface IWorkspaceProvider
     {
+        object Scope { get; set; }
+
         object Tag { get; set; }
 
         /// <summary>

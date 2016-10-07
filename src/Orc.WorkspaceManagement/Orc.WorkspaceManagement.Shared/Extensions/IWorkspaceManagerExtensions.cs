@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceManagerExtensions.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="IWorkspaceManagerExtensions.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => workspaceProvider);
 
-            await workspaceManager.AddProviderAsync(workspaceProvider);
+            workspaceManager.AddProvider(workspaceProvider);
 
             if (callApplyWorkspaceForCurrentWorkspace)
             {
@@ -89,6 +89,8 @@ namespace Orc.WorkspaceManagement
         public static async Task EnsureDefaultWorkspaceAsync(this IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default", bool autoSelect = true)
         {
             Argument.IsNotNull(() => workspaceManager);
+
+            workspaceManager.DefaultWorkspaceTitle = defaultWorkspaceName;
 
             var defaultWorkspace = (from workspace in workspaceManager.Workspaces
                                     where string.Equals(workspace.Title, defaultWorkspaceName)
@@ -118,9 +120,11 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
+            workspaceManager.DefaultWorkspaceTitle = defaultWorkspaceName;
+
             if (alwaysEnsureDefaultWorkspace || (addDefaultWorkspaceIfNoWorkspacesAreFound && !workspaceManager.Workspaces.Any()))
             {
-                await EnsureDefaultWorkspaceAsync(workspaceManager, defaultWorkspaceName, false);
+                await workspaceManager.EnsureDefaultWorkspaceAsync(defaultWorkspaceName, false);
             }
 
             if (autoSelect && workspaceManager.Workspace == null && workspaceManager.Workspaces.Any())

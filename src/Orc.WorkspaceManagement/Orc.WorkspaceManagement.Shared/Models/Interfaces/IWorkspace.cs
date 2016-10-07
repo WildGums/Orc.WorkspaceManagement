@@ -1,12 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspace.cs" company="Wild Gums">
-//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// <copyright file="IWorkspace.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 namespace Orc.WorkspaceManagement
 {
+    using System.Collections.Generic;
     using Catel.Runtime.Serialization;
 
     public interface IWorkspace
@@ -20,12 +21,15 @@ namespace Orc.WorkspaceManagement
         bool IsVisible { get; set; }
 
         [ExcludeFromSerialization]
-        object Tag { get; set; }
+        object Scope { get; set; }
         #endregion
 
         #region Methods
         void SetWorkspaceValue(string name, object value);
         T GetWorkspaceValue<T>(string name, T defaultValue);
         #endregion
+
+        void ClearWorkspaceValues();
+        List<string> GetAllWorkspaceValueNames();
     }
 }

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Workspace.cs" company="Wild Gums">
-//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// <copyright file="Workspace.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +15,11 @@ namespace Orc.WorkspaceManagement
 
     public class Workspace : DynamicConfiguration, IWorkspace
     {
+        private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new []
+        {
+            "Title", "Persist", "CanEdit", "CanDelete", "IsVisible", "Scope", "Tag", "IsDirty", "IsReadOnly"
+        });
+
         #region Constructors
         public Workspace()
         {
@@ -22,6 +27,8 @@ namespace Orc.WorkspaceManagement
             CanEdit = true;
             CanDelete = true;
             IsVisible = true;
+
+            SuspendValidation = false;
         }
         #endregion
 
@@ -34,7 +41,44 @@ namespace Orc.WorkspaceManagement
         public bool IsVisible { get; set; }
 
         [ExcludeFromSerialization]
-        public object Tag { get; set; } 
+        public object Scope { get; set; }
+
+        [ExcludeFromSerialization]
+        public object Tag { get; set; }
+
+        public void ClearWorkspaceValues()
+        {
+            var workspaceValueNames = GetAllWorkspaceValueNames();
+
+            foreach (var workspaceValueName in workspaceValueNames)
+            {
+                SetWorkspaceValue(workspaceValueName, null);
+            }
+        }
+
+        public List<string> GetAllWorkspaceValueNames()
+        {
+            var valueNames = new List<string>();
+
+            var propertyData = PropertyDataManager.Default.GetCatelTypeInfo(GetType());
+
+            foreach (var catelProperty in propertyData.GetCatelProperties())
+            {
+                if (catelProperty.Value.IsModelBaseProperty)
+                {
+                    continue;
+                }
+
+                if (IgnoredProperties.Contains(catelProperty.Key))
+                {
+                    continue;
+                }
+
+                valueNames.Add(catelProperty.Key);
+            }
+
+            return valueNames;
+        }
 
         public void SetWorkspaceValue(string name, object value)
         {

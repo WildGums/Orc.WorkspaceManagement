@@ -1,13 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspacesView.xaml.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="WorkspacesView.xaml.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Orc.WorkspaceManagement.Views
 {
-    using System.Runtime.CompilerServices;
+    using System;
     using System.Windows;
     using Catel.MVVM.Views;
     using ViewModels;
@@ -27,29 +26,36 @@ namespace Orc.WorkspaceManagement.Views
         }
         #endregion
 
-
         #region Properties
-        public static readonly DependencyProperty ManagerTagProperty =
-           DependencyProperty.Register("ManagerTag", typeof(object), typeof(WorkspacesView), new FrameworkPropertyMetadata(OnManagerTagChanged));
-
-        private static void OnManagerTagChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
+        public object Scope
         {
-            var workspacesView = d as WorkspacesView;
-            if (workspacesView != null)
+            get { return GetValue(ScopeProperty); }
+            set { SetValue(ScopeProperty, value); }
+        }
+
+        public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register("Scope", typeof(object),
+            typeof(WorkspacesView), new FrameworkPropertyMetadata((sender, e) => ((WorkspacesView)sender).OnScopeChanged(e)));
+        #endregion
+
+        #region Methods
+        private void OnScopeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            var vm = ViewModel as WorkspacesViewModel;
+            if (vm != null)
             {
-                var viewModel = (WorkspacesViewModel)workspacesView.ViewModel;
-                if (viewModel != null)
-                {
-                    viewModel.ManagerTag = workspacesView.ManagerTag;
-                }
+                vm.Scope = Scope;
             }
         }
 
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
-        public object ManagerTag
+        protected override void OnLoaded(EventArgs e)
         {
-            get { return GetValue(ManagerTagProperty); }
-            set { SetValue(ManagerTagProperty, value); }
+            base.OnLoaded(e);
+        }
+
+        protected override void OnViewModelChanged()
+        {
+            base.OnViewModelChanged();
         }
         #endregion
     }

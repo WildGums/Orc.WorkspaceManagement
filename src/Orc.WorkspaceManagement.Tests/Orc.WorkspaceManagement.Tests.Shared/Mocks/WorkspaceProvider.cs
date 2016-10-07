@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceProvider.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="WorkspaceProvider.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -28,6 +28,8 @@ namespace Orc.WorkspaceManagement.Test.Mocks
 
             workspace.SetWorkspaceValue(_key, _value);
         }
+
+        public object Scope { get; set; }
 
         public object Tag { get; set; }
 
