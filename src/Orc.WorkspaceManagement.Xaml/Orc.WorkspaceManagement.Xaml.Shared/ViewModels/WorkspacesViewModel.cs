@@ -146,6 +146,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         #region Methods
 #pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
+#pragma warning disable AvoidAsyncVoid
         private async void OnScopeChanged()
         {
             await DeactivateWorkspaceManagerAsync();
@@ -167,6 +168,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
         }
 #pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
+#pragma warning restore AvoidAsyncVoid
 
         protected override async Task InitializeAsync()
         {

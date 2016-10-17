@@ -34,6 +34,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         public static readonly DependencyProperty RowsToPersistProperty =
             DependencyProperty.Register("RowsToPersist", typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
 
+
         public string ColumnsToPersist
         {
             get { return (string)GetValue(ColumnsToPersistProperty); }
@@ -57,7 +58,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             var rows = GetRows();
             foreach (var index in rows)
             {
-                var defaultValueName = string.Format("row_{0}_default", index);
+                var defaultValueName = $"row_{index}_default";
                 var defaultRowHeight = FromGridLengthToString(AssociatedObject.RowDefinitions[index].Height);
 
                 _defaultValues[defaultValueName] = defaultRowHeight;
@@ -66,7 +67,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             var columns = GetColumns();
             foreach (var index in columns)
             {
-                var defaultValueName = string.Format("column_{0}_default", index);
+                var defaultValueName = $"column_{index}_default";
                 var defaultColumnWidth = FromGridLengthToString(AssociatedObject.ColumnDefinitions[index].Width);
 
                 _defaultValues[defaultValueName] = defaultColumnWidth;
@@ -78,7 +79,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             var rows = GetRows();
             foreach (var index in rows)
             {
-                var name = string.Format("row_{0}", index);
+                var name = $"row_{index}";
                 var rowHeight = AssociatedObject.RowDefinitions[index].ActualHeight.ToString();
 
                 AssociatedObject.SaveValueToWorkspace(name, rowHeight, workspace, prefix);
@@ -87,7 +88,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             var columns = GetColumns();
             foreach (var index in columns)
             {
-                var name = string.Format("column_{0}", index);
+                var name = $"column_{index}";
                 var columnWidth = AssociatedObject.ColumnDefinitions[index].ActualWidth.ToString();
 
                 AssociatedObject.SaveValueToWorkspace(name, columnWidth, workspace, prefix);
@@ -99,13 +100,13 @@ namespace Orc.WorkspaceManagement.Behaviors
             var rows = GetRows();
             foreach (var index in rows)
             {
-                var name = string.Format("row_{0}", index);
+                var name = $"row_{index}";
                 var rowValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
                 GridLength gridLength;
                 if (string.Equals(rowValue, "unknown"))
                 {
-                    var key = string.Format("row_{0}_default", index);
+                    var key = $"row_{index}_default";
                     if (!_defaultValues.ContainsKey(key))
                     {
                         continue;
@@ -118,13 +119,13 @@ namespace Orc.WorkspaceManagement.Behaviors
                     gridLength = new GridLength(double.Parse(rowValue));
                 }
 
-                AssociatedObject.RowDefinitions[index].Height = gridLength;
+                AssociatedObject.RowDefinitions[index].SetCurrentValue(RowDefinition.HeightProperty, gridLength);
             }
 
             var columns = GetColumns();
             foreach (var index in columns)
             {
-                var name = string.Format("column_{0}", index);
+                var name = $"column_{index}";
                 var columnValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
                 if (columnValue == null)
@@ -135,7 +136,7 @@ namespace Orc.WorkspaceManagement.Behaviors
                 GridLength gridLength;
                 if (string.Equals(columnValue, "unknown"))
                 {
-                    var key = string.Format("column_{0}_default", index);
+                    var key = $"column_{index}_default";
                     if (!_defaultValues.ContainsKey(key))
                     {
                         continue;
@@ -148,7 +149,7 @@ namespace Orc.WorkspaceManagement.Behaviors
                     gridLength = new GridLength(double.Parse(columnValue));
                 }
 
-                AssociatedObject.ColumnDefinitions[index].Width = gridLength;
+                AssociatedObject.ColumnDefinitions[index].SetCurrentValue(ColumnDefinition.WidthProperty, gridLength);
             }
         }
 
