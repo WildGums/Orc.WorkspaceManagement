@@ -22,9 +22,9 @@ namespace Orc.WorkspaceManagement.ViewModels
 
     public class WorkspacesViewModel : ViewModelBase
     {
+        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Fields
         private IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IServiceLocator _serviceLocator;
@@ -95,20 +95,26 @@ namespace Orc.WorkspaceManagement.ViewModels
             var modelValidation = workspace as IModelValidation;
 
             EventHandler<ValidationEventArgs> handler = null;
-            handler = (object sender, ValidationEventArgs e) =>
+            handler = (sender, e) =>
             {
-                if (_workspaceManager.Workspaces.Where(x => string.Equals(x.Title, workspace.Title) && x != workspace).Any())
+                if (_workspaceManager.Workspaces.Any(x => x.Title.EqualsIgnoreCase(workspace.Title) && x != workspace))
                 {
                     e.ValidationContext.AddFieldValidationResult(FieldValidationResult.CreateError("Title",
                         _languageService.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
                 }
             };
 
-            modelValidation.Validating += handler;
+            if (modelValidation != null)
+            {
+                modelValidation.Validating += handler;
+            }
 
             if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
             {
-                modelValidation.Validating -= handler;
+                if (modelValidation != null)
+                {
+                    modelValidation.Validating -= handler;
+                }
 
                 await _workspaceManager.SaveAsync();
             }
@@ -148,6 +154,10 @@ namespace Orc.WorkspaceManagement.ViewModels
 #pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
         private async void OnScopeChanged()
         {
+            var scope = Scope;
+
+            Log.Debug($"Scope has changed to '{scope}'");
+
             await DeactivateWorkspaceManagerAsync();
             ActivateWorkspaceManager();
             await UpdateCurrentWorkspaceAsync();
@@ -161,6 +171,9 @@ namespace Orc.WorkspaceManagement.ViewModels
             }
 
             var workspace = SelectedWorkspace;
+
+            Log.Info($"Selected workspace changed to '{workspace?.Title}'");
+
             if (workspace != null)
             {
                 await _workspaceManager.TrySetWorkspaceAsync(workspace);
@@ -215,9 +228,10 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void SetWorkspaceManager(IWorkspaceManager workspaceManager)
         {
-            if (_workspaceManager != null)
+            var previousWorkspaceManager = _workspaceManager;
+            if (previousWorkspaceManager != null)
             {
-                _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
+                previousWorkspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
             }
 
             _workspaceManager = workspaceManager;
@@ -226,7 +240,11 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void ActivateWorkspaceManager()
         {
-            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Scope);
+            var scope = Scope;
+
+            Log.Debug($"Activating workspace manager using scope '{scope}'");
+
+            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(scope);
             SetWorkspaceManager(workspaceManager);
 
             UpdateWorkspaces();
@@ -234,6 +252,8 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task DeactivateWorkspaceManagerAsync(bool setToNull = true)
         {
+            Log.Debug($"Deactivating workspace manager");
+
             await SetSelectedWorkspaceAsync(null);
 
             if (_workspaceManager != null)
@@ -251,6 +271,8 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void UpdateWorkspaces()
         {
+            Log.Debug("Updating available workspaces");
+
             var finalItems = new List<IWorkspace>();
 
             var visibleWorkspaces = (from workspace in _workspaceManager.Workspaces
