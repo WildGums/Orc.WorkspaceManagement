@@ -129,13 +129,13 @@ namespace Orc.WorkspaceManagement
             var oldWorkspace = Workspace;
             var newWorkspace = value;
 
-            Log.Debug($"Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
+            Log.Debug($"[{Scope}] Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
 
             var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
             await WorkspaceUpdatingAsync.SafeInvokeAsync(this, workspaceUpdatingEventArgs);
             if (workspaceUpdatingEventArgs.Cancel)
             {
-                Log.Debug("Changing workspace was canceled");
+                Log.Debug($"[{Scope}] Changing workspace was canceled");
                 return false;
             }
             
@@ -147,7 +147,7 @@ namespace Orc.WorkspaceManagement
 
             if (oldWorkspace != null && !string.Equals(oldWorkspace.Title, DefaultWorkspaceTitle, StringComparison.InvariantCultureIgnoreCase))
             {
-                Log.Debug($"Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
+                Log.Debug($"[{Scope}] Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
 
                 await ReloadWorkspaceAsync(oldWorkspace);
             }
@@ -182,7 +182,7 @@ namespace Orc.WorkspaceManagement
         {
             var baseDirectory = BaseDirectory;
 
-            Log.Debug("Initializing workspaces from '{0}'", baseDirectory);
+            Log.Debug($"[{Scope}] Initializing workspaces from '{baseDirectory}'");
 
             var cancelEventArgs = new CancelEventArgs();
             Initializing.SafeInvoke(this, cancelEventArgs);
@@ -211,7 +211,7 @@ namespace Orc.WorkspaceManagement
 
             Initialized.SafeInvoke(this);
 
-            Log.Info("Initialized '{0}' workspaces from '{1}'", _workspaces.Count, baseDirectory);
+            Log.Info($"[{Scope}] Initialized '{_workspaces.Count}' workspaces from '{baseDirectory}'");
 
             return true;
         }
@@ -225,7 +225,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceProvider);
 
 #if DEBUG
-            Log.Debug($"Adding provider {workspaceProvider.GetType()} to the WorkspaceManager (Scope = '{Scope ?? "null"}')");
+            Log.Debug($"[{Scope}] Adding provider {workspaceProvider.GetType()} to the WorkspaceManager (Scope = '{Scope ?? "null"}')");
 #endif
 
             lock (_workspaceProviders)
@@ -246,7 +246,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceProvider);
 
 #if DEBUG
-            Log.Debug($"Removing provider {workspaceProvider.GetType()} from the WorkspaceManager (Tag == \"{Scope ?? "null"}\")");
+            Log.Debug($"[{Scope}] Removing provider {workspaceProvider.GetType()} from the WorkspaceManager (Tag == \"{Scope ?? "null"}\")");
 #endif
 
             var removed = false;
@@ -275,7 +275,7 @@ namespace Orc.WorkspaceManagement
 
             if (!_workspaces.Contains(workspace))
             {
-                Log.Debug($"Adding workspace '{workspace}'");
+                Log.Debug($"[{Scope}] Adding workspace '{workspace}'");
 
                 await _workspaceInitializer.InitializeAsync(workspace);
 
@@ -297,17 +297,17 @@ namespace Orc.WorkspaceManagement
         {
             Argument.IsNotNull(() => workspace);
 
-            Log.Debug($"Deleting workspace '{workspace}'");
+            Log.Debug($"[{Scope}] Deleting workspace '{workspace}'");
 
             if (!_workspaces.Contains(workspace))
             {
-                Log.Debug($"Can't delete workspace '{workspace}', workspace is not contained by the manager");
+                Log.Debug($"[{Scope}] Can't delete workspace '{workspace}', workspace is not contained by the manager");
                 return false;
             }
 
             if (!workspace.CanDelete)
             {
-                Log.Debug($"Can't delete workspace '{workspace}', CanDelete = false");
+                Log.Debug($"[{Scope}] Can't delete workspace '{workspace}', CanDelete = false");
                 return false;
             }
 
@@ -340,17 +340,17 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public async Task ReloadWorkspaceAsync(IWorkspace workspace)
         {
-            Log.Debug($"Reloading workspace '{workspace}'");
+            Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
 
              if (workspace == null)
             {
-                Log.Error("Workspace is empty, cannot reload workspace");
+                Log.Error($"[{Scope}] Workspace is empty, cannot reload workspace");
                 return;
             }
 
             if (!workspace.CanEdit)
             {
-                Log.Warning("Workspace is read-only, cannot reload workspace");
+                Log.Warning($"[{Scope}] Workspace is read-only, cannot reload workspace");
                 return;
             }
 
@@ -358,13 +358,13 @@ namespace Orc.WorkspaceManagement
             var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
             if (workspaceFromDisk == null)
             {
-                Log.Warning($"Failed to reload workspace '{workspace}'");
+                Log.Warning($"[{Scope}] Failed to reload workspace '{workspace}'");
                 return;
             }
 
             workspace.SynchronizeWithWorkspace(workspaceFromDisk);
 
-            Log.Info($"Reloaded workspace '{workspace}'");
+            Log.Info($"[{Scope}] Reloaded workspace '{workspace}'");
         }
 
         /// <summary>
@@ -380,17 +380,17 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public async Task StoreWorkspaceAsync(IWorkspace workspace)
         {
-            Log.Debug($"Storing workspace '{workspace}'");
+            Log.Debug($"[{Scope}] Storing workspace '{workspace}'");
 
             if (workspace == null)
             {
-                Log.Error("Workspace is empty, cannot store workspace");
+                Log.Error($"[{Scope}] Workspace is empty, cannot store workspace");
                 return;
             }
 
             if (!workspace.CanEdit)
             {
-                Log.Warning("Workspace is read-only, cannot store workspace");
+                Log.Warning($"[{Scope}] Workspace is read-only, cannot store workspace");
                 return;
             }
 
@@ -400,7 +400,7 @@ namespace Orc.WorkspaceManagement
 
             await GetInformationFromProvidersAsync(workspace);
 
-            Log.Info($"Stored workspace '{workspace}'");
+            Log.Info($"[{Scope}] Stored workspace '{workspace}'");
             Log.Status("Stored workspace");
         }
 
@@ -411,7 +411,7 @@ namespace Orc.WorkspaceManagement
         {
             var baseDirectory = BaseDirectory;
 
-            Log.Debug("Saving all workspaces to '{0}'", baseDirectory);
+            Log.Debug($"[{Scope}] Saving all workspaces to '{baseDirectory}'");
 
             var cancelEventArgs = new CancelEventArgs();
             await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
@@ -424,7 +424,7 @@ namespace Orc.WorkspaceManagement
 
             Saved.SafeInvoke(this);
 
-            Log.Info("Saved all workspaces to '{0}'", baseDirectory);
+            Log.Info($"[{Scope}] Saved all workspaces to '{baseDirectory}'");
 
             return true;
         }
@@ -452,7 +452,7 @@ namespace Orc.WorkspaceManagement
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to get information for workspace using provider '{0}'", provider.GetType().Name);
+                    Log.Warning(ex, $"[{Scope}] Failed to get information for workspace using provider '{provider.GetType().Name}'");
                 }
             }
         }
@@ -468,7 +468,7 @@ namespace Orc.WorkspaceManagement
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to apply workspace using provider '{0}'", provider.GetType().Name);
+                    Log.Warning(ex, $"[{Scope}] Failed to apply workspace using provider '{provider.GetType().Name}'");
                 }
             }
         }
