@@ -31,6 +31,8 @@ namespace Orc.WorkspaceManagement.ViewModels
         private readonly IDispatcherService _dispatcherService;
         private readonly IMessageService _messageService;
         private readonly ILanguageService _languageService;
+
+        private bool _updatingSelectedWorkspace;
         #endregion
 
         #region Constructors
@@ -165,7 +167,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async void OnSelectedWorkspaceChanged()
         {
-            if (_settingSelectedWokspace)
+            if (_updatingSelectedWorkspace)
             {
                 return;
             }
@@ -197,22 +199,30 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void OnWorkspacesChanged(object sender, EventArgs e)
         {
+            var workspaceManager = _workspaceManager;
+
+            Log.Debug($"Workspaces have changed, updating workspaces, current workspace manager scope is '{workspaceManager.Scope}'");
+
             UpdateWorkspaces();
         }
 
-        private bool _settingSelectedWokspace;
-
         private async Task SetSelectedWorkspaceAsync(IWorkspace workspace)
         {
-            try
+            await _dispatcherService.InvokeAsync(() =>
             {
-                _settingSelectedWokspace = true;
-                await _dispatcherService.InvokeAsync(() => SelectedWorkspace = workspace);
-            }
-            finally
-            {
-                _settingSelectedWokspace = false;
-            }
+                try
+                {
+                    _updatingSelectedWorkspace = true;
+
+                    Log.Debug($"Setting selected workspace to '{workspace?.Title}'");
+
+                    SelectedWorkspace = workspace;
+                }
+                finally
+                {
+                    _updatingSelectedWorkspace = false;
+                }
+            });
         }
 
         private IWorkspaceManager GetWorkspaceManager()
@@ -229,13 +239,24 @@ namespace Orc.WorkspaceManagement.ViewModels
         private void SetWorkspaceManager(IWorkspaceManager workspaceManager)
         {
             var previousWorkspaceManager = _workspaceManager;
+            if (ReferenceEquals(workspaceManager, previousWorkspaceManager))
+            {
+                return;
+            }
+
             if (previousWorkspaceManager != null)
             {
                 previousWorkspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
             }
 
+            Log.Debug($"Updating current workspace manager with scope '{workspaceManager?.Scope}' to new instance with '{workspaceManager?.Workspaces.Count() ?? 0}' workspaces");
+
             _workspaceManager = workspaceManager;
-            _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
+
+            if (workspaceManager != null)
+            {
+                _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
+            }
         }
 
         private void ActivateWorkspaceManager()
@@ -256,9 +277,10 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             await SetSelectedWorkspaceAsync(null);
 
-            if (_workspaceManager != null)
+            var workspaceManager = _workspaceManager;
+            if (workspaceManager != null)
             {
-                _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
+                workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
 
                 if (setToNull)
                 {
@@ -271,11 +293,11 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private void UpdateWorkspaces()
         {
-            Log.Debug("Updating available workspaces");
+            var workspaces = _workspaceManager.Workspaces;
 
             var finalItems = new List<IWorkspace>();
 
-            var visibleWorkspaces = (from workspace in _workspaceManager.Workspaces
+            var visibleWorkspaces = (from workspace in workspaces
                                      where workspace.IsVisible
                                      select workspace).ToList();
 
@@ -290,6 +312,8 @@ namespace Orc.WorkspaceManagement.ViewModels
                                 where workspace.CanDelete
                                 orderby workspace.Title
                                 select workspace);
+
+            Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{finalItems.Count}' workspaces available");
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
