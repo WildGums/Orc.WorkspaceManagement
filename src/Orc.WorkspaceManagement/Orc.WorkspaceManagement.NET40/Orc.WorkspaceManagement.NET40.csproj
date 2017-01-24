@@ -128,7 +128,6 @@
     <EmbeddedResource Include="..\Orc.WorkspaceManagement.Shared\Properties\Resources.ru.resx">
       <Link>Properties\Resources.ru.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.nl.resx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Orc.WorkspaceManagement.Shared\Properties\Resources.NET40.Designer.cs">
