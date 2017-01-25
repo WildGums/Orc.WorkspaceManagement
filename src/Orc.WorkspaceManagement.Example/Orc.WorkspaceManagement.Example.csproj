@@ -71,9 +71,8 @@
     <Reference Include="Orc.Controls, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orc.Controls.1.3.5\lib\net40\Orc.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Orc.FileSystem, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.FileSystem.1.0.0\lib\net40\Orc.FileSystem.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orc.FileSystem, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Orc.FileSystem.1.1.1\lib\net40\Orc.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="Orchestra.Core, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orchestra.Core.2.4.0\lib\net40\Orchestra.Core.dll</HintPath>
