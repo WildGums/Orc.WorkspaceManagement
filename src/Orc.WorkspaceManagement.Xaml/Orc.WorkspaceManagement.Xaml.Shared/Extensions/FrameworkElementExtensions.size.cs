@@ -22,8 +22,8 @@ namespace Orc.WorkspaceManagement
             var width = frameworkElement.LoadValueFromWorkspace("Width", frameworkElement.Width, workspace, prefix);
             var height = frameworkElement.LoadValueFromWorkspace("Height", frameworkElement.Height, workspace, prefix);
 
-            frameworkElement.Width = width;
-            frameworkElement.Height = height;
+            frameworkElement.SetCurrentValue(FrameworkElement.WidthProperty, width);
+            frameworkElement.SetCurrentValue(FrameworkElement.HeightProperty, height);
         }
     }
 }
