@@ -19,6 +19,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         public MainViewModel()
         {
+            Title = "Orc.WorkspaceManagement example";
         }
     }
 }
