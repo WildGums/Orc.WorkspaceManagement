@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Orc.WorkspaceManagement.Example.Properties {
+namespace Orc.WorkspaceManagement.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Orc.WorkspaceManagement.Example.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.WorkspaceManagement.Example.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.WorkspaceManagement.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -34,7 +34,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             AddWorkspace = new TaskCommand(OnAddWorkspaceExecuteAsync);
             SaveWorkspace = new TaskCommand(OnSaveWorkspaceExecuteAsync, OnSaveWorkspaceCanExecute);
 
-            EditWorkspace = new Command(OnEditWorkspaceExecute, OnEditWorkspaceCanExecute);
+            EditWorkspace = new TaskCommand(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new TaskCommand(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
             ChooseBaseDirectory = new TaskCommand(OnChooseBaseDirectoryAsync);
         }
@@ -50,7 +50,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             var workspace = new Workspace();
 
-            if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
+            if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
             {
                 var existingWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
                 if (existingWorkspace != null)
@@ -84,16 +84,16 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             UpdateCurrentWorkspace();
         }
 
-        public Command EditWorkspace { get; private set; }
+        public TaskCommand EditWorkspace { get; private set; }
 
         private bool OnEditWorkspaceCanExecute()
         {
             return (CurrentWorkspace != null);
         }
 
-        private void OnEditWorkspaceExecute()
+        private async Task OnEditWorkspaceExecuteAsync()
         {
-            _uiVisualizerService.ShowDialog<WorkspaceViewModel>(CurrentWorkspace);
+            await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(CurrentWorkspace);
         }
 
         public TaskCommand RemoveWorkspace { get; private set; }
@@ -121,16 +121,14 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         public TaskCommand ChooseBaseDirectory { get; private set; }
 
-        public Task OnChooseBaseDirectoryAsync()
+        public async Task OnChooseBaseDirectoryAsync()
         {
             _selectDirectoryService.ShowNewFolderButton = true;
 
-            if (_selectDirectoryService.DetermineDirectory())
+            if (await _selectDirectoryService.DetermineDirectoryAsync())
             {
-                return _workspaceManager.SetWorkspaceSchemesDirectoryAsync(_selectDirectoryService.DirectoryName);
+                await _workspaceManager.SetWorkspaceSchemesDirectoryAsync(_selectDirectoryService.DirectoryName);
             }
-
-            return TaskHelper.Completed;
         }
         #endregion
 

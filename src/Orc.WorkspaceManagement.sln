@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET40", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET40\Orc.WorkspaceManagement.NET40.csproj", "{4258FC75-DD23-4877-A56D-3A077AB57F2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.NET47", "Orc.WorkspaceManagement\Orc.WorkspaceManagement.NET47\Orc.WorkspaceManagement.NET47.csproj", "{4258FC75-DD23-4877-A56D-3A077AB57F2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}"
 EndProject
@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1FE0D431-A
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests.NET40", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.NET40\Orc.WorkspaceManagement.Tests.NET40.csproj", "{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Tests.NET47", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.NET47\Orc.WorkspaceManagement.Tests.NET47.csproj", "{D6415689-67DE-4FEE-AA72-6D7EEDDDCEB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Example", "Orc.WorkspaceManagement.Example\Orc.WorkspaceManagement.Example.csproj", "{E70E1855-9D61-4063-A209-CA0A150A6F3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Xaml.NET40", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET40\Orc.WorkspaceManagement.Xaml.NET40.csproj", "{933B120F-8D30-44BA-A4F0-6F485DDA64AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.WorkspaceManagement.Xaml.NET47", "Orc.WorkspaceManagement.Xaml\Orc.WorkspaceManagement.Xaml.NET47\Orc.WorkspaceManagement.Xaml.NET47.csproj", "{933B120F-8D30-44BA-A4F0-6F485DDA64AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{516961BF-FC2B-4FAC-8520-DA8E290B3A78}"
 EndProject

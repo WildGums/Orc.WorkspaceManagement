@@ -29,17 +29,6 @@ namespace Orc.WorkspaceManagement
         /// Initializes a new instance of the <see cref="WorkspaceProviderBase"/> class.
         /// </summary>
         /// <param name="workspaceManager">The workspace manager.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceProviderBase(IWorkspaceManager, IServiceLocator)", TreatAsErrorFromVersion = "1.0",
-            RemoveInVersion = "2.0")]
-        protected WorkspaceProviderBase(IWorkspaceManager workspaceManager)
-            : this(workspaceManager, Catel.IoC.ServiceLocator.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkspaceProviderBase"/> class.
-        /// </summary>
-        /// <param name="workspaceManager">The workspace manager.</param>
         /// <param name="serviceLocator"></param>
         protected WorkspaceProviderBase(IWorkspaceManager workspaceManager, IServiceLocator serviceLocator)
         {
