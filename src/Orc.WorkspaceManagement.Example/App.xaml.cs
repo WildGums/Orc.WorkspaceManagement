@@ -10,6 +10,7 @@
     using Catel.Reflection;
     using Catel.Services;
     using Catel.Windows;
+    using Orchestra;
     using Orchestra.Services;
     using Orchestra.Views;
 
@@ -36,7 +37,7 @@
 
             Log.Info("Starting application");
 
-            StyleHelper.CreateStyleForwardersForDefaultStyles();
+            this.ApplyTheme();
 
             Log.Info("Calling base.OnStartup");
 

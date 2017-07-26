@@ -18,9 +18,9 @@ namespace Orc.WorkspaceManagement.Behaviors
             set { SetValue(PersistSizeProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for PersistSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PersistSizeProperty =
             DependencyProperty.Register("PersistSize", typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
+
 
         public bool PersistGridSettings
         {
@@ -28,7 +28,6 @@ namespace Orc.WorkspaceManagement.Behaviors
             set { SetValue(PersistGridSettingsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for PersistGridSettings.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PersistGridSettingsProperty =
             DependencyProperty.Register("PersistGridSettings", typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
         #endregion

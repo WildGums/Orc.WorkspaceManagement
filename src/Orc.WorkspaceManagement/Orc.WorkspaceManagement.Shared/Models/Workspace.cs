@@ -27,8 +27,6 @@ namespace Orc.WorkspaceManagement
             CanEdit = true;
             CanDelete = true;
             IsVisible = true;
-
-            SuspendValidation = false;
         }
         #endregion
 
@@ -105,16 +103,6 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Methods
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            base.ValidateFields(validationResults);
-
-            if (string.IsNullOrWhiteSpace(Title))
-            {
-                validationResults.Add(FieldValidationResult.CreateError("Title", "Title is required"));
-            }
-        }
-
         public override bool Equals(object obj)
         {
             var workspace = obj as Workspace;

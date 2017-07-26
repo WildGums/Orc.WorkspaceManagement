@@ -7,8 +7,10 @@
 
 namespace Orc.WorkspaceManagement.ViewModels
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Data;
     using Catel.Fody;
     using Catel.MVVM;
     using Catel.Services;
@@ -21,7 +23,6 @@ namespace Orc.WorkspaceManagement.ViewModels
             Argument.IsNotNull(() => languageService);
 
             DeferValidationUntilFirstSaveCall = true;
-            SuspendValidation = false;
 
             Workspace = workspace;
 
@@ -29,7 +30,19 @@ namespace Orc.WorkspaceManagement.ViewModels
         }
 
         [Model]
-        [Expose("WorkspaceTitle", "Title")]
         public IWorkspace Workspace { get; private set; }
+
+        [ViewModelToModel("Workspace", "Title")]
+        public string WorkspaceTitle { get; set; }
+
+        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
+        {
+            base.ValidateFields(validationResults);
+
+            if (string.IsNullOrWhiteSpace(WorkspaceTitle))
+            {
+                validationResults.Add(FieldValidationResult.CreateError(nameof(WorkspaceTitle), "Title is required"));
+            }
+        }
     }
 }

@@ -94,14 +94,14 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task OnEditWorkspaceExecuteAsync(IWorkspace workspace)
         {
-            var modelValidation = workspace as IModelValidation;
+            var modelValidation = workspace as IValidatable;
 
             EventHandler<ValidationEventArgs> handler = null;
             handler = (sender, e) =>
             {
                 if (_workspaceManager.Workspaces.Any(x => x.Title.EqualsIgnoreCase(workspace.Title) && x != workspace))
                 {
-                    e.ValidationContext.AddFieldValidationResult(FieldValidationResult.CreateError("Title",
+                    e.ValidationContext.Add(FieldValidationResult.CreateError("Title",
                         _languageService.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
                 }
             };
@@ -111,7 +111,7 @@ namespace Orc.WorkspaceManagement.ViewModels
                 modelValidation.Validating += handler;
             }
 
-            if (_uiVisualizerService.ShowDialog<WorkspaceViewModel>(workspace) ?? false)
+            if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
             {
                 if (modelValidation != null)
                 {

@@ -15,6 +15,7 @@ namespace Orc.WorkspaceManagement
     using Catel.Data;
     using Catel.Logging;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Path = Catel.IO.Path;
 
     public class WorkspacesStorageService : IWorkspacesStorageService
@@ -24,12 +25,15 @@ namespace Orc.WorkspaceManagement
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 private readonly ISerializationManager _serializationManager;
+        private readonly IXmlSerializer _xmlSerializer;
 
-        public WorkspacesStorageService(ISerializationManager serializationManager)
+        public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer)
         {
             Argument.IsNotNull(() => serializationManager);
+            Argument.IsNotNull(() => xmlSerializer);
 
             _serializationManager = serializationManager;
+            _xmlSerializer = xmlSerializer;
         }
 
         public IEnumerable<IWorkspace> LoadWorkspaces(string path)
@@ -66,7 +70,7 @@ private readonly ISerializationManager _serializationManager;
 
                 using (var fileStream = new FileStream(fileName, FileMode.Open))
                 {
-                    var workspace = ModelBase.Load<Workspace>(fileStream, SerializationMode.Xml, null);
+                    var workspace = _xmlSerializer.Deserialize<Workspace>(fileStream);
                     if (workspace == null || string.IsNullOrEmpty(workspace.Title))
                     {
                         Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
