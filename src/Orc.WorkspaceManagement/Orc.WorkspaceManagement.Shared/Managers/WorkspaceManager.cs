@@ -429,7 +429,7 @@ namespace Orc.WorkspaceManagement
             return true;
         }
 
-        private List<IWorkspaceProvider> GetWorkspaceProviders()
+        public List<IWorkspaceProvider> GetWorkspaceProviders()
         {
             var providers = new List<IWorkspaceProvider>();
 
@@ -441,7 +441,7 @@ namespace Orc.WorkspaceManagement
             return providers;
         }
 
-        private async Task GetInformationFromProvidersAsync(IWorkspace workspace)
+        public async Task GetInformationFromProvidersAsync(IWorkspace workspace)
         {
             var workspaceProviders = GetWorkspaceProviders();
             foreach (var provider in workspaceProviders)
@@ -457,7 +457,7 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        private async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
+        public async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
         {
             var workspaceProviders = GetWorkspaceProviders();
             foreach (var provider in workspaceProviders)
