@@ -64,6 +64,9 @@ namespace Orc.WorkspaceManagement
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
         System.Threading.Tasks.Task AddAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         void AddProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider);
+        System.Threading.Tasks.Task ApplyWorkspaceUsingProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace);
+        System.Threading.Tasks.Task GetInformationFromProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace);
+        System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspaceProvider> GetWorkspaceProviders();
         System.Threading.Tasks.Task InitializeAsync();
         System.Threading.Tasks.Task InitializeAsync(bool autoSelect);
         System.Threading.Tasks.Task<bool> RemoveAsync(Orc.WorkspaceManagement.IWorkspace workspace);
@@ -182,6 +185,9 @@ namespace Orc.WorkspaceManagement
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
         public System.Threading.Tasks.Task AddAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public void AddProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider) { }
+        public System.Threading.Tasks.Task ApplyWorkspaceUsingProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public System.Threading.Tasks.Task GetInformationFromProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspaceProvider> GetWorkspaceProviders() { }
         public System.Threading.Tasks.Task InitializeAsync() { }
         public System.Threading.Tasks.Task InitializeAsync(bool autoSelect) { }
         public System.Threading.Tasks.Task ReloadWorkspaceAsync() { }

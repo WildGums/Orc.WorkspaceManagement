@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement
 {
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;

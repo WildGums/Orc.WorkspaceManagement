@@ -100,5 +100,9 @@ namespace Orc.WorkspaceManagement
         /// Stores the workspace by requesting information.
         /// </summary>
         Task StoreWorkspaceAsync(IWorkspace workspace);
+
+        List<IWorkspaceProvider> GetWorkspaceProviders();
+        Task GetInformationFromProvidersAsync(IWorkspace workspace);
+        Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace);
     }
 }
