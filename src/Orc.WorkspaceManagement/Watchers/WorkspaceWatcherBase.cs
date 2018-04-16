@@ -166,10 +166,10 @@ namespace Orc.WorkspaceManagement
             var type = GetType();
 
             _switchStopwatch.Stop();
-            MethodTimeLogger.Log(type, "Switch", _switchStopwatch.ElapsedMilliseconds);
+            MethodTimeLogger.Log(type, "Switch", _switchStopwatch.ElapsedMilliseconds, "");
 
             _totalStopwatch.Stop();
-            MethodTimeLogger.Log(type, "Total", _totalStopwatch.ElapsedMilliseconds);
+            MethodTimeLogger.Log(type, "Total", _totalStopwatch.ElapsedMilliseconds, "");
 #endif
         }
 
