@@ -7,6 +7,7 @@
 
 namespace Orc.WorkspaceManagement.Tests
 {
+    using System.Runtime.CompilerServices;
     using ApiApprover;
     using NUnit.Framework;
     using ViewModels;
@@ -14,7 +15,7 @@ namespace Orc.WorkspaceManagement.Tests
     [TestFixture]
     public class PublicApiFacts
     {
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_WorkspaceManagement_HasNoBreakingChanges()
         {
             var assembly = typeof(WorkspaceManager).Assembly;
@@ -22,7 +23,7 @@ namespace Orc.WorkspaceManagement.Tests
             PublicApiApprover.ApprovePublicApi(assembly);
         }
 
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_WorkspaceManagement_Xaml_HasNoBreakingChanges()
         {
             var assembly = typeof(WorkspacesViewModel).Assembly;

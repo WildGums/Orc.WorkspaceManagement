@@ -6,7 +6,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:fluent="urn:fluent-ribbon"
                    xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views;assembly=Orc.WorkspaceManagement.Xaml"
-                   xmlns:orchestra="https://github.com/orcomp/orchestra"
+                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
                    xmlns:ribbon="clr-namespace:Orc.WorkspaceManagement.Example"
                    xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters;assembly=Orc.WorkspaceManagement.Xaml"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
