@@ -58,6 +58,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             EditWorkspace = new TaskCommand<IWorkspace>(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
+            Refresh = new TaskCommand<IWorkspace>(OnRefreshAsync, OnRefreshCanExecute);
         }
         #endregion
 
@@ -70,6 +71,18 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Commands
+        public TaskCommand<IWorkspace> Refresh { get; private set; }
+
+        private bool OnRefreshCanExecute(IWorkspace workspace)
+        {
+            return true;
+        }
+
+        private async Task OnRefreshAsync(IWorkspace workspace)
+        {
+            await _workspaceManager.TrySetWorkspaceAsync(workspace);
+        }
+
         public TaskCommand<IWorkspace> EditWorkspace { get; private set; }
 
         private bool OnEditWorkspaceCanExecute(IWorkspace workspace)

@@ -132,6 +132,9 @@
   <data name="WorkspaceManagement_EditWorkspace" xml:space="preserve">
     <value>Edit workspace {0}</value>
   </data>
+  <data name="WorkspaceManagement_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
   <data name="WorkspaceManagement_Remove" xml:space="preserve">
     <value>Remove</value>
   </data>

@@ -10,7 +10,6 @@
 
 namespace Orc.WorkspaceManagement.Properties {
     using System;
-    using Catel.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Orc.WorkspaceManagement.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.WorkspaceManagement.Properties.Resources", typeof(Resources).GetAssemblyEx());
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.WorkspaceManagement.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -103,6 +102,15 @@ namespace Orc.WorkspaceManagement.Properties {
         internal static string WorkspaceManagement_EditWorkspace {
             get {
                 return ResourceManager.GetString("WorkspaceManagement_EditWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string WorkspaceManagement_Refresh {
+            get {
+                return ResourceManager.GetString("WorkspaceManagement_Refresh", resourceCulture);
             }
         }
         

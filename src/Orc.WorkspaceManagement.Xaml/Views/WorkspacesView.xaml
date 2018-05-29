@@ -7,6 +7,7 @@
     <UserControl.Resources>
         <catel:BooleanToHidingVisibilityConverter x:Key="BooleanToHidingVisibilityConverter" />
         <converters:IsCurrentWorkspaceToCollapsingVisibilityConverter x:Key="IsCurrentWorkspaceToCollapsingVisibilityConverter" />
+        <converters:IsCurrentWorkspaceToHidingVisibilityConverter x:Key="IsCurrentWorkspaceToHidingVisibilityConverter" />
         
         <converters:TriggerConverter x:Key="TriggerConverter" />
     </UserControl.Resources>
@@ -22,16 +23,43 @@
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
                                Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
 
-                        <Label Grid.Column="1" Content="{Binding Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" />
+                        <Label Grid.Column="1" 
+                               Content="{Binding Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
+                            <Label.InputBindings>
+                                <MouseBinding Command="{Binding DataContext.Refresh}" MouseAction="LeftClick"></MouseBinding>
+                            </Label.InputBindings>
+                        </Label>
 
-                        <Button Grid.Column="2" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" Width="24" 
-                                    Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">
+                        <Button Grid.Column="2" 
+                                CommandParameter="{Binding }" 
+                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
+                                Width="24" 
+                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
+
+                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                            <Button.Command>
+                                <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                    <Binding Path="DataContext.Refresh" ElementName="layoutRoot" />
+                                    <Binding />
+                                </MultiBinding>
+                            </Button.Command>
+
+                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/refresh.png" Stretch="None" />
+                        </Button>
+
+                        <Button Grid.Column="3" 
+                                CommandParameter="{Binding }" 
+                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
+                                Width="24" 
+                                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">
 
                             <!-- NOTE: important to fix commands where command parameter is not yet available when
                                      the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
@@ -45,7 +73,7 @@
                             <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/edit.png" Stretch="None" />
                         </Button>
 
-                        <Button Grid.Column="3" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}" Width="24"
+                        <Button Grid.Column="4" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}" Width="24"
                                     Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BooleanToHidingVisibilityConverter}}">
 
                             <!-- NOTE: important to fix commands where command parameter is not yet available when
