@@ -83,6 +83,11 @@ namespace Orc.WorkspaceManagement.Converters
         public IsCurrentWorkspaceToCollapsingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
+    public class IsCurrentWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
+    {
+        public IsCurrentWorkspaceToHidingVisibilityConverter() { }
+        protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
+    }
     public class TriggerConverter : System.Windows.Data.IMultiValueConverter
     {
         public TriggerConverter() { }
@@ -105,6 +110,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         public WorkspacesViewModel(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IDispatcherService dispatcherService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService) { }
         public Catel.Collections.FastObservableCollection<Orc.WorkspaceManagement.IWorkspace> AvailableWorkspaces { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> EditWorkspace { get; }
+        public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> Refresh { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> RemoveWorkspace { get; }
         public object Scope { get; set; }
         public Orc.WorkspaceManagement.IWorkspace SelectedWorkspace { get; set; }
@@ -140,5 +146,17 @@ namespace Orc.WorkspaceManagement.Views
         public WorkspaceWindow() { }
         public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel viewModel) { }
         public void InitializeComponent() { }
+    }
+}
+namespace XamlGeneratedNamespace
+{
+    public sealed class GeneratedInternalTypeHelper : System.Windows.Markup.InternalTypeHelper
+    {
+        public GeneratedInternalTypeHelper() { }
+        protected override void AddEventHandler(System.Reflection.EventInfo eventInfo, object target, System.Delegate handler) { }
+        protected override System.Delegate CreateDelegate(System.Type delegateType, object target, string handler) { }
+        protected override object CreateInstance(System.Type type, System.Globalization.CultureInfo culture) { }
+        protected override object GetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, System.Globalization.CultureInfo culture) { }
+        protected override void SetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, object value, System.Globalization.CultureInfo culture) { }
     }
 }
