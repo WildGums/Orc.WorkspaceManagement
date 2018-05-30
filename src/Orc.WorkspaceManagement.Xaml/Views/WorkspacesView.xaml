@@ -7,7 +7,7 @@
     <UserControl.Resources>
         <catel:BooleanToHidingVisibilityConverter x:Key="BooleanToHidingVisibilityConverter" />
         <converters:IsCurrentWorkspaceToCollapsingVisibilityConverter x:Key="IsCurrentWorkspaceToCollapsingVisibilityConverter" />
-        <converters:IsCurrentWorkspaceToHidingVisibilityConverter x:Key="IsCurrentWorkspaceToHidingVisibilityConverter" />
+        <converters:IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter x:Key="IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter" />
         
         <converters:TriggerConverter x:Key="TriggerConverter" />
     </UserControl.Resources>
@@ -41,7 +41,7 @@
                                 CommandParameter="{Binding }" 
                                 ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
                                 Width="24" 
-                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
+                                Visibility="{Binding Converter={StaticResource IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter}}">
 
                             <!-- NOTE: important to fix commands where command parameter is not yet available when
                                      the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->

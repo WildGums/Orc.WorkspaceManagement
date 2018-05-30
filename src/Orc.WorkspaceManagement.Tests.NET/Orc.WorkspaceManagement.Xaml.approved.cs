@@ -73,6 +73,11 @@ namespace Orc.WorkspaceManagement
 }
 namespace Orc.WorkspaceManagement.Converters
 {
+    public class IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
+    {
+        public IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter() { }
+        protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
+    }
     public class IsCurrentWorkspaceToBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsCurrentWorkspaceToBooleanConverter() { }
@@ -81,11 +86,6 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public IsCurrentWorkspaceToCollapsingVisibilityConverter() { }
-        protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
-    }
-    public class IsCurrentWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
-    {
-        public IsCurrentWorkspaceToHidingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
     public class TriggerConverter : System.Windows.Data.IMultiValueConverter
