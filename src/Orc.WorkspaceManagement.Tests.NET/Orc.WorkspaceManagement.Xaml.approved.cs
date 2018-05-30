@@ -73,11 +73,6 @@ namespace Orc.WorkspaceManagement
 }
 namespace Orc.WorkspaceManagement.Converters
 {
-    public class IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
-    {
-        public IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter() { }
-        protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
-    }
     public class IsCurrentWorkspaceToBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsCurrentWorkspaceToBooleanConverter() { }
@@ -86,6 +81,11 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public IsCurrentWorkspaceToCollapsingVisibilityConverter() { }
+        protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
+    }
+    public class IsCurrentWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
+    {
+        public IsCurrentWorkspaceToHidingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
     public class TriggerConverter : System.Windows.Data.IMultiValueConverter
@@ -133,18 +133,30 @@ namespace Orc.WorkspaceManagement.Views
 {
     public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector
     {
+        public static readonly System.Windows.DependencyProperty HasRefreshButtonProperty;
         public static readonly System.Windows.DependencyProperty ScopeProperty;
         public WorkspacesView() { }
+        public bool HasRefreshButton { get; set; }
         [Catel.MVVM.Views.ViewToViewModelAttribute("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
         public object Scope { get; set; }
         public void InitializeComponent() { }
-        protected override void OnLoaded(System.EventArgs e) { }
-        protected override void OnViewModelChanged() { }
     }
     public class WorkspaceWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public WorkspaceWindow() { }
         public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel viewModel) { }
         public void InitializeComponent() { }
+    }
+}
+namespace XamlGeneratedNamespace
+{
+    public sealed class GeneratedInternalTypeHelper : System.Windows.Markup.InternalTypeHelper
+    {
+        public GeneratedInternalTypeHelper() { }
+        protected override void AddEventHandler(System.Reflection.EventInfo eventInfo, object target, System.Delegate handler) { }
+        protected override System.Delegate CreateDelegate(System.Type delegateType, object target, string handler) { }
+        protected override object CreateInstance(System.Type type, System.Globalization.CultureInfo culture) { }
+        protected override object GetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, System.Globalization.CultureInfo culture) { }
+        protected override void SetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, object value, System.Globalization.CultureInfo culture) { }
     }
 }
