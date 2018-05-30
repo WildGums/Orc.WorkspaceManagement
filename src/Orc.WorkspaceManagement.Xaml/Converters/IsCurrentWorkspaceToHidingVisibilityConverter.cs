@@ -7,14 +7,14 @@ namespace Orc.WorkspaceManagement.Converters
     using Catel.IoC;
     using Catel.MVVM.Converters;
 
-    public class IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
+    public class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
     {
         #region Fields
         private readonly IServiceLocator _serviceLocator;
         #endregion
 
         #region Constructors
-        public IsCurrentNotDefaultWorkspaceToHidingVisibilityConverter()
+        public IsCurrentWorkspaceToHidingVisibilityConverter()
             : base(Visibility.Hidden)
         {
             _serviceLocator = this.GetServiceLocator();
@@ -32,13 +32,7 @@ namespace Orc.WorkspaceManagement.Converters
 
             var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
 
-            if (workspaceManager == null || 
-                (string.Equals(workspace.Title, workspaceManager.DefaultWorkspaceTitle)))
-            {
-                return false;
-            }
-
-            return ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
+            return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion
     }

@@ -36,6 +36,15 @@ namespace Orc.WorkspaceManagement.Views
 
         public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register("Scope", typeof(object),
             typeof(WorkspacesView), new FrameworkPropertyMetadata((sender, e) => ((WorkspacesView)sender).OnScopeChanged(e)));
+
+        public bool HasRefreshButton
+        {
+            get { return (bool) GetValue(HasRefreshButtonProperty); }
+            set { SetValue(HasRefreshButtonProperty, value); }
+        }
+
+        public static readonly DependencyProperty HasRefreshButtonProperty = DependencyProperty.Register(
+            "HasRefreshButton", typeof(bool), typeof(WorkspacesView), new PropertyMetadata(false));
         #endregion
 
         #region Methods
@@ -46,16 +55,6 @@ namespace Orc.WorkspaceManagement.Views
             {
                 vm.Scope = Scope;
             }
-        }
-
-        protected override void OnLoaded(EventArgs e)
-        {
-            base.OnLoaded(e);
-        }
-
-        protected override void OnViewModelChanged()
-        {
-            base.OnViewModelChanged();
         }
         #endregion
     }
