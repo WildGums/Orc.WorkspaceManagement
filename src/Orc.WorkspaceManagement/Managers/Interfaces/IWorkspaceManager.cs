@@ -21,6 +21,7 @@ namespace Orc.WorkspaceManagement
         IEnumerable<IWorkspaceProvider> Providers { get; }
         string DefaultWorkspaceTitle { get; set; }
         object Scope { get; set; }
+        IWorkspace RefreshingWorkspace { get; }
 
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
@@ -104,5 +105,12 @@ namespace Orc.WorkspaceManagement
         List<IWorkspaceProvider> GetWorkspaceProviders();
         Task GetInformationFromProvidersAsync(IWorkspace workspace);
         Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace);
+
+        /// <summary>
+        /// Refresh workspace to the state before it was changes and not saved
+        /// </summary>
+        /// <param name="workspace"></param>
+        /// <returns></returns>
+        Task RefreshWorkspaceAsync(IWorkspace workspace);
     }
 }

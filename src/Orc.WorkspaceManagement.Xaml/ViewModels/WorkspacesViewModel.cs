@@ -80,7 +80,18 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task OnRefreshAsync(IWorkspace workspace)
         {
-            await _workspaceManager.TrySetWorkspaceAsync(workspace);
+            if (!await _workspaceManager.CheckIsDirtyAsync())
+            {
+                return;
+            }
+
+            if (await _messageService.ShowAsync(string.Format(_languageService.GetString("WorkspaceManagement_AreYouSureYouWantToRefreshTheWorkspace"), workspace.Title),
+                    _languageService.GetString("WorkspaceManagement_AreYouSure"), MessageButton.YesNo, MessageImage.Question) == MessageResult.No)
+            {
+                return;
+            }
+
+            await _workspaceManager.RefreshWorkspaceAsync(workspace);
         }
 
         public TaskCommand<IWorkspace> EditWorkspace { get; private set; }

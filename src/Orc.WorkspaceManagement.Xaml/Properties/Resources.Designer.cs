@@ -70,6 +70,15 @@ namespace Orc.WorkspaceManagement.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to refresh the workspace &apos;{0}&apos;?.
+        /// </summary>
+        internal static string WorkspaceManagement_AreYouSureYouWantToRefreshTheWorkspace {
+            get {
+                return ResourceManager.GetString("WorkspaceManagement_AreYouSureYouWantToRefreshTheWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove workspace &apos;{0}&apos;?.
         /// </summary>
         internal static string WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace {

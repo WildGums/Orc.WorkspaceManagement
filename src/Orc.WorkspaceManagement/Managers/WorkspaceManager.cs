@@ -89,6 +89,8 @@ namespace Orc.WorkspaceManagement
         }
 
         public string DefaultWorkspaceTitle { get; set; }
+
+        public IWorkspace RefreshingWorkspace { get; private set; }
         #endregion
 
         #region Events
@@ -470,6 +472,22 @@ namespace Orc.WorkspaceManagement
                 {
                     Log.Warning(ex, $"[{Scope}] Failed to apply workspace using provider '{provider.GetType().Name}'");
                 }
+            }
+        }
+
+        public async Task RefreshWorkspaceAsync(IWorkspace workspace)
+        {
+            var oldValue = RefreshingWorkspace;
+
+            RefreshingWorkspace = workspace;
+
+            try
+            {
+                await TrySetWorkspaceAsync(workspace);
+            }
+            finally
+            {
+                RefreshingWorkspace = oldValue;
             }
         }
         #endregion

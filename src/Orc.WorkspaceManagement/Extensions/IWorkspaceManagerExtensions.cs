@@ -171,6 +171,11 @@ namespace Orc.WorkspaceManagement
                 return true;
             }
 
+            if (workspace.Equals(workspaceManager.RefreshingWorkspace))
+            {
+                return false;
+            }
+
             foreach (var provider in workspaceManager.Providers)
             {
                 if (await provider.CheckIsDirtyAsync(workspace))
@@ -188,6 +193,11 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspace);
 
             if (workspaceManager.Providers == null)
+            {
+                return false;
+            }
+
+            if (workspace.Equals(workspaceManager.RefreshingWorkspace))
             {
                 return false;
             }

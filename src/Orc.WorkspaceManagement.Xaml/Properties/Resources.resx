@@ -120,6 +120,9 @@
   <data name="WorkspaceManagement_AreYouSure" xml:space="preserve">
     <value>Are you sure?</value>
   </data>
+  <data name="WorkspaceManagement_AreYouSureYouWantToRefreshTheWorkspace" xml:space="preserve">
+    <value>Are you sure you want to refresh the workspace '{0}'?</value>
+  </data>
   <data name="WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace" xml:space="preserve">
     <value>Are you sure you want to remove workspace '{0}'?</value>
   </data>
