@@ -38,6 +38,7 @@ namespace Orc.WorkspaceManagement
         string BaseDirectory { get; set; }
         string DefaultWorkspaceTitle { get; set; }
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }
+        Orc.WorkspaceManagement.IWorkspace RefreshingWorkspace { get; }
         object Scope { get; set; }
         Orc.WorkspaceManagement.IWorkspace Workspace { get; }
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
@@ -60,6 +61,7 @@ namespace Orc.WorkspaceManagement
         System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspaceProvider> GetWorkspaceProviders();
         System.Threading.Tasks.Task InitializeAsync();
         System.Threading.Tasks.Task InitializeAsync(bool autoSelect);
+        System.Threading.Tasks.Task RefreshWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         System.Threading.Tasks.Task<bool> RemoveAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         bool RemoveProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider);
         System.Threading.Tasks.Task<bool> SaveAsync();
@@ -158,6 +160,7 @@ namespace Orc.WorkspaceManagement
         public string BaseDirectory { get; set; }
         public string DefaultWorkspaceTitle { get; set; }
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }
+        public Orc.WorkspaceManagement.IWorkspace RefreshingWorkspace { get; }
         public object Scope { get; set; }
         public int UniqueIdentifier { get; }
         public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
@@ -181,6 +184,7 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspaceProvider> GetWorkspaceProviders() { }
         public System.Threading.Tasks.Task InitializeAsync() { }
         public System.Threading.Tasks.Task InitializeAsync(bool autoSelect) { }
+        public System.Threading.Tasks.Task RefreshWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public System.Threading.Tasks.Task ReloadWorkspaceAsync() { }
         public System.Threading.Tasks.Task ReloadWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public System.Threading.Tasks.Task<bool> RemoveAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
