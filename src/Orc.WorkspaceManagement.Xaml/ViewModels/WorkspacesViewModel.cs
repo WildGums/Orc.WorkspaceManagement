@@ -25,14 +25,13 @@ namespace Orc.WorkspaceManagement.ViewModels
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private IWorkspaceManager _workspaceManager;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IServiceLocator _serviceLocator;
         private readonly IDispatcherService _dispatcherService;
         private readonly IMessageService _messageService;
         private readonly ILanguageService _languageService;
 
-        private bool _updatingSelectedWorkspace;
+        private IWorkspaceManager _workspaceManager;
         #endregion
 
         #region Constructors
@@ -65,7 +64,21 @@ namespace Orc.WorkspaceManagement.ViewModels
         #region Properties
         public FastObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
 
-        public IWorkspace SelectedWorkspace { get; set; }
+        public IWorkspace SelectedWorkspace
+        {
+            get => _workspaceManager?.Workspace;
+
+            set
+            {
+                if (value != null)
+                {
+                    _workspaceManager.TrySetWorkspaceAsync(value).ContinueWith(_ =>
+                    {
+                        RaisePropertyChanged(nameof(SelectedWorkspace));
+                    });
+                }
+            }
+        }
 
         public object Scope { get; set; }
         #endregion
@@ -191,37 +204,17 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
-#pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning disable AvoidAsyncVoid
-        private async void OnScopeChanged()
+        private void OnScopeChanged()
         {
             var scope = Scope;
 
             Log.Debug($"Scope has changed to '{scope}'");
 
-            await DeactivateWorkspaceManagerAsync();
+            DeactivateWorkspaceManager();
             ActivateWorkspaceManager();
-            await UpdateCurrentWorkspaceAsync();
+
+            UpdateWorkspaces();
         }
-
-        private async void OnSelectedWorkspaceChanged()
-        {
-            if (_updatingSelectedWorkspace)
-            {
-                return;
-            }
-
-            var workspace = SelectedWorkspace;
-
-            Log.Info($"Selected workspace changed to '{workspace?.Title}'");
-
-            if (workspace != null)
-            {
-                await _workspaceManager.TrySetWorkspaceAsync(workspace);
-            }
-        }
-#pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning restore AvoidAsyncVoid
 
         protected override async Task InitializeAsync()
         {
@@ -230,11 +223,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             ActivateWorkspaceManager();
         }
 
-        protected override async Task CloseAsync()
+        protected override Task CloseAsync()
         {
-            await DeactivateWorkspaceManagerAsync(false);
+            DeactivateWorkspaceManager(false);
 
-            await base.CloseAsync();
+            return base.CloseAsync();
         }
 
         private void OnWorkspacesChanged(object sender, EventArgs e)
@@ -244,36 +237,6 @@ namespace Orc.WorkspaceManagement.ViewModels
             Log.Debug($"Workspaces have changed, updating workspaces, current workspace manager scope is '{workspaceManager.Scope}'");
 
             UpdateWorkspaces();
-        }
-
-        private async Task SetSelectedWorkspaceAsync(IWorkspace workspace)
-        {
-            await _dispatcherService.InvokeAsync(() =>
-            {
-                try
-                {
-                    _updatingSelectedWorkspace = true;
-
-                    Log.Debug($"Setting selected workspace to '{workspace?.Title}'");
-
-                    SelectedWorkspace = workspace;
-                }
-                finally
-                {
-                    _updatingSelectedWorkspace = false;
-                }
-            });
-        }
-
-        private IWorkspaceManager GetWorkspaceManager()
-        {
-            if (_workspaceManager == null)
-            {
-                var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(Scope);
-                SetWorkspaceManager(workspaceManager);
-            }
-
-            return _workspaceManager;
         }
 
         private void SetWorkspaceManager(IWorkspaceManager workspaceManager)
@@ -311,11 +274,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             UpdateWorkspaces();
         }
 
-        private async Task DeactivateWorkspaceManagerAsync(bool setToNull = true)
+        private void DeactivateWorkspaceManager(bool setToNull = true)
         {
             Log.Debug($"Deactivating workspace manager");
 
-            await SetSelectedWorkspaceAsync(null);
+            SelectedWorkspace = null;
 
             var workspaceManager = _workspaceManager;
             if (workspaceManager != null)
@@ -357,15 +320,10 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             using (AvailableWorkspaces.SuspendChangeNotifications())
             {
-                ((ICollection<IWorkspace>)AvailableWorkspaces).ReplaceRange(finalItems);
+                AvailableWorkspaces.ReplaceRange(finalItems);
             }
-        }
 
-        private Task UpdateCurrentWorkspaceAsync()
-        {
-            var workspaceManager = GetWorkspaceManager();
-
-            return SetSelectedWorkspaceAsync(workspaceManager?.Workspace);
+            RaisePropertyChanged(nameof(SelectedWorkspace));
         }
         #endregion
     }
