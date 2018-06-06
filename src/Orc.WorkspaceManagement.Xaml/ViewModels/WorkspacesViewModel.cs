@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WorkspacesViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,27 +13,15 @@ namespace Orc.WorkspaceManagement.ViewModels
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
+    using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Threading;
-    using Catel.Data;
 
     public class WorkspacesViewModel : ViewModelBase
     {
-        #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly IServiceLocator _serviceLocator;
-        private readonly IDispatcherService _dispatcherService;
-        private readonly IMessageService _messageService;
-        private readonly ILanguageService _languageService;
-
-        private IWorkspaceManager _workspaceManager;
-        #endregion
-
         #region Constructors
         public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService,
             IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
@@ -61,6 +49,18 @@ namespace Orc.WorkspaceManagement.ViewModels
         }
         #endregion
 
+        #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IServiceLocator _serviceLocator;
+        private readonly IDispatcherService _dispatcherService;
+        private readonly IMessageService _messageService;
+        private readonly ILanguageService _languageService;
+
+        private IWorkspaceManager _workspaceManager;
+        #endregion
+
         #region Properties
         public FastObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
 
@@ -74,7 +74,7 @@ namespace Orc.WorkspaceManagement.ViewModels
                 {
                     _workspaceManager.TrySetWorkspaceAsync(value).ContinueWith(_ =>
                     {
-                        RaisePropertyChanged(nameof(SelectedWorkspace));
+                        RaiseSelectedWorkspaceChanged();
                     });
                 }
             }
@@ -204,6 +204,11 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Methods
+        private void RaiseSelectedWorkspaceChanged()
+        {
+            _dispatcherService.Invoke(() => RaisePropertyChanged(nameof(SelectedWorkspace)));
+        }
+
         private void OnScopeChanged()
         {
             var scope = Scope;
@@ -294,36 +299,52 @@ namespace Orc.WorkspaceManagement.ViewModels
             AvailableWorkspaces.Clear();
         }
 
+        private bool _updatingWorkspace;
+
         private void UpdateWorkspaces()
         {
-            var workspaces = _workspaceManager.Workspaces;
-
-            var finalItems = new List<IWorkspace>();
-
-            var visibleWorkspaces = (from workspace in workspaces
-                                     where workspace.IsVisible
-                                     select workspace).ToList();
-
-            // 1) Items that cannot be deleted
-            finalItems.AddRange(from workspace in visibleWorkspaces
-                                where !workspace.CanDelete
-                                orderby workspace.Title
-                                select workspace);
-
-            // 2) Items that can be deleted
-            finalItems.AddRange(from workspace in visibleWorkspaces
-                                where workspace.CanDelete
-                                orderby workspace.Title
-                                select workspace);
-
-            Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{finalItems.Count}' workspaces available");
-
-            using (AvailableWorkspaces.SuspendChangeNotifications())
+            if (_updatingWorkspace)
             {
-                AvailableWorkspaces.ReplaceRange(finalItems);
+                return;
             }
 
-            RaisePropertyChanged(nameof(SelectedWorkspace));
+            _updatingWorkspace = true;
+
+            try
+            {
+                var workspaces = _workspaceManager.Workspaces;
+
+                var finalItems = new List<IWorkspace>();
+
+                var visibleWorkspaces = (from workspace in workspaces
+                    where workspace.IsVisible
+                    select workspace).ToList();
+
+                // 1) Items that cannot be deleted
+                finalItems.AddRange(from workspace in visibleWorkspaces
+                    where !workspace.CanDelete
+                    orderby workspace.Title
+                    select workspace);
+
+                // 2) Items that can be deleted
+                finalItems.AddRange(from workspace in visibleWorkspaces
+                    where workspace.CanDelete
+                    orderby workspace.Title
+                    select workspace);
+
+                Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{finalItems.Count}' workspaces available");
+
+                using (AvailableWorkspaces.SuspendChangeNotifications())
+                {
+                    AvailableWorkspaces.ReplaceRange(finalItems);
+                }
+
+                RaiseSelectedWorkspaceChanged();
+            }
+            finally
+            {
+                _updatingWorkspace = false;
+            }
         }
         #endregion
     }
