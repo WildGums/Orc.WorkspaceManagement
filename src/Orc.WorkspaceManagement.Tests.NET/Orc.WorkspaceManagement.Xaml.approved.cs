@@ -106,7 +106,6 @@ namespace Orc.WorkspaceManagement.ViewModels
     {
         public static readonly Catel.Data.PropertyData AvailableWorkspacesProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
-        public static readonly Catel.Data.PropertyData SelectedWorkspaceProperty;
         public WorkspacesViewModel(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IDispatcherService dispatcherService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService) { }
         public Catel.Collections.FastObservableCollection<Orc.WorkspaceManagement.IWorkspace> AvailableWorkspaces { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> EditWorkspace { get; }
