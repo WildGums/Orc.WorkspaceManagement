@@ -38,6 +38,10 @@
           <source>Workspace with current title already exists</source>
           <target state="translated">Werkplaats met deze titel bestaat al</target>
         </trans-unit>
+        <trans-unit id="WorkspaceManagement_Refresh" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <target state="new">Refresh</target>
+        </trans-unit>
       </group>
     </body>
   </file>
