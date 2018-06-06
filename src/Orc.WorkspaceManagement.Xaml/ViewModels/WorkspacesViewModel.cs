@@ -22,6 +22,18 @@ namespace Orc.WorkspaceManagement.ViewModels
 
     public class WorkspacesViewModel : ViewModelBase
     {
+        #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IServiceLocator _serviceLocator;
+        private readonly IDispatcherService _dispatcherService;
+        private readonly IMessageService _messageService;
+        private readonly ILanguageService _languageService;
+
+        private IWorkspaceManager _workspaceManager;
+        #endregion
+
         #region Constructors
         public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService,
             IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
@@ -47,18 +59,6 @@ namespace Orc.WorkspaceManagement.ViewModels
             RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
             Refresh = new TaskCommand<IWorkspace>(OnRefreshAsync, OnRefreshCanExecute);
         }
-        #endregion
-
-        #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly IServiceLocator _serviceLocator;
-        private readonly IDispatcherService _dispatcherService;
-        private readonly IMessageService _messageService;
-        private readonly ILanguageService _languageService;
-
-        private IWorkspaceManager _workspaceManager;
         #endregion
 
         #region Properties
