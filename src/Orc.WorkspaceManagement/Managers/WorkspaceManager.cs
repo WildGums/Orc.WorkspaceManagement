@@ -132,6 +132,16 @@ namespace Orc.WorkspaceManagement
             var oldWorkspace = Workspace;
             var newWorkspace = value;
 
+            if (oldWorkspace is null && newWorkspace is null)
+            {
+                return true;
+            }
+
+            if (Equals(oldWorkspace, newWorkspace) && !Equals(RefreshingWorkspace, newWorkspace))
+            {
+                return true;
+            }
+
             Log.Debug($"[{Scope}] Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
 
             var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
