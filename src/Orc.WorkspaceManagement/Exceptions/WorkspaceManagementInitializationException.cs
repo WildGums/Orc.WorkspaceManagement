@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WorkspaceManagementInitializationException.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,6 +13,18 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceManagementInitializationException(IWorkspaceManager workspaceManager)
             : base("Unable to initialize WorkspaceManager. Probably initialization was canceled.")
+        {
+            WorkspaceManager = workspaceManager;
+        }
+
+        public WorkspaceManagementInitializationException(IWorkspaceManager workspaceManager, string message)
+            : base(message)
+        {
+            WorkspaceManager = workspaceManager;
+        }
+
+        public WorkspaceManagementInitializationException(IWorkspaceManager workspaceManager, string message, Exception innerException)
+            : base(message, innerException)
         {
             WorkspaceManager = workspaceManager;
         }

@@ -14,6 +14,8 @@ namespace Orc.WorkspaceManagement
     public class InvalidWorkspaceException : Orc.WorkspaceManagement.WorkspaceException
     {
         public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
+        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
     }
     public interface IWorkspace
     {
@@ -143,6 +145,7 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
+        public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
         public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
     }
     public class static WorkspaceExtensions
@@ -152,6 +155,8 @@ namespace Orc.WorkspaceManagement
     public class WorkspaceManagementInitializationException : System.Exception
     {
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
+        public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message) { }
+        public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message, System.Exception innerException) { }
         public Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; }
     }
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager

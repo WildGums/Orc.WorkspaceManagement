@@ -1,8 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WorkspaceManager.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Orc.WorkspaceManagement
 {
@@ -19,16 +20,16 @@ namespace Orc.WorkspaceManagement
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly IServiceLocator _serviceLocator;
 
         private readonly IWorkspaceInitializer _workspaceInitializer;
-        private readonly IServiceLocator _serviceLocator;
 
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
+        private object _scope;
+        private IWorkspace _workspace;
 
         private IWorkspacesStorageService _workspacesStorageService;
-        private IWorkspace _workspace;
-        private object _scope;
 
         #region Constructors
         /// <summary>
@@ -121,7 +122,7 @@ namespace Orc.WorkspaceManagement
 
             if (!await TrySetWorkspaceAsync(value))
             {
-                throw Log.ErrorAndCreateException<WorkspaceException>(new WorkspaceException(value),
+                throw Log.ErrorAndCreateException(message => new WorkspaceException(value, message),
                     "Unable to set value to Workspace property.");
             }
         }
@@ -140,7 +141,7 @@ namespace Orc.WorkspaceManagement
                 Log.Debug($"[{Scope}] Changing workspace was canceled");
                 return false;
             }
-            
+
             Workspace = newWorkspace;
 
             await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
@@ -170,8 +171,8 @@ namespace Orc.WorkspaceManagement
         {
             if (!await TryInitializeAsync(autoSelect))
             {
-                throw Log.ErrorAndCreateException<WorkspaceManagementInitializationException>(
-                    new WorkspaceManagementInitializationException(this), "Unable to initialize WorkspaceManager");
+                throw Log.ErrorAndCreateException(message => new WorkspaceManagementInitializationException(this, message),
+                    "Unable to initialize WorkspaceManager");
             }
         }
 
@@ -344,7 +345,7 @@ namespace Orc.WorkspaceManagement
         {
             Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
 
-             if (workspace == null)
+            if (workspace == null)
             {
                 Log.Error($"[{Scope}] Workspace is empty, cannot reload workspace");
                 return;
