@@ -32,7 +32,7 @@
                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
 
                         <Label Grid.Column="1" 
-                               Content="{Binding Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
+                               Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
                             <Label.InputBindings>
                                 <MouseBinding Command="{Binding DataContext.Refresh}" MouseAction="LeftClick"></MouseBinding>
                             </Label.InputBindings>

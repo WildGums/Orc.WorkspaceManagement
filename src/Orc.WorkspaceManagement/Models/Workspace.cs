@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Workspace.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,9 +15,17 @@ namespace Orc.WorkspaceManagement
 
     public class Workspace : DynamicConfiguration, IWorkspace
     {
-        private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new []
+        private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
-            "Title", "Persist", "CanEdit", "CanDelete", "IsVisible", "Scope", "Tag", "IsDirty", "IsReadOnly"
+            nameof(Title), 
+            nameof(Persist), 
+            nameof(CanEdit), 
+            nameof(CanDelete), 
+            nameof(IsVisible), 
+            nameof(Scope), 
+            nameof(Tag), 
+            nameof(IsReadOnly),
+            nameof(IsDirty)
         });
 
         #region Constructors
@@ -32,6 +40,10 @@ namespace Orc.WorkspaceManagement
 
         #region IWorkspace Members
         public string Title { get; set; }
+
+        public string DisplayName => IsDirty
+            ? $"{Title}*"
+            : Title;
 
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
@@ -76,6 +88,16 @@ namespace Orc.WorkspaceManagement
             }
 
             return valueNames;
+        }
+
+        public void ClearIsDirtyFlag()
+        {
+            IsDirty = false;
+        }
+
+        public void SetIsDirtyFlag()
+        {
+            IsDirty = true;
         }
 
         public void SetWorkspaceValue(string name, object value)

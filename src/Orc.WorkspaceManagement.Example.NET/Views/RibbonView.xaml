@@ -15,7 +15,7 @@
         <fluent:Ribbon.Tabs>
             <fluent:RibbonTabItem Header="View">
                 <fluent:RibbonGroupBox Header="Workspaces">
-                    <fluent:SplitButton Header="{Binding CurrentWorkspace.Title, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Plus}}"
+                    <fluent:SplitButton Header="{Binding CurrentWorkspace.DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Plus}}"
                                         ClosePopupOnMouseDown="True" Command="{Binding AddWorkspace}">
                         <views:WorkspacesView/>
                     </fluent:SplitButton>

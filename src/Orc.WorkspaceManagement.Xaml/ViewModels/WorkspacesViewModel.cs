@@ -93,7 +93,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private async Task OnRefreshAsync(IWorkspace workspace)
         {
-            if (!await _workspaceManager.CheckIsDirtyAsync())
+            if (!workspace.IsDirty)
             {
                 return;
             }

@@ -22,7 +22,7 @@ namespace Orc.WorkspaceManagement
         string DefaultWorkspaceTitle { get; set; }
         object Scope { get; set; }
         IWorkspace RefreshingWorkspace { get; }
-
+        
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
 
@@ -44,6 +44,7 @@ namespace Orc.WorkspaceManagement
 
         Task SetWorkspaceAsync(IWorkspace value);
         Task<bool> TrySetWorkspaceAsync(IWorkspace value);
+        Task UpdateIsDirtyFlagAsync(IWorkspace workspace);
 
         /// <summary>
         /// Initializes the workspaces by reading them from the <see cref="WorkspaceManager.BaseDirectory" />.

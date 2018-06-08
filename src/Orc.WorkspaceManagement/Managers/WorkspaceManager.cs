@@ -165,7 +165,24 @@ namespace Orc.WorkspaceManagement
                 await ReloadWorkspaceAsync(oldWorkspace);
             }
 
+            if (!(newWorkspace is null))
+            {
+                await UpdateIsDirtyFlagAsync(newWorkspace);
+            }
+
             return true;
+        }
+
+        public async Task UpdateIsDirtyFlagAsync(IWorkspace workspace)
+        {
+            if (!await this.IsWorkspaceDirtyAsync(workspace))
+            {
+                workspace.ClearIsDirtyFlag();
+            }
+            else
+            {
+                workspace.SetIsDirtyFlag();
+            }
         }
 
         /// <summary>
@@ -351,7 +368,7 @@ namespace Orc.WorkspaceManagement
         /// <summary>
         /// Stores the workspace by requesting information.
         /// </summary>
-        public async Task ReloadWorkspaceAsync(IWorkspace workspace)
+        private async Task ReloadWorkspaceAsync(IWorkspace workspace)
         {
             Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
 
@@ -434,6 +451,10 @@ namespace Orc.WorkspaceManagement
             }
 
             _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
+            foreach (var workspace in _workspaces)
+            {
+                workspace.ClearIsDirtyFlag();
+            }
 
             Saved.SafeInvoke(this);
 

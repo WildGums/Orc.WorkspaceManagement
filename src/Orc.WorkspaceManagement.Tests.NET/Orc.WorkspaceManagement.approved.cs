@@ -21,14 +21,18 @@ namespace Orc.WorkspaceManagement
     {
         bool CanDelete { get; set; }
         bool CanEdit { get; set; }
+        string DisplayName { get; }
+        bool IsDirty { get; }
         bool IsVisible { get; set; }
         bool Persist { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         object Scope { get; set; }
         string Title { get; set; }
+        void ClearIsDirtyFlag();
         void ClearWorkspaceValues();
         System.Collections.Generic.List<string> GetAllWorkspaceValueNames();
         T GetWorkspaceValue<T>(string name, T defaultValue);
+        void SetIsDirtyFlag();
         void SetWorkspaceValue(string name, object value);
     }
     public interface IWorkspaceInitializer
@@ -73,6 +77,7 @@ namespace Orc.WorkspaceManagement
         System.Threading.Tasks.Task<bool> TryInitializeAsync();
         System.Threading.Tasks.Task<bool> TryInitializeAsync(bool autoSelect);
         System.Threading.Tasks.Task<bool> TrySetWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace value);
+        System.Threading.Tasks.Task UpdateIsDirtyFlagAsync(Orc.WorkspaceManagement.IWorkspace workspace);
     }
     public class static IWorkspaceManagerExtensions
     {
@@ -121,6 +126,7 @@ namespace Orc.WorkspaceManagement
         public Workspace() { }
         public bool CanDelete { get; set; }
         public bool CanEdit { get; set; }
+        public string DisplayName { get; }
         public bool IsVisible { get; set; }
         public bool Persist { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
@@ -128,11 +134,14 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         public object Tag { get; set; }
         public string Title { get; set; }
+        public void ClearIsDirtyFlag() { }
         public void ClearWorkspaceValues() { }
         public override bool Equals(object obj) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
         public override int GetHashCode() { }
         public T GetWorkspaceValue<T>(string name, T defaultValue) { }
+        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        public void SetIsDirtyFlag() { }
         public void SetWorkspaceValue(string name, object value) { }
         public override string ToString() { }
     }
@@ -191,7 +200,6 @@ namespace Orc.WorkspaceManagement
         public System.Threading.Tasks.Task InitializeAsync(bool autoSelect) { }
         public System.Threading.Tasks.Task RefreshWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public System.Threading.Tasks.Task ReloadWorkspaceAsync() { }
-        public System.Threading.Tasks.Task ReloadWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public System.Threading.Tasks.Task<bool> RemoveAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public bool RemoveProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider) { }
         public System.Threading.Tasks.Task<bool> SaveAsync() { }
@@ -201,6 +209,7 @@ namespace Orc.WorkspaceManagement
         public System.Threading.Tasks.Task<bool> TryInitializeAsync() { }
         public System.Threading.Tasks.Task<bool> TryInitializeAsync(bool autoSelect) { }
         public System.Threading.Tasks.Task<bool> TrySetWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace value) { }
+        public System.Threading.Tasks.Task UpdateIsDirtyFlagAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
     }
     public abstract class WorkspaceProviderBase : Orc.WorkspaceManagement.IWorkspaceProvider
     {

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IWorkspace.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,6 +19,9 @@ namespace Orc.WorkspaceManagement
         bool CanEdit { get; set; }
         bool CanDelete { get; set; }
         bool IsVisible { get; set; }
+        bool IsDirty { get; }
+
+        string DisplayName { get; }
 
         [ExcludeFromSerialization]
         object Scope { get; set; }
@@ -27,9 +30,10 @@ namespace Orc.WorkspaceManagement
         #region Methods
         void SetWorkspaceValue(string name, object value);
         T GetWorkspaceValue<T>(string name, T defaultValue);
-        #endregion
-
-        void ClearWorkspaceValues();
         List<string> GetAllWorkspaceValueNames();
+        void ClearWorkspaceValues();
+        void ClearIsDirtyFlag();
+        void SetIsDirtyFlag();
+        #endregion
     }
 }
