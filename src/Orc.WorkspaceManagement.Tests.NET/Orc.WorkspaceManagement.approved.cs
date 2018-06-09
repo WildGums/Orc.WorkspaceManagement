@@ -118,6 +118,7 @@ namespace Orc.WorkspaceManagement
     {
         public static readonly Catel.Data.PropertyData CanDeleteProperty;
         public static readonly Catel.Data.PropertyData CanEditProperty;
+        public static readonly Catel.Data.PropertyData IsDirtyProperty;
         public static readonly Catel.Data.PropertyData IsVisibleProperty;
         public static readonly Catel.Data.PropertyData PersistProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
@@ -127,6 +128,7 @@ namespace Orc.WorkspaceManagement
         public bool CanDelete { get; set; }
         public bool CanEdit { get; set; }
         public string DisplayName { get; }
+        public bool IsDirty { get; }
         public bool IsVisible { get; set; }
         public bool Persist { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]

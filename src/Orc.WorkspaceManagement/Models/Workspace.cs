@@ -35,6 +35,7 @@ namespace Orc.WorkspaceManagement
             CanEdit = true;
             CanDelete = true;
             IsVisible = true;
+            IsDirty = false;
         }
         #endregion
 
@@ -49,6 +50,7 @@ namespace Orc.WorkspaceManagement
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
         public bool IsVisible { get; set; }
+        public new bool IsDirty { get; private set; }
 
         [ExcludeFromSerialization]
         public object Scope { get; set; }
@@ -64,6 +66,17 @@ namespace Orc.WorkspaceManagement
             {
                 SetWorkspaceValue(workspaceValueName, null);
             }
+        }
+
+        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
+        {
+            if (IgnoredProperties.Contains(e.PropertyName))
+            {
+                base.OnPropertyChanged(e);
+                return;
+            }
+
+            IsDirty = true;
         }
 
         public List<string> GetAllWorkspaceValueNames()

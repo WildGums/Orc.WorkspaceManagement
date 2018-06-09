@@ -104,7 +104,7 @@ namespace Orc.WorkspaceManagement
                     Title = defaultWorkspaceName,
                     Persist = false,
                     CanEdit = false,
-                    CanDelete = false,
+                    CanDelete = false
                 };
 
                 await workspaceManager.AddAsync(defaultWorkspace, autoSelect);
