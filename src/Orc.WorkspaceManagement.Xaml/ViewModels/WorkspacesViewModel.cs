@@ -277,6 +277,11 @@ namespace Orc.WorkspaceManagement.ViewModels
             SetWorkspaceManager(workspaceManager);
 
             UpdateWorkspaces();
+
+            foreach (var workspace in workspaceManager.Workspaces)
+            {
+                workspace.UpdateIsDirtyFlag(false);
+            }
         }
 
         private void DeactivateWorkspaceManager(bool setToNull = true)

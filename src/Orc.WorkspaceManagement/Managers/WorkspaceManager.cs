@@ -27,7 +27,6 @@ namespace Orc.WorkspaceManagement
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
         private object _scope;
-        private IWorkspace _workspace;
 
         private IWorkspacesStorageService _workspacesStorageService;
 
@@ -55,7 +54,7 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Properties
-        public int UniqueIdentifier { get; private set; }
+        public int UniqueIdentifier { get; }
 
         /// <summary>
         /// Gets or sets the base directory to store the workspaces in.
@@ -65,12 +64,18 @@ namespace Orc.WorkspaceManagement
 
         public IEnumerable<IWorkspaceProvider> Providers
         {
-            get { return _workspaceProviders.ToArray(); }
+            get
+            {
+                lock (_workspaceProviders)
+                {
+                    return _workspaceProviders.ToArray();
+                }
+            }
         }
 
         public object Scope
         {
-            get { return _scope; }
+            get => _scope;
             set
             {
                 _scope = value;
@@ -78,20 +83,14 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public IEnumerable<IWorkspace> Workspaces
-        {
-            get { return _workspaces.ToArray(); }
-        }
+        public IEnumerable<IWorkspace> Workspaces => _workspaces.ToArray();
 
-        public IWorkspace Workspace
-        {
-            get { return _workspace; }
-            private set { _workspace = value; }
-        }
+        public IWorkspace Workspace { get; private set; }
 
         public string DefaultWorkspaceTitle { get; set; }
 
         public IWorkspace RefreshingWorkspace { get; private set; }
+        public bool AutoRefreshEnabled { get; set; } = true;
         #endregion
 
         #region Events
@@ -152,17 +151,25 @@ namespace Orc.WorkspaceManagement
                 return false;
             }
 
+            if (!(oldWorkspace is null))
+            {
+                await UpdateIsDirtyFlagAsync(oldWorkspace);
+            }
+
+            var oldIsDirty = oldWorkspace?.IsDirty;
+
             Workspace = newWorkspace;
 
             await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
 
             WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
-            if (oldWorkspace != null && !oldWorkspace.Title.EqualsIgnoreCase(DefaultWorkspaceTitle))
+            if (AutoRefreshEnabled && !(oldWorkspace is null) && !oldWorkspace.Title.EqualsIgnoreCase(DefaultWorkspaceTitle))
             {
                 Log.Debug($"[{Scope}] Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
 
                 await ReloadWorkspaceAsync(oldWorkspace);
+                oldWorkspace.UpdateIsDirtyFlag(oldIsDirty.Value);
             }
 
             if (!(newWorkspace is null))
@@ -175,14 +182,7 @@ namespace Orc.WorkspaceManagement
 
         public async Task UpdateIsDirtyFlagAsync(IWorkspace workspace)
         {
-            if (!await this.IsWorkspaceDirtyAsync(workspace))
-            {
-                workspace.ClearIsDirtyFlag();
-            }
-            else
-            {
-                workspace.SetIsDirtyFlag();
-            }
+            workspace.UpdateIsDirtyFlag(await this.IsWorkspaceDirtyAsync(workspace));
         }
 
         /// <summary>
@@ -223,11 +223,12 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.Clear();
 
-            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory);
+            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory).ToList();
             foreach (var workspace in workspaces)
             {
                 workspace.Scope = Scope;
                 _workspaces.Add(workspace);
+                workspace.UpdateIsDirtyFlag(false);
             }
 
             if (autoSelect && _workspaces.Any())
@@ -357,9 +358,9 @@ namespace Orc.WorkspaceManagement
             return removed;
         }
 
-        /// <summary>
-        /// Reloads the workspace by reading the information from the original location.
-        /// </summary>
+        /// <summary> 
+        /// Reloads the workspace by reading the information from the original location. 
+        /// </summary> 
         public Task ReloadWorkspaceAsync()
         {
             return ReloadWorkspaceAsync(Workspace);
@@ -384,6 +385,7 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
+            //TODO: implement reloding (resetting) default workspace as well
             var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
             var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
             if (workspaceFromDisk == null)
@@ -453,7 +455,7 @@ namespace Orc.WorkspaceManagement
             _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
             foreach (var workspace in _workspaces)
             {
-                workspace.ClearIsDirtyFlag();
+                workspace.UpdateIsDirtyFlag(false);
             }
 
             Saved.SafeInvoke(this);
@@ -515,6 +517,7 @@ namespace Orc.WorkspaceManagement
 
             try
             {
+                // TODO: use ReloadWorkspaceAsync(workspace)
                 await TrySetWorkspaceAsync(workspace);
             }
             finally

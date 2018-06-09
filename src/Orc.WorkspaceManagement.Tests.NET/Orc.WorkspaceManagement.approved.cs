@@ -28,12 +28,11 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         object Scope { get; set; }
         string Title { get; set; }
-        void ClearIsDirtyFlag();
         void ClearWorkspaceValues();
         System.Collections.Generic.List<string> GetAllWorkspaceValueNames();
         T GetWorkspaceValue<T>(string name, T defaultValue);
-        void SetIsDirtyFlag();
         void SetWorkspaceValue(string name, object value);
+        void UpdateIsDirtyFlag(bool isDirty);
     }
     public interface IWorkspaceInitializer
     {
@@ -41,6 +40,7 @@ namespace Orc.WorkspaceManagement
     }
     public interface IWorkspaceManager
     {
+        bool AutoRefreshEnabled { get; set; }
         string BaseDirectory { get; set; }
         string DefaultWorkspaceTitle { get; set; }
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }
@@ -134,16 +134,15 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         public object Tag { get; set; }
         public string Title { get; set; }
-        public void ClearIsDirtyFlag() { }
         public void ClearWorkspaceValues() { }
         public override bool Equals(object obj) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
         public override int GetHashCode() { }
         public T GetWorkspaceValue<T>(string name, T defaultValue) { }
         protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
-        public void SetIsDirtyFlag() { }
         public void SetWorkspaceValue(string name, object value) { }
         public override string ToString() { }
+        public void UpdateIsDirtyFlag(bool isDirty) { }
     }
     public class WorkspaceEventArgs : System.EventArgs
     {
@@ -171,6 +170,7 @@ namespace Orc.WorkspaceManagement
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager
     {
         public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public bool AutoRefreshEnabled { get; set; }
         public string BaseDirectory { get; set; }
         public string DefaultWorkspaceTitle { get; set; }
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }

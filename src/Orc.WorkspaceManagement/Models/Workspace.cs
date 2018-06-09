@@ -90,14 +90,9 @@ namespace Orc.WorkspaceManagement
             return valueNames;
         }
 
-        public void ClearIsDirtyFlag()
+        public void UpdateIsDirtyFlag(bool isDirty)
         {
-            IsDirty = false;
-        }
-
-        public void SetIsDirtyFlag()
-        {
-            IsDirty = true;
+            IsDirty = isDirty;
         }
 
         public void SetWorkspaceValue(string name, object value)

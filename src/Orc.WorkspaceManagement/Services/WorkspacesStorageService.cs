@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WorkspacesStorageService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ namespace Orc.WorkspaceManagement
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-private readonly ISerializationManager _serializationManager;
+        private readonly ISerializationManager _serializationManager;
         private readonly IXmlSerializer _xmlSerializer;
 
         public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer)

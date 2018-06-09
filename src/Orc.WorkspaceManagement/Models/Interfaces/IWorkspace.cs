@@ -32,8 +32,7 @@ namespace Orc.WorkspaceManagement
         T GetWorkspaceValue<T>(string name, T defaultValue);
         List<string> GetAllWorkspaceValueNames();
         void ClearWorkspaceValues();
-        void ClearIsDirtyFlag();
-        void SetIsDirtyFlag();
+        void UpdateIsDirtyFlag(bool isDirty);
         #endregion
     }
 }

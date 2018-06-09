@@ -22,7 +22,8 @@ namespace Orc.WorkspaceManagement
         string DefaultWorkspaceTitle { get; set; }
         object Scope { get; set; }
         IWorkspace RefreshingWorkspace { get; }
-        
+        bool AutoRefreshEnabled { get; set; }
+
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
 
