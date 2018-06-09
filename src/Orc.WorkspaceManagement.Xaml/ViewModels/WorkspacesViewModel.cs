@@ -88,7 +88,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private bool OnRefreshCanExecute(IWorkspace workspace)
         {
-            return true;
+            return workspace.IsDirty;
         }
 
         private async Task OnRefreshAsync(IWorkspace workspace)
