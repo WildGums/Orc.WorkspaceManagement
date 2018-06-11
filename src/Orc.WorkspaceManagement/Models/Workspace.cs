@@ -17,16 +17,19 @@ namespace Orc.WorkspaceManagement
     {
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
-            nameof(Title), 
-            nameof(Persist), 
-            nameof(CanEdit), 
-            nameof(CanDelete), 
-            nameof(IsVisible), 
-            nameof(Scope), 
-            nameof(Tag), 
+            nameof(Title),
+            nameof(Persist),
+            nameof(CanEdit),
+            nameof(CanDelete),
+            nameof(IsVisible),
+            nameof(Scope),
+            nameof(Tag),
             nameof(IsReadOnly),
-            nameof(IsDirty)
+            nameof(IsDirty),
+            nameof(DisplayName)
         });
+
+        private bool _updatingDisplayName;
 
         #region Constructors
         public Workspace()
@@ -41,10 +44,7 @@ namespace Orc.WorkspaceManagement
 
         #region IWorkspace Members
         public string Title { get; set; }
-
-        public string DisplayName => IsDirty
-            ? $"{Title}*"
-            : Title;
+        public string DisplayName { get; private set; }
 
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
@@ -70,6 +70,17 @@ namespace Orc.WorkspaceManagement
 
         protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
         {
+            if (_updatingDisplayName)
+            {
+                return;
+            }
+
+            if (string.Equals(e.PropertyName, nameof(Title)) ||
+                string.Equals(e.PropertyName, nameof(IsDirty)))
+            {
+                UpdateDisplayName();
+            }
+
             if (IgnoredProperties.Contains(e.PropertyName))
             {
                 base.OnPropertyChanged(e);
@@ -77,6 +88,22 @@ namespace Orc.WorkspaceManagement
             }
 
             IsDirty = true;
+        }
+
+        private void UpdateDisplayName()
+        {
+            _updatingDisplayName = true;
+
+            try
+            {
+                DisplayName = IsDirty
+                    ? $"{Title}*"
+                    : Title;
+            }
+            finally
+            {
+                _updatingDisplayName = false;
+            }
         }
 
         public List<string> GetAllWorkspaceValueNames()
