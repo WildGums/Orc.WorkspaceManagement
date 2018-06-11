@@ -118,6 +118,7 @@ namespace Orc.WorkspaceManagement
     {
         public static readonly Catel.Data.PropertyData CanDeleteProperty;
         public static readonly Catel.Data.PropertyData CanEditProperty;
+        public static readonly Catel.Data.PropertyData DisplayNameProperty;
         public static readonly Catel.Data.PropertyData IsDirtyProperty;
         public static readonly Catel.Data.PropertyData IsVisibleProperty;
         public static readonly Catel.Data.PropertyData PersistProperty;
