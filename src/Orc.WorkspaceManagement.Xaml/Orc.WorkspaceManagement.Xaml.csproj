@@ -10,6 +10,11 @@
     <PackageTags>orc;workspace;workspaces;xaml;wpf</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>2805D052-5F85-4CC2-BD3D-7AD822D171BB</ProjectGuid>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Catel.MVVM" Version="5.5.0-beta0000" />
     <PackageReference Include="MethodTimer.Fody" Version="2.1.0" PrivateAssets="all" />

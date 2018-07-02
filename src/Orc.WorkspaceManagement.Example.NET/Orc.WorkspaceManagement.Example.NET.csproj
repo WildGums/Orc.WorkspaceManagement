@@ -4,6 +4,7 @@
     <AssemblyName>Orc.WorkspaceManagement.Example</AssemblyName>
     <RootNamespace>Orc.WorkspaceManagement.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <PropertyGroup>
