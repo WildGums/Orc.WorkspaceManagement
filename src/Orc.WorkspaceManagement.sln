@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.WorkspaceManagement.Xam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.WorkspaceManagement.Example.NET", "Orc.WorkspaceManagement.Example.NET\Orc.WorkspaceManagement.Example.NET.csproj", "{E70E1855-9D61-4063-A209-CA0A150A6F3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.WorkspaceManagement.Tests", "Orc.WorkspaceManagement.Tests.NET\Orc.WorkspaceManagement.Tests.csproj", "{A7C51ADF-7C37-4223-A550-ED80CCAD3092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.WorkspaceManagement.Tests", "Orc.WorkspaceManagement.Tests\Orc.WorkspaceManagement.Tests.csproj", "{A7C51ADF-7C37-4223-A550-ED80CCAD3092}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
