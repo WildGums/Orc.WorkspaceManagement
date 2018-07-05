@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement.Tests.Models
 {
     using NUnit.Framework;
+    using Test;
 
     [TestFixture]
     public class WorkspaceExtensionsFacts
@@ -15,12 +16,12 @@ namespace Orc.WorkspaceManagement.Tests.Models
         [Test]
         public void SynchronizesWorkspaces()
         {
-            var workspaceA = new Workspace();
+            var workspaceA = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
             workspaceA.SetWorkspaceValue("A", 1);
             workspaceA.SetWorkspaceValue("B", 2);
             workspaceA.SetWorkspaceValue("C", 3);
 
-            var workspaceB = new Workspace();
+            var workspaceB = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
             workspaceB.SetWorkspaceValue("D", 4);
             workspaceB.SetWorkspaceValue("E", 5);
             workspaceB.SetWorkspaceValue("F", 6);

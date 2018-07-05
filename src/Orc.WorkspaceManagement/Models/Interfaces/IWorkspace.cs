@@ -13,7 +13,7 @@ namespace Orc.WorkspaceManagement
     public interface IWorkspace
     {
         #region Properties
-        string Title { get; set; }
+        string Title { get; }
 
         bool Persist { get; set; }
         bool CanEdit { get; set; }

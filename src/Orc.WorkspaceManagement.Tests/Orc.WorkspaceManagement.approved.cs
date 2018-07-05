@@ -16,6 +16,7 @@ namespace Orc.WorkspaceManagement
         public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
         public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
+        protected InvalidWorkspaceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public interface IWorkspace
     {
@@ -27,7 +28,7 @@ namespace Orc.WorkspaceManagement
         bool Persist { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         object Scope { get; set; }
-        string Title { get; set; }
+        string Title { get; }
         void ClearWorkspaceValues();
         System.Collections.Generic.List<string> GetAllWorkspaceValueNames();
         T GetWorkspaceValue<T>(string name, T defaultValue);
@@ -114,7 +115,7 @@ namespace Orc.WorkspaceManagement
         void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
         void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
     }
-    public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace
+    public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace, System.IEquatable<Orc.WorkspaceManagement.Workspace>
     {
         public static readonly Catel.Data.PropertyData CanDeleteProperty;
         public static readonly Catel.Data.PropertyData CanEditProperty;
@@ -124,8 +125,8 @@ namespace Orc.WorkspaceManagement
         public static readonly Catel.Data.PropertyData PersistProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
         public static readonly Catel.Data.PropertyData TagProperty;
-        public static readonly Catel.Data.PropertyData TitleProperty;
         public Workspace() { }
+        public Workspace(string title) { }
         public bool CanDelete { get; set; }
         public bool CanEdit { get; set; }
         public string DisplayName { get; }
@@ -136,8 +137,9 @@ namespace Orc.WorkspaceManagement
         public object Scope { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         public object Tag { get; set; }
-        public string Title { get; set; }
+        public string Title { get; }
         public void ClearWorkspaceValues() { }
+        public bool Equals(Orc.WorkspaceManagement.Workspace other) { }
         public override bool Equals(object obj) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
         public override int GetHashCode() { }
@@ -157,6 +159,7 @@ namespace Orc.WorkspaceManagement
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
+        protected WorkspaceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
     }
     public class static WorkspaceExtensions
@@ -168,6 +171,7 @@ namespace Orc.WorkspaceManagement
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message) { }
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message, System.Exception innerException) { }
+        protected WorkspaceManagementInitializationException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; }
     }
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager
@@ -258,6 +262,7 @@ namespace Orc.WorkspaceManagement
         protected readonly Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager;
         protected WorkspaceWatcherBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
+        protected virtual void Dispose(bool disposing) { }
         public void Dispose() { }
         protected virtual void OnSaved() { }
         protected virtual System.Threading.Tasks.Task<bool> OnSavingAsync() { }

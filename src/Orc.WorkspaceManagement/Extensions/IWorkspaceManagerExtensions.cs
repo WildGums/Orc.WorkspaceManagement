@@ -99,9 +99,8 @@ namespace Orc.WorkspaceManagement
 
             if (defaultWorkspace == null)
             {
-                defaultWorkspace = new Workspace
+                defaultWorkspace = new Workspace(defaultWorkspaceName)
                 {
-                    Title = defaultWorkspaceName,
                     Persist = false,
                     CanEdit = false,
                     CanDelete = false

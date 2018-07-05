@@ -19,8 +19,8 @@ namespace Orc.WorkspaceManagement.Test.EventArgs
         [TestCase("A", "A", true)]
         public void TheIsRefreshProperty(string title1, string title2, bool expectedResult)
         {
-            var workspace1 = !string.IsNullOrEmpty(title1) ? new Workspace { Title = title1 } : null;
-            var workspace2 = !string.IsNullOrEmpty(title2) ? new Workspace { Title = title2 } : null;
+            var workspace1 = !string.IsNullOrEmpty(title1) ? new Workspace(title1) : null;
+            var workspace2 = !string.IsNullOrEmpty(title2) ? new Workspace(title2) : null;
 
             var workspaceUpdatedEventArgs = new WorkspaceUpdatedEventArgs(workspace1, workspace2);
 

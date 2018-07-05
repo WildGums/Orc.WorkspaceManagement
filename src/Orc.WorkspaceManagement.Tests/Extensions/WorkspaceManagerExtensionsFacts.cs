@@ -8,6 +8,7 @@
 namespace Orc.WorkspaceManagement.Test.Extensions
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -39,7 +40,13 @@ namespace Orc.WorkspaceManagement.Test.Extensions
 
                 const int workspacesCount = 3;
 
-                mock.Setup(x => x.LoadWorkspaces(It.IsAny<string>())).Returns(Enumerable.Repeat(new Workspace(), workspacesCount));
+                var workspaces = new List<Workspace>();
+                for (int i = 0; i < workspacesCount; i++)
+                {
+                    workspaces.Add(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
+                }
+
+                mock.Setup(x => x.LoadWorkspaces(It.IsAny<string>())).Returns(workspaces);
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
@@ -57,7 +64,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
             {
                 var mock = new Mock<IWorkspacesStorageService>();
 
-                mock.Setup(x => x.LoadWorkspaces(It.IsAny<string>())).Returns(titles.Select(t => new Workspace { Title = t }));
+                mock.Setup(x => x.LoadWorkspaces(It.IsAny<string>())).Returns(titles.Select(t => new Workspace(t)));
 
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
@@ -92,7 +99,7 @@ namespace Orc.WorkspaceManagement.Test.Extensions
                 const string defaultWorkspace = "Default name";
                 const string notEmptyDirectory = "Not empty directory";
 
-                mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] { new Workspace { Title = "Not default 1" }, new Workspace { Title = defaultWorkspace }, new Workspace { Title = "Not default 2" } });
+                mock.Setup(x => x.LoadWorkspaces(notEmptyDirectory)).Returns(new[] { new Workspace("Not default 1"), new Workspace(defaultWorkspace), new Workspace("Not default 2") });
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
                 await workspaceManager.SetWorkspaceSchemesDirectoryAsync(notEmptyDirectory, defaultWorkspaceName: defaultWorkspace);

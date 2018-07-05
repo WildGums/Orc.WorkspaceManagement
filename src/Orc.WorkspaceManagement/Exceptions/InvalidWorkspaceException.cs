@@ -8,8 +8,10 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Runtime.Serialization;
     using Catel;
 
+    [Serializable]
     public class InvalidWorkspaceException : WorkspaceException
     {
         public InvalidWorkspaceException(IWorkspace workspace)
@@ -24,6 +26,11 @@ namespace Orc.WorkspaceManagement
 
         public InvalidWorkspaceException(IWorkspace workspace, string message, Exception innerException)
             : base(workspace, message, innerException)
+        {
+        }
+
+        protected InvalidWorkspaceException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

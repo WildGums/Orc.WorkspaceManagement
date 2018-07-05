@@ -18,7 +18,7 @@ namespace Orc.WorkspaceManagement.Test.Models
             [TestCase("bool", true, false, true, false)]
             public void CorrectlyHandlesValuesWithDefaults(string configurationKey, bool setValueBeforeRetrieving, object valueToSet, object defaultValue, object expectedValue)
             {
-                var workspace = new Workspace();
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 if (setValueBeforeRetrieving)
                 {

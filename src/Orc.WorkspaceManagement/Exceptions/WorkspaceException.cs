@@ -8,7 +8,9 @@
 namespace Orc.WorkspaceManagement
 {
     using System;
+    using System.Runtime.Serialization;
 
+    [Serializable]
     public class WorkspaceException : Exception
     {
         public WorkspaceException(IWorkspace workspace)
@@ -26,6 +28,11 @@ namespace Orc.WorkspaceManagement
             : base(message, innerException)
         {
             Workspace = workspace;
+        }
+
+        protected WorkspaceException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
         }
 
         public IWorkspace Workspace { get; }

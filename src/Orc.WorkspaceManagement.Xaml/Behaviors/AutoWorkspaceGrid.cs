@@ -97,31 +97,13 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         protected override void LoadSettings(IWorkspace workspace, string prefix)
         {
-            var rows = GetRows();
-            foreach (var index in rows)
-            {
-                var name = $"row_{index}";
-                var rowValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
+            LoadGridRowSettings(workspace, prefix);
 
-                GridLength gridLength;
-                if (string.Equals(rowValue, "unknown"))
-                {
-                    var key = $"row_{index}_default";
-                    if (!_defaultValues.ContainsKey(key))
-                    {
-                        continue;
-                    }
+            LoadGridColumnsSettings(workspace, prefix);
+        }
 
-                    gridLength = FromStringToGridLength(_defaultValues[key]);
-                }
-                else
-                {
-                    gridLength = new GridLength(double.Parse(rowValue));
-                }
-
-                AssociatedObject.RowDefinitions[index].SetCurrentValue(RowDefinition.HeightProperty, gridLength);
-            }
-
+        private void LoadGridColumnsSettings(IWorkspace workspace, string prefix)
+        {
             var columns = GetColumns();
             foreach (var index in columns)
             {
@@ -153,6 +135,34 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
         }
 
+        private void LoadGridRowSettings(IWorkspace workspace, string prefix)
+        {
+            var rows = GetRows();
+            foreach (var index in rows)
+            {
+                var name = $"row_{index}";
+                var rowValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
+
+                GridLength gridLength;
+                if (string.Equals(rowValue, "unknown"))
+                {
+                    var key = $"row_{index}_default";
+                    if (!_defaultValues.ContainsKey(key))
+                    {
+                        continue;
+                    }
+
+                    gridLength = FromStringToGridLength(_defaultValues[key]);
+                }
+                else
+                {
+                    gridLength = new GridLength(double.Parse(rowValue));
+                }
+
+                AssociatedObject.RowDefinitions[index].SetCurrentValue(RowDefinition.HeightProperty, gridLength);
+            }
+        }
+
         private List<int> GetRows()
         {
             return GetItemsFromString(RowsToPersist, AssociatedObject.RowDefinitions.Count);
@@ -172,13 +182,9 @@ namespace Orc.WorkspaceManagement.Behaviors
                 var splittedItems = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var splittedItem in splittedItems)
                 {
-                    var index = 0;
-                    if (int.TryParse(splittedItem, out index))
+                    if (int.TryParse(splittedItem, out var index) && index < totalItems)
                     {
-                        if (index < totalItems)
-                        {
-                            items.Add(index);
-                        }
+                        items.Add(index);
                     }
                 }
             }
@@ -215,16 +221,16 @@ namespace Orc.WorkspaceManagement.Behaviors
             switch (gridLength.GridUnitType)
             {
                 case GridUnitType.Auto:
-                    return string.Format("auto-{0}", gridLength.Value);
+                    return $"auto-{gridLength.Value}";
 
                 case GridUnitType.Pixel:
-                    return string.Format("{0}", gridLength.Value);
+                    return $"{gridLength.Value}";
 
                 case GridUnitType.Star:
-                    return string.Format("star-{0}", gridLength.Value);
+                    return $"star-{gridLength.Value}";
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(gridLength));
             }
         }
     }

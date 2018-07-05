@@ -58,7 +58,7 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Methods
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
             WorkspaceManager.WorkspaceUpdatingAsync -= OnWorkspaceUpdatingAsync;
             WorkspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
@@ -73,17 +73,15 @@ namespace Orc.WorkspaceManagement
             WorkspaceManager.Saved -= OnSaved;
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         protected virtual bool ShouldIgnoreWorkspaceChange()
         {
-            if (IgnoreSwitchToNewlyCreatedWorkspace)
-            {
-                if (_justAddedWorkspace)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return IgnoreSwitchToNewlyCreatedWorkspace && _justAddedWorkspace;
         }
 
         protected virtual Task<bool> OnWorkspaceUpdatingAsync(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)

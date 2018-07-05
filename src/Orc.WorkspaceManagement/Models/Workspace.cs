@@ -9,11 +9,13 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using Catel;
     using Catel.Configuration;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
-    public class Workspace : DynamicConfiguration, IWorkspace
+    public class Workspace : DynamicConfiguration, IWorkspace, IEquatable<Workspace>
     {
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
@@ -32,8 +34,17 @@ namespace Orc.WorkspaceManagement
         private bool _updatingDisplayName;
 
         #region Constructors
-        public Workspace()
+        public Workspace() 
+            : this("Default")
         {
+            
+        }
+
+        public Workspace(string title)
+        {
+            Argument.IsNotNullOrEmpty(() => title);
+
+            Title = title;
             Persist = true;
             CanEdit = true;
             CanDelete = true;
@@ -43,7 +54,7 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspace Members
-        public string Title { get; set; }
+        public string Title { get; }
         public string DisplayName { get; private set; }
 
         public bool Persist { get; set; }
@@ -160,25 +171,44 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Methods
+        public bool Equals(Workspace other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return string.Equals(Title, other.Title);
+        }
+
         public override bool Equals(object obj)
         {
-            var workspace = obj as Workspace;
-            if (workspace == null)
+            if (obj is null)
             {
                 return false;
             }
 
-            if (!string.Equals(workspace.Title, Title))
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != GetType())
             {
                 return false;
             }
 
-            return true;
+            return Equals((Workspace) obj);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Title.GetHashCode();
         }
 
         public override string ToString()

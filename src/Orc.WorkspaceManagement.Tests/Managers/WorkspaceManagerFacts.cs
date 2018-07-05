@@ -24,10 +24,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace);
 
@@ -42,7 +39,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var eventRaised = false;
                 workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
 
-                await workspaceManager.AddAsync(new Workspace());
+                await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
                 Assert.IsTrue(eventRaised);
             }
@@ -55,7 +52,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
                 var eventRaised = false;
                 workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
-                await workspaceManager.AddAsync(new Workspace());
+                await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
                 Assert.IsTrue(eventRaised);
             }
@@ -69,10 +66,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace);
 
@@ -88,11 +82,8 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName(),
-                    CanDelete = false
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+                workspace.CanDelete = false;
 
                 await workspaceManager.AddAsync(workspace);
 
@@ -108,10 +99,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace);
 
@@ -128,10 +116,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace);
 
@@ -182,11 +167,8 @@ namespace Orc.WorkspaceManagement.Test.Managers
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName(),
-                    CanEdit = false
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+                workspace.CanEdit = false;
 
                 await workspaceManager.AddAsync(workspace);
                 await workspaceManager.SetWorkspaceAsync(workspace);
@@ -243,10 +225,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             public async Task CallsProviderWhenStoringWorkspaceAsync()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace, true);
 
@@ -266,10 +245,7 @@ namespace Orc.WorkspaceManagement.Test.Managers
             public async Task CorrectlyRemovesProviderWhenStoringWorkspaceAsync()
             {
                 var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-                var workspace = new Workspace
-                {
-                    Title = WorkspaceNameHelper.GetRandomWorkspaceName()
-                };
+                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
                 await workspaceManager.AddAsync(workspace, true);
 
