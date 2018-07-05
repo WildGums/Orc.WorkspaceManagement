@@ -115,7 +115,7 @@ namespace Orc.WorkspaceManagement
         void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
         void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
     }
-    public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace, System.IEquatable<Orc.WorkspaceManagement.Workspace>
+    public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace, System.Collections.Generic.IEqualityComparer<Orc.WorkspaceManagement.Workspace>
     {
         public static readonly Catel.Data.PropertyData CanDeleteProperty;
         public static readonly Catel.Data.PropertyData CanEditProperty;
@@ -139,10 +139,11 @@ namespace Orc.WorkspaceManagement
         public object Tag { get; set; }
         public string Title { get; }
         public void ClearWorkspaceValues() { }
-        public bool Equals(Orc.WorkspaceManagement.Workspace other) { }
         public override bool Equals(object obj) { }
+        public bool Equals(Orc.WorkspaceManagement.Workspace x, Orc.WorkspaceManagement.Workspace y) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
         public override int GetHashCode() { }
+        public int GetHashCode(Orc.WorkspaceManagement.Workspace obj) { }
         public T GetWorkspaceValue<T>(string name, T defaultValue) { }
         protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
         public void SetWorkspaceValue(string name, object value) { }

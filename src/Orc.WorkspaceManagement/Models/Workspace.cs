@@ -9,13 +9,12 @@ namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
     using Catel;
     using Catel.Configuration;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
-    public class Workspace : DynamicConfiguration, IWorkspace, IEquatable<Workspace>
+    public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Workspace>
     {
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
@@ -171,7 +170,7 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region Methods
-        public bool Equals(Workspace other)
+        private bool Equals(Workspace other)
         {
             if (other is null)
             {
@@ -216,5 +215,15 @@ namespace Orc.WorkspaceManagement
             return Title;
         }
         #endregion
+
+        public bool Equals(Workspace x, Workspace y)
+        {
+            return x?.Equals(y)??y is null;
+        }
+
+        public int GetHashCode(Workspace obj)
+        {
+            return obj.GetHashCode();
+        }
     }
 }
