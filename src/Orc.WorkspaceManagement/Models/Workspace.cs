@@ -53,8 +53,8 @@ namespace Orc.WorkspaceManagement
         #endregion
 
         #region IWorkspace Members
-        public string Title { get; }
-        public string DisplayName { get; private set; }
+        public string Title { get; set; }
+        public string DisplayName { get; set; }
 
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
@@ -98,6 +98,13 @@ namespace Orc.WorkspaceManagement
             }
 
             IsDirty = true;
+        }
+
+        protected override void OnDeserialized()
+        {
+            base.OnDeserialized();
+
+            UpdateDisplayName();
         }
 
         private void UpdateDisplayName()
