@@ -212,11 +212,6 @@ namespace Orc.WorkspaceManagement
             return Equals((Workspace) obj);
         }
 
-        public override int GetHashCode()
-        {
-            return Title.GetHashCode();
-        }
-
         public override string ToString()
         {
             return Title;
@@ -231,6 +226,11 @@ namespace Orc.WorkspaceManagement
         public int GetHashCode(Workspace obj)
         {
             return obj.GetHashCode();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ 17;
         }
     }
 }

@@ -125,11 +125,12 @@ namespace Orc.WorkspaceManagement
         public static readonly Catel.Data.PropertyData PersistProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
         public static readonly Catel.Data.PropertyData TagProperty;
+        public static readonly Catel.Data.PropertyData TitleProperty;
         public Workspace() { }
         public Workspace(string title) { }
         public bool CanDelete { get; set; }
         public bool CanEdit { get; set; }
-        public string DisplayName { get; }
+        public string DisplayName { get; set; }
         public bool IsDirty { get; }
         public bool IsVisible { get; set; }
         public bool Persist { get; set; }
@@ -137,14 +138,15 @@ namespace Orc.WorkspaceManagement
         public object Scope { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         public object Tag { get; set; }
-        public string Title { get; }
+        public string Title { get; set; }
         public void ClearWorkspaceValues() { }
         public override bool Equals(object obj) { }
         public bool Equals(Orc.WorkspaceManagement.Workspace x, Orc.WorkspaceManagement.Workspace y) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
-        public override int GetHashCode() { }
         public int GetHashCode(Orc.WorkspaceManagement.Workspace obj) { }
+        public override int GetHashCode() { }
         public T GetWorkspaceValue<T>(string name, T defaultValue) { }
+        protected override void OnDeserialized() { }
         protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
         public void SetWorkspaceValue(string name, object value) { }
         public override string ToString() { }
