@@ -1,0 +1,101 @@
+﻿<catel:UserControl x:Class="Orc.WorkspaceManagement.Views.WorkspacesView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters"
+                   xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views">
+
+    <UserControl.Resources>
+        <catel:BooleanToHidingVisibilityConverter x:Key="BooleanToHidingVisibilityConverter" />
+        <converters:IsCurrentWorkspaceToCollapsingVisibilityConverter x:Key="IsCurrentWorkspaceToCollapsingVisibilityConverter" />
+        <converters:IsCurrentWorkspaceToHidingVisibilityConverter x:Key="IsCurrentWorkspaceToHidingVisibilityConverter" />
+        
+        <converters:TriggerConverter x:Key="TriggerConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="layoutRoot" Background="White">
+        <ListBox x:Name="listBox" ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" 
+                 BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="286">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
+                               Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
+
+                        <Label Grid.Column="1" 
+                               Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
+                            <Label.InputBindings>
+                                <MouseBinding Command="{Binding DataContext.Refresh}" MouseAction="LeftClick"></MouseBinding>
+                            </Label.InputBindings>
+                        </Label>
+
+                        <Border Grid.Column="2" 
+                                BorderThickness="0"
+                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
+                            <Button 
+                                CommandParameter="{Binding }" 
+                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
+                                Width="24" 
+                                Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:WorkspacesView}}, Path=HasRefreshButton, Converter={catel:BooleanToHidingVisibilityConverter}}">
+
+                                <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                <Button.Command>
+                                    <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                        <Binding Path="DataContext.Refresh" ElementName="layoutRoot" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </Button.Command>
+
+                                <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/refresh.png" Stretch="None" />
+                            </Button>
+                        </Border>
+
+                        <Button Grid.Column="3" 
+                                CommandParameter="{Binding }" 
+                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
+                                Width="24" 
+                                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+
+                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                            <Button.Command>
+                                <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                    <Binding Path="DataContext.EditWorkspace" ElementName="layoutRoot" />
+                                    <Binding />
+                                </MultiBinding>
+                            </Button.Command>
+
+                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/edit.png" Stretch="None" />
+                        </Button>
+
+                        <Button Grid.Column="4" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}" Width="24"
+                                    Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+
+                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                            <Button.Command>
+                                <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                    <Binding Path="DataContext.RemoveWorkspace" ElementName="layoutRoot" />
+                                    <Binding />
+                                </MultiBinding>
+                            </Button.Command>
+
+                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/remove.png" Stretch="None" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListBox>
+    </Grid>
+
+</catel:UserControl>
