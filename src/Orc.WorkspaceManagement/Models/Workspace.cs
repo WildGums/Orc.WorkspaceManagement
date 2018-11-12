@@ -34,15 +34,13 @@ namespace Orc.WorkspaceManagement
 
         #region Constructors
         public Workspace() 
-            : this("Default")
+            : this(string.Empty)
         {
             
         }
 
         public Workspace(string title)
         {
-            Argument.IsNotNullOrEmpty(() => title);
-
             Title = title;
             Persist = true;
             CanEdit = true;
