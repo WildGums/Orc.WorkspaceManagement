@@ -111,10 +111,18 @@ namespace Orc.WorkspaceManagement
     public interface IWorkspacesStorageService
     {
         string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace);
+        [System.ObsoleteAttribute("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName);
+        System.Threading.Tasks.Task<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaceAsync(string fileName);
+        [System.ObsoleteAttribute("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path);
+        System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace>> LoadWorkspacesAsync(string path);
+        [System.ObsoleteAttribute("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
+        System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
+        [System.ObsoleteAttribute("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
+        System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
     }
     public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace, System.Collections.Generic.IEqualityComparer<Orc.WorkspaceManagement.Workspace>
     {
@@ -244,10 +252,18 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Orc.FileSystem.IFileService fileService, Orc.FileSystem.IDirectoryService directoryService) { }
         public string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        [System.ObsoleteAttribute("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         public virtual Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName) { }
+        public virtual System.Threading.Tasks.Task<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaceAsync(string fileName) { }
+        [System.ObsoleteAttribute("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         public virtual System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path) { }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace>> LoadWorkspacesAsync(string path) { }
+        [System.ObsoleteAttribute("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         public virtual void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public virtual System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        [System.ObsoleteAttribute("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         public virtual void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
+        public virtual System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
     }
     public class WorkspaceUpdatedEventArgs : System.EventArgs
     {

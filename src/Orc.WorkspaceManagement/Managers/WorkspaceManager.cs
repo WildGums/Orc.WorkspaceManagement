@@ -224,7 +224,8 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.Clear();
 
-            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory).ToList();
+            var workspaces = await _workspacesStorageService.LoadWorkspacesAsync(baseDirectory);
+
             foreach (var workspace in workspaces)
             {
                 workspace.Scope = Scope;
@@ -388,7 +389,7 @@ namespace Orc.WorkspaceManagement
 
             //TODO: implement reloding (resetting) default workspace as well
             var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
-            var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
+            var workspaceFromDisk = await _workspacesStorageService.LoadWorkspaceAsync(workspacePath);
             if (workspaceFromDisk is null)
             {
                 Log.Warning($"[{Scope}] Failed to reload workspace '{workspace}'");
@@ -453,7 +454,8 @@ namespace Orc.WorkspaceManagement
                 return false;
             }
 
-            _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
+            await _workspacesStorageService.SaveWorkspacesAsync(baseDirectory, _workspaces);
+
             foreach (var workspace in _workspaces)
             {
                 workspace.UpdateIsDirtyFlag(false);

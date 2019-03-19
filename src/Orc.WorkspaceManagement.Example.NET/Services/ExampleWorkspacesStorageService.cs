@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Orc.FileSystem;
@@ -14,9 +15,9 @@
         {
         }
 
-        public override IEnumerable<IWorkspace> LoadWorkspaces(string path)
+        public override async Task<IEnumerable<IWorkspace>> LoadWorkspacesAsync(string path)
         {
-            var workspaces = new List<IWorkspace>(base.LoadWorkspaces(path));
+            var workspaces = new List<IWorkspace>(await base.LoadWorkspacesAsync(path));
 
             workspaces.Add(new Workspace
             {
@@ -29,9 +30,9 @@
             return workspaces;
         }
 
-        public override void SaveWorkspaces(string path, IEnumerable<IWorkspace> workspaces)
+        public override async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
         {
-            base.SaveWorkspaces(path, workspaces.Where(x => x.WorkspaceGroup is null));
+            await base.SaveWorkspacesAsync(path, workspaces.Where(x => x.WorkspaceGroup is null));
         }
     }
 }
