@@ -97,7 +97,7 @@ namespace Orc.WorkspaceManagement
                                     where string.Equals(workspace.Title, defaultWorkspaceName)
                                     select workspace).FirstOrDefault();
 
-            if (defaultWorkspace == null)
+            if (defaultWorkspace is null)
             {
                 defaultWorkspace = new Workspace(defaultWorkspaceName)
                 {
@@ -127,7 +127,7 @@ namespace Orc.WorkspaceManagement
                 await workspaceManager.EnsureDefaultWorkspaceAsync(defaultWorkspaceName, false);
             }
 
-            if (autoSelect && workspaceManager.Workspace == null && workspaceManager.Workspaces.Any())
+            if (autoSelect && workspaceManager.Workspace is null && workspaceManager.Workspaces.Any())
             {
                 var workspace = workspaceManager.Workspaces.FirstOrDefault(x => string.Equals(x.Title, defaultWorkspaceName))
                     ?? workspaceManager.Workspaces.FirstOrDefault();
@@ -165,7 +165,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
 
             var workspace = workspaceManager.Workspace;
-            if (workspace == null)
+            if (workspace is null)
             {
                 return true;
             }
@@ -191,7 +191,7 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspaceManager);
             Argument.IsNotNull(() => workspace);
 
-            if (workspaceManager.Providers == null)
+            if (workspaceManager.Providers is null)
             {
                 return false;
             }

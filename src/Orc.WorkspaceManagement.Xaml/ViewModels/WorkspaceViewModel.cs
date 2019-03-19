@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.ViewModels
+﻿namespace Orc.WorkspaceManagement.ViewModels
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Catel;
     using Catel.Data;
-    using Catel.Fody;
     using Catel.MVVM;
     using Catel.Services;
 
@@ -32,7 +23,7 @@ namespace Orc.WorkspaceManagement.ViewModels
         [Model]
         public IWorkspace Workspace { get; private set; }
 
-        [ViewModelToModel("Workspace", "Title")]
+        [ViewModelToModel(nameof(Workspace), nameof(IWorkspace.Title))]
         public string WorkspaceTitle { get; set; }
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)

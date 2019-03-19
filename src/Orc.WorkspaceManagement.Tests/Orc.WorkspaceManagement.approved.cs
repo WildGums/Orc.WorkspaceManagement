@@ -29,6 +29,7 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         object Scope { get; set; }
         string Title { get; }
+        string WorkspaceGroup { get; }
         void ClearWorkspaceValues();
         System.Collections.Generic.List<string> GetAllWorkspaceValueNames();
         T GetWorkspaceValue<T>(string name, T defaultValue);
@@ -126,6 +127,7 @@ namespace Orc.WorkspaceManagement
         public static readonly Catel.Data.PropertyData ScopeProperty;
         public static readonly Catel.Data.PropertyData TagProperty;
         public static readonly Catel.Data.PropertyData TitleProperty;
+        public static readonly Catel.Data.PropertyData WorkspaceGroupProperty;
         public Workspace() { }
         public Workspace(string title) { }
         public bool CanDelete { get; set; }
@@ -139,6 +141,7 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         public object Tag { get; set; }
         public string Title { get; set; }
+        public string WorkspaceGroup { get; set; }
         public void ClearWorkspaceValues() { }
         public override bool Equals(object obj) { }
         public bool Equals(Orc.WorkspaceManagement.Workspace x, Orc.WorkspaceManagement.Workspace y) { }
@@ -239,12 +242,12 @@ namespace Orc.WorkspaceManagement
     }
     public class WorkspacesStorageService : Orc.WorkspaceManagement.IWorkspacesStorageService
     {
-        public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer) { }
+        public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Orc.FileSystem.IFileService fileService, Orc.FileSystem.IDirectoryService directoryService) { }
         public string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace) { }
-        public Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName) { }
-        public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path) { }
-        public void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
-        public void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
+        public virtual Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName) { }
+        public virtual System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path) { }
+        public virtual void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public virtual void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
     }
     public class WorkspaceUpdatedEventArgs : System.EventArgs
     {

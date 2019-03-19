@@ -100,7 +100,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         private bool OnRemoveWorkspaceCanExecute()
         {
-            if (CurrentWorkspace == null)
+            if (CurrentWorkspace is null)
             {
                 return false;
             }

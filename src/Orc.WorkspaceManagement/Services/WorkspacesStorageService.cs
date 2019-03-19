@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspacesStorageService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +10,7 @@ namespace Orc.WorkspaceManagement
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Path = Catel.IO.Path;
+    using Orc.FileSystem;
 
     public class WorkspacesStorageService : IWorkspacesStorageService
     {
@@ -26,28 +20,35 @@ namespace Orc.WorkspaceManagement
 
         private readonly ISerializationManager _serializationManager;
         private readonly IXmlSerializer _xmlSerializer;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
-        public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer)
+        public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer,
+            IFileService fileService, IDirectoryService directoryService)
         {
             Argument.IsNotNull(() => serializationManager);
             Argument.IsNotNull(() => xmlSerializer);
+            Argument.IsNotNull(() => fileService);
+            Argument.IsNotNull(() => directoryService);
 
             _serializationManager = serializationManager;
             _xmlSerializer = xmlSerializer;
+            _fileService = fileService;
+            _directoryService = directoryService;
         }
 
-        public IEnumerable<IWorkspace> LoadWorkspaces(string path)
+        public virtual IEnumerable<IWorkspace> LoadWorkspaces(string path)
         {
             Argument.IsNotNullOrEmpty(() => path);
 
-            if (Directory.Exists(path))
+            if (_directoryService.Exists(path))
             {
                 // Note: since Catel caches serializable members of an object, we might have introduced new dynamic members,
                 // so we need to clear the cache in order to make sure we always (deserialize) the right members
                 _serializationManager.Clear(typeof(Workspace));
                 _serializationManager.Clear(typeof(DynamicConfiguration));
 
-                foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
+                foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
                 {
                     var workspace = LoadWorkspace(workspaceFile);
                     if (workspace != null)
@@ -58,7 +59,7 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public IWorkspace LoadWorkspace(string fileName)
+        public virtual IWorkspace LoadWorkspace(string fileName)
         {
             Argument.IsNotNullOrEmpty(() => fileName);
 
@@ -68,10 +69,10 @@ namespace Orc.WorkspaceManagement
             {
                 Log.Debug("Loading workspace from '{0}'", fileName);
 
-                using (var fileStream = new FileStream(fileName, FileMode.Open))
+                using (var fileStream = _fileService.Open(fileName, FileMode.Open))
                 {
                     var workspace = _xmlSerializer.Deserialize<Workspace>(fileStream);
-                    if (workspace == null || string.IsNullOrEmpty(workspace.Title))
+                    if (workspace is null || string.IsNullOrEmpty(workspace.Title))
                     {
                         Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
                     }
@@ -91,27 +92,22 @@ namespace Orc.WorkspaceManagement
             return result;
         }
 
-        public void SaveWorkspaces(string path, IEnumerable<IWorkspace> workspaces)
+        public virtual void SaveWorkspaces(string path, IEnumerable<IWorkspace> workspaces)
         {
             Argument.IsNotNullOrEmpty(() => path);
             Argument.IsNotNull(() => workspaces);
 
-            if (!Directory.Exists(path))
-            {
-                Log.Debug("Creating base directory '{0}'", path);
-
-                Directory.CreateDirectory(path);
-            }
+            _directoryService.Create(path);
 
             Log.Debug("Deleting previous workspace files");
 
-            foreach (var workspaceFile in Directory.GetFiles(path, $"*{WorkspaceFileExtension}"))
+            foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
             {
                 try
                 {
                     Log.Debug("Deleting file '{0}'", workspaceFile);
 
-                    File.Delete(workspaceFile);
+                    _fileService.Delete(workspaceFile);
                 }
                 catch (Exception ex)
                 {
@@ -126,7 +122,7 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public void SaveWorkspace(string fileName, IWorkspace workspace)
+        public virtual void SaveWorkspace(string fileName, IWorkspace workspace)
         {
             Argument.IsNotNullOrEmpty(() => fileName);
             Argument.IsNotNull(() => workspace);

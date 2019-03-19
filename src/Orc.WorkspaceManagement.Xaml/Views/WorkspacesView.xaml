@@ -14,88 +14,112 @@
     </UserControl.Resources>
 
     <Grid x:Name="layoutRoot" Background="White">
-        <ListBox x:Name="listBox" ItemsSource="{Binding AvailableWorkspaces}" SelectedItem="{Binding SelectedWorkspace}" 
-                 BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <ItemsControl ItemsSource="{Binding WorkspaceGroups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="286">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                        <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
-                               Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
+                        <Label Grid.Row="0"
+                               Margin="8,4,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Content="{Binding Title, Mode=OneWay}"
+                               Visibility="{Binding Title, Converter={catel:ReferenceToCollapsingVisibilityConverter}}" />
 
-                        <Label Grid.Column="1" 
-                               Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
-                            <Label.InputBindings>
-                                <MouseBinding Command="{Binding DataContext.Refresh}" MouseAction="LeftClick"></MouseBinding>
-                            </Label.InputBindings>
-                        </Label>
+                        <ListBox x:Name="listBox" 
+                                 Grid.Row="1"
+                                 ItemsSource="{Binding Workspaces, Mode=OneWay}" 
+                                 BorderThickness="0" 
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="286" 
+                                          Background="Transparent"
+                                          PreviewMouseLeftButtonDown="OnWorkspacePreviewMouseLeftButtonDown">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="2" 
-                                BorderThickness="0"
-                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
-                            <Button 
-                                CommandParameter="{Binding }" 
-                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
-                                Width="24" 
-                                Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:WorkspacesView}}, Path=HasRefreshButton, Converter={catel:BooleanToHidingVisibilityConverter}}">
+                                        <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
+                                               Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
 
-                                <!-- NOTE: important to fix commands where command parameter is not yet available when
-                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
-                                <Button.Command>
-                                    <MultiBinding Converter="{StaticResource TriggerConverter}">
-                                        <Binding Path="DataContext.Refresh" ElementName="layoutRoot" />
-                                        <Binding />
-                                    </MultiBinding>
-                                </Button.Command>
+                                        <Label Grid.Column="1" 
+                                               Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
+                                            <Label.InputBindings>
+                                                <MouseBinding Command="{Binding ElementName=layoutRoot, Path=DataContext.Refresh}" MouseAction="LeftClick" />
+                                            </Label.InputBindings>
+                                        </Label>
 
-                                <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/refresh.png" Stretch="None" />
-                            </Button>
-                        </Border>
+                                        <Border Grid.Column="2" 
+                                                BorderThickness="0"
+                                                Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
+                                            <Button CommandParameter="{Binding }" 
+                                                    ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
+                                                    Width="24" 
+                                                    Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:WorkspacesView}}, Path=HasRefreshButton, Converter={catel:BooleanToHidingVisibilityConverter}}">
 
-                        <Button Grid.Column="3" 
-                                CommandParameter="{Binding }" 
-                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
-                                Width="24" 
-                                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                                                <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                                    the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                                <Button.Command>
+                                                    <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                                        <Binding Path="DataContext.Refresh" ElementName="layoutRoot" />
+                                                        <Binding />
+                                                    </MultiBinding>
+                                                </Button.Command>
 
-                            <!-- NOTE: important to fix commands where command parameter is not yet available when
-                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
-                            <Button.Command>
-                                <MultiBinding Converter="{StaticResource TriggerConverter}">
-                                    <Binding Path="DataContext.EditWorkspace" ElementName="layoutRoot" />
-                                    <Binding />
-                                </MultiBinding>
-                            </Button.Command>
+                                                <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/refresh.png" Stretch="None" />
+                                            </Button>
+                                        </Border>
 
-                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/edit.png" Stretch="None" />
-                        </Button>
+                                        <Button Grid.Column="3" 
+                                                CommandParameter="{Binding }" 
+                                                ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
+                                                Width="24" 
+                                                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
 
-                        <Button Grid.Column="4" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}" Width="24"
-                                    Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                            the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                            <Button.Command>
+                                                <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                                    <Binding Path="DataContext.EditWorkspace" ElementName="layoutRoot" />
+                                                    <Binding />
+                                                </MultiBinding>
+                                            </Button.Command>
 
-                            <!-- NOTE: important to fix commands where command parameter is not yet available when
-                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
-                            <Button.Command>
-                                <MultiBinding Converter="{StaticResource TriggerConverter}">
-                                    <Binding Path="DataContext.RemoveWorkspace" ElementName="layoutRoot" />
-                                    <Binding />
-                                </MultiBinding>
-                            </Button.Command>
+                                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/edit.png" Stretch="None" />
+                                        </Button>
 
-                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/remove.png" Stretch="None" />
-                        </Button>
+                                        <Button Grid.Column="4" CommandParameter="{Binding }" ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}" Width="24"
+                                                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+
+                                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                            the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
+                                            <Button.Command>
+                                                <MultiBinding Converter="{StaticResource TriggerConverter}">
+                                                    <Binding Path="DataContext.RemoveWorkspace" ElementName="layoutRoot" />
+                                                    <Binding />
+                                                </MultiBinding>
+                                            </Button.Command>
+
+                                            <Image Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/remove.png" Stretch="None" />
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ListBox>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ListBox>
+        </ItemsControl>
     </Grid>
 
 </catel:UserControl>

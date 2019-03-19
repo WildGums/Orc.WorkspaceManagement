@@ -32,7 +32,7 @@ namespace Orc.WorkspaceManagement
 
         public override Task ProvideInformationAsync(IWorkspace workspace)
         {
-            if (workspace == null)
+            if (workspace is null)
             {
                 return TaskHelper.Completed;
             }
@@ -42,7 +42,7 @@ namespace Orc.WorkspaceManagement
 
         public override Task ApplyWorkspaceAsync(IWorkspace workspace)
         {
-            if (workspace == null)
+            if (workspace is null)
             {
                 return TaskHelper.Completed;
             }

@@ -374,7 +374,7 @@ namespace Orc.WorkspaceManagement
         {
             Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
 
-            if (workspace == null)
+            if (workspace is null)
             {
                 Log.Error($"[{Scope}] Workspace is empty, cannot reload workspace");
                 return;
@@ -389,7 +389,7 @@ namespace Orc.WorkspaceManagement
             //TODO: implement reloding (resetting) default workspace as well
             var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
             var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
-            if (workspaceFromDisk == null)
+            if (workspaceFromDisk is null)
             {
                 Log.Warning($"[{Scope}] Failed to reload workspace '{workspace}'");
                 return;
@@ -415,7 +415,7 @@ namespace Orc.WorkspaceManagement
         {
             Log.Debug($"[{Scope}] Storing workspace '{workspace}'");
 
-            if (workspace == null)
+            if (workspace is null)
             {
                 Log.Error($"[{Scope}] Workspace is empty, cannot store workspace");
                 return;

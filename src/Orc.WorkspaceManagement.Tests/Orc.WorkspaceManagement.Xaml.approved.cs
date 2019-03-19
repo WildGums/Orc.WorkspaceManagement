@@ -70,6 +70,13 @@ namespace Orc.WorkspaceManagement
         public static void SaveSizeToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
         public static void SaveValueToWorkspace(this System.Windows.FrameworkElement frameworkElement, string name, object value, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
     }
+    [System.Diagnostics.DebuggerDisplayAttribute("{Title}")]
+    public class WorkspaceGroup
+    {
+        public WorkspaceGroup() { }
+        public string Title { get; set; }
+        public Catel.Collections.FastObservableCollection<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; set; }
+    }
 }
 namespace Orc.WorkspaceManagement.Converters
 {
@@ -104,15 +111,15 @@ namespace Orc.WorkspaceManagement.ViewModels
 {
     public class WorkspacesViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData AvailableWorkspacesProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
+        public static readonly Catel.Data.PropertyData WorkspaceGroupsProperty;
         public WorkspacesViewModel(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IDispatcherService dispatcherService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService) { }
-        public Catel.Collections.FastObservableCollection<Orc.WorkspaceManagement.IWorkspace> AvailableWorkspaces { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> EditWorkspace { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> Refresh { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> RemoveWorkspace { get; }
         public object Scope { get; set; }
         public Orc.WorkspaceManagement.IWorkspace SelectedWorkspace { get; set; }
+        public System.Collections.Generic.List<Orc.WorkspaceManagement.WorkspaceGroup> WorkspaceGroups { get; }
         protected override System.Threading.Tasks.Task CloseAsync() { }
         protected override System.Threading.Tasks.Task InitializeAsync() { }
     }
@@ -130,7 +137,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 }
 namespace Orc.WorkspaceManagement.Views
 {
-    public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector
+    public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector, System.Windows.Markup.IStyleConnector
     {
         public static readonly System.Windows.DependencyProperty HasRefreshButtonProperty;
         public static readonly System.Windows.DependencyProperty ScopeProperty;

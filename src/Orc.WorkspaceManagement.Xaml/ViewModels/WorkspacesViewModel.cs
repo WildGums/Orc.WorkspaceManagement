@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspacesViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.ViewModels
+﻿namespace Orc.WorkspaceManagement.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -53,7 +46,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             _messageService = messageService;
             _languageService = languageService;
 
-            AvailableWorkspaces = new FastObservableCollection<IWorkspace>();
+            WorkspaceGroups = new List<WorkspaceGroup>();
 
             EditWorkspace = new TaskCommand<IWorkspace>(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
             RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
@@ -62,12 +55,11 @@ namespace Orc.WorkspaceManagement.ViewModels
         #endregion
 
         #region Properties
-        public FastObservableCollection<IWorkspace> AvailableWorkspaces { get; private set; }
+        public List<WorkspaceGroup> WorkspaceGroups { get; private set; }
 
         public IWorkspace SelectedWorkspace
         {
             get => _workspaceManager?.Workspace;
-
             set
             {
                 if (value != null)
@@ -88,6 +80,11 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private bool OnRefreshCanExecute(IWorkspace workspace)
         {
+            if (workspace is null)
+            {
+                return false;
+            }
+
             return workspace.IsDirty;
         }
 
@@ -105,7 +102,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private bool OnEditWorkspaceCanExecute(IWorkspace workspace)
         {
-            if (workspace == null)
+            if (workspace is null)
             {
                 return false;
             }
@@ -132,7 +129,7 @@ namespace Orc.WorkspaceManagement.ViewModels
             {
                 if (_workspaceManager.Workspaces.Any(x => x.Title.EqualsIgnoreCase(workspace.Title) && x != workspace))
                 {
-                    e.ValidationContext.Add(FieldValidationResult.CreateError("Title",
+                    e.ValidationContext.Add(FieldValidationResult.CreateError(nameof(Title),
                         _languageService.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
                 }
             };
@@ -167,7 +164,7 @@ namespace Orc.WorkspaceManagement.ViewModels
 
         private bool OnRemoveWorkspaceCanExecute(IWorkspace workspace)
         {
-            if (workspace == null)
+            if (workspace is null)
             {
                 return false;
             }
@@ -296,7 +293,7 @@ namespace Orc.WorkspaceManagement.ViewModels
                 }
             }
 
-            AvailableWorkspaces.Clear();
+            WorkspaceGroups.Clear();
         }
 
         private bool _updatingWorkspace;
@@ -312,32 +309,19 @@ namespace Orc.WorkspaceManagement.ViewModels
 
             try
             {
-                var workspaces = _workspaceManager.Workspaces;
+                var workspaceGroups = (from workspace in _workspaceManager.Workspaces
+                                       where workspace.IsVisible
+                                       orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
+                                       group workspace by workspace.WorkspaceGroup into g
+                                       select new WorkspaceGroup
+                                       {
+                                           Title = g.Key,
+                                           Workspaces = new FastObservableCollection<IWorkspace>(g.ToList())
+                                       }).ToList();
 
-                var finalItems = new List<IWorkspace>();
+                Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{workspaceGroups.Count}' workspace groups available");
 
-                var visibleWorkspaces = (from workspace in workspaces
-                    where workspace.IsVisible
-                    select workspace).ToList();
-
-                // 1) Items that cannot be deleted
-                finalItems.AddRange(from workspace in visibleWorkspaces
-                    where !workspace.CanDelete
-                    orderby workspace.Title
-                    select workspace);
-
-                // 2) Items that can be deleted
-                finalItems.AddRange(from workspace in visibleWorkspaces
-                    where workspace.CanDelete
-                    orderby workspace.Title
-                    select workspace);
-
-                Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{finalItems.Count}' workspaces available");
-
-                using (AvailableWorkspaces.SuspendChangeNotifications())
-                {
-                    AvailableWorkspaces.ReplaceRange(finalItems);
-                }
+                WorkspaceGroups = workspaceGroups;
 
                 RaiseSelectedWorkspaceChanged();
             }
