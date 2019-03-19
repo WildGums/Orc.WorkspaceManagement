@@ -29,7 +29,7 @@ namespace Orc.WorkspaceManagement
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         object Scope { get; set; }
         string Title { get; }
-        string WorkspaceGroup { get; }
+        string WorkspaceGroup { get; set; }
         void ClearWorkspaceValues();
         System.Collections.Generic.List<string> GetAllWorkspaceValueNames();
         T GetWorkspaceValue<T>(string name, T defaultValue);
@@ -250,6 +250,10 @@ namespace Orc.WorkspaceManagement
     }
     public class WorkspacesStorageService : Orc.WorkspaceManagement.IWorkspacesStorageService
     {
+        protected readonly Orc.FileSystem.IDirectoryService _directoryService;
+        protected readonly Orc.FileSystem.IFileService _fileService;
+        protected readonly Catel.Runtime.Serialization.ISerializationManager _serializationManager;
+        protected readonly Catel.Runtime.Serialization.Xml.IXmlSerializer _xmlSerializer;
         public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Orc.FileSystem.IFileService fileService, Orc.FileSystem.IDirectoryService directoryService) { }
         public string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace) { }
         [System.ObsoleteAttribute("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]

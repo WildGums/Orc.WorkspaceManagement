@@ -19,10 +19,10 @@
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ISerializationManager _serializationManager;
-        private readonly IXmlSerializer _xmlSerializer;
-        private readonly IFileService _fileService;
-        private readonly IDirectoryService _directoryService;
+        protected readonly ISerializationManager _serializationManager;
+        protected readonly IXmlSerializer _xmlSerializer;
+        protected readonly IFileService _fileService;
+        protected readonly IDirectoryService _directoryService;
 
         public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer,
             IFileService fileService, IDirectoryService directoryService)

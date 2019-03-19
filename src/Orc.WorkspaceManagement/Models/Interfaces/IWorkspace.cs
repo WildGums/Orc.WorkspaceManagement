@@ -21,7 +21,7 @@ namespace Orc.WorkspaceManagement
         bool IsVisible { get; set; }
         bool IsDirty { get; }
 
-        string WorkspaceGroup { get; }
+        string WorkspaceGroup { get; set; }
         string DisplayName { get; }
 
         [ExcludeFromSerialization]
