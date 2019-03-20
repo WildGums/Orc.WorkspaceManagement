@@ -313,11 +313,7 @@
                                        where workspace.IsVisible
                                        orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
                                        group workspace by workspace.WorkspaceGroup into g
-                                       select new WorkspaceGroup
-                                       {
-                                           Title = g.Key,
-                                           Workspaces = new FastObservableCollection<IWorkspace>(g.ToList())
-                                       }).ToList();
+                                       select new WorkspaceGroup(g.Key, g)).ToList();
 
                 Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{workspaceGroups.Count}' workspace groups available");
 

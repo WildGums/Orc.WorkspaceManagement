@@ -73,9 +73,9 @@ namespace Orc.WorkspaceManagement
     [System.Diagnostics.DebuggerDisplayAttribute("{Title}")]
     public class WorkspaceGroup
     {
-        public WorkspaceGroup() { }
-        public string Title { get; set; }
-        public Catel.Collections.FastObservableCollection<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; set; }
+        public WorkspaceGroup(string title, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
+        public string Title { get; }
+        public System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
     }
 }
 namespace Orc.WorkspaceManagement.Converters
