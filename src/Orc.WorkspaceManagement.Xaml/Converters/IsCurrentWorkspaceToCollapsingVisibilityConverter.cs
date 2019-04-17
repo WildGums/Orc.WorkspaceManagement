@@ -31,7 +31,7 @@ namespace Orc.WorkspaceManagement.Converters
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
             var workspace = value as IWorkspace;
-            if (workspace == null)
+            if (workspace is null)
             {
                 return false;
             }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Workspace.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +12,8 @@ namespace Orc.WorkspaceManagement
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
             nameof(Title),
+            nameof(DisplayName),
+            nameof(WorkspaceGroup),
             nameof(Persist),
             nameof(CanEdit),
             nameof(CanDelete),
@@ -27,7 +22,6 @@ namespace Orc.WorkspaceManagement
             nameof(Tag),
             nameof(IsReadOnly),
             nameof(IsDirty),
-            nameof(DisplayName)
         });
 
         private bool _updatingDisplayName;
@@ -53,6 +47,7 @@ namespace Orc.WorkspaceManagement
         #region IWorkspace Members
         public string Title { get; set; }
         public string DisplayName { get; set; }
+        public string WorkspaceGroup { get; set; }
 
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }

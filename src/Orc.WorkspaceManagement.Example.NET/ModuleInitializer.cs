@@ -1,7 +1,6 @@
 ﻿using Catel.IoC;
-
+using Orc.WorkspaceManagement;
 using Orc.WorkspaceManagement.Example.Services;
-
 using Orchestra.Services;
 
 /// <summary>
@@ -17,6 +16,7 @@ public static class ModuleInitializer
         var serviceLocator = ServiceLocator.Default;
 
         serviceLocator.RegisterType<IRibbonService, RibbonService>();
-        serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();        
+        serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
+        serviceLocator.RegisterType<IWorkspacesStorageService, ExampleWorkspacesStorageService>();
     }
 }

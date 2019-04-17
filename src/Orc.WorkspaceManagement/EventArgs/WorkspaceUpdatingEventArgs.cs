@@ -26,7 +26,7 @@ namespace Orc.WorkspaceManagement
         {
             get
             {
-                if (OldWorkspace == null || NewWorkspace == null)
+                if (OldWorkspace is null || NewWorkspace is null)
                 {
                     return false;
                 }

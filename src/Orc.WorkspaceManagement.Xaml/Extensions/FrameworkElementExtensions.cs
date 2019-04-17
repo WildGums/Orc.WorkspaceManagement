@@ -34,7 +34,7 @@ namespace Orc.WorkspaceManagement
 
         private static IWorkspace GetWorkspace(IWorkspace workspace)
         {
-            if (workspace == null)
+            if (workspace is null)
             {
                 var workspaceManager = ServiceLocator.Default.ResolveType<IWorkspaceManager>();
                 workspace = workspaceManager.Workspace;

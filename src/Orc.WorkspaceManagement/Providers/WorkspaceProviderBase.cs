@@ -56,7 +56,7 @@ namespace Orc.WorkspaceManagement
             set
             {
                 var workspaceManager = ServiceLocator.ResolveType<IWorkspaceManager>(value);
-                if (workspaceManager == null)
+                if (workspaceManager is null)
                 {
                     throw new PropertyNotNullableException("WorkspaceManager", typeof(IWorkspaceManager));
                 }

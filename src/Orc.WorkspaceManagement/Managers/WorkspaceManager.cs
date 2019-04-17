@@ -162,7 +162,7 @@ namespace Orc.WorkspaceManagement
 
             await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
 
-            WorkspaceUpdated.SafeInvoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
+            WorkspaceUpdated?.Invoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
             if (AutoRefreshEnabled && !(oldWorkspace is null) && !oldWorkspace.Title.EqualsIgnoreCase(DefaultWorkspaceTitle))
             {
@@ -216,7 +216,7 @@ namespace Orc.WorkspaceManagement
             Log.Debug($"[{Scope}] Initializing workspaces from '{baseDirectory}'");
 
             var cancelEventArgs = new CancelEventArgs();
-            Initializing.SafeInvoke(this, cancelEventArgs);
+            Initializing?.Invoke(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
                 return false;
@@ -224,7 +224,8 @@ namespace Orc.WorkspaceManagement
 
             _workspaces.Clear();
 
-            var workspaces = _workspacesStorageService.LoadWorkspaces(baseDirectory).ToList();
+            var workspaces = await _workspacesStorageService.LoadWorkspacesAsync(baseDirectory);
+
             foreach (var workspace in workspaces)
             {
                 workspace.Scope = Scope;
@@ -241,7 +242,7 @@ namespace Orc.WorkspaceManagement
                 await TrySetWorkspaceAsync(null);
             }
 
-            Initialized.SafeInvoke(this);
+            Initialized?.Invoke(this, EventArgs.Empty);
 
             Log.Info($"[{Scope}] Initialized '{_workspaces.Count}' workspaces from '{baseDirectory}'");
 
@@ -265,7 +266,7 @@ namespace Orc.WorkspaceManagement
                 _workspaceProviders.Add(workspaceProvider);
             }
 
-            WorkspaceProviderAdded.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
+            WorkspaceProviderAdded?.Invoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
         }
 
         /// <summary>
@@ -290,7 +291,7 @@ namespace Orc.WorkspaceManagement
 
             if (removed)
             {
-                WorkspaceProviderRemoved.SafeInvoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
+                WorkspaceProviderRemoved?.Invoke(this, new WorkspaceProviderEventArgs(workspaceProvider));
                 return true;
             }
 
@@ -313,8 +314,8 @@ namespace Orc.WorkspaceManagement
 
                 _workspaces.Add(workspace);
 
-                WorkspaceAdded.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-                WorkspacesChanged.SafeInvoke(this);
+                WorkspaceAdded?.Invoke(this, new WorkspaceEventArgs(workspace));
+                WorkspacesChanged?.Invoke(this, EventArgs.Empty);
             }
 
             workspace.Scope = Scope;
@@ -352,8 +353,8 @@ namespace Orc.WorkspaceManagement
 
             if (removed)
             {
-                WorkspaceRemoved.SafeInvoke(this, new WorkspaceEventArgs(workspace));
-                WorkspacesChanged.SafeInvoke(this);
+                WorkspaceRemoved?.Invoke(this, new WorkspaceEventArgs(workspace));
+                WorkspacesChanged?.Invoke(this, EventArgs.Empty);
             }
 
             return removed;
@@ -374,7 +375,7 @@ namespace Orc.WorkspaceManagement
         {
             Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
 
-            if (workspace == null)
+            if (workspace is null)
             {
                 Log.Error($"[{Scope}] Workspace is empty, cannot reload workspace");
                 return;
@@ -388,8 +389,8 @@ namespace Orc.WorkspaceManagement
 
             //TODO: implement reloding (resetting) default workspace as well
             var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
-            var workspaceFromDisk = _workspacesStorageService.LoadWorkspace(workspacePath);
-            if (workspaceFromDisk == null)
+            var workspaceFromDisk = await _workspacesStorageService.LoadWorkspaceAsync(workspacePath);
+            if (workspaceFromDisk is null)
             {
                 Log.Warning($"[{Scope}] Failed to reload workspace '{workspace}'");
                 return;
@@ -415,7 +416,7 @@ namespace Orc.WorkspaceManagement
         {
             Log.Debug($"[{Scope}] Storing workspace '{workspace}'");
 
-            if (workspace == null)
+            if (workspace is null)
             {
                 Log.Error($"[{Scope}] Workspace is empty, cannot store workspace");
                 return;
@@ -429,7 +430,7 @@ namespace Orc.WorkspaceManagement
 
             // Events first so providers can manipulate data afterwards
             var workspaceEventArgs = new WorkspaceEventArgs(workspace);
-            WorkspaceInfoRequested.SafeInvoke(this, workspaceEventArgs);
+            WorkspaceInfoRequested?.Invoke(this, workspaceEventArgs);
 
             await GetInformationFromProvidersAsync(workspace);
 
@@ -453,13 +454,14 @@ namespace Orc.WorkspaceManagement
                 return false;
             }
 
-            _workspacesStorageService.SaveWorkspaces(baseDirectory, _workspaces);
+            await _workspacesStorageService.SaveWorkspacesAsync(baseDirectory, _workspaces);
+
             foreach (var workspace in _workspaces)
             {
                 workspace.UpdateIsDirtyFlag(false);
             }
 
-            Saved.SafeInvoke(this);
+            Saved?.Invoke(this, EventArgs.Empty);
 
             Log.Info($"[{Scope}] Saved all workspaces to '{baseDirectory}'");
 

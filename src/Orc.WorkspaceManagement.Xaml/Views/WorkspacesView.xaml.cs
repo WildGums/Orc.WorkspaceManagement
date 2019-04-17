@@ -11,15 +11,9 @@ namespace Orc.WorkspaceManagement.Views
     using Catel.MVVM.Views;
     using ViewModels;
 
-    /// <summary>
-    /// Interaction logic for WorkspacesView.xaml.
-    /// </summary>
     public partial class WorkspacesView
     {
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkspacesView"/> class.
-        /// </summary>
         public WorkspacesView()
         {
             InitializeComponent();
@@ -34,7 +28,7 @@ namespace Orc.WorkspaceManagement.Views
             set { SetValue(ScopeProperty, value); }
         }
 
-        public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register("Scope", typeof(object),
+        public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register(nameof(Scope), typeof(object),
             typeof(WorkspacesView), new FrameworkPropertyMetadata((sender, e) => ((WorkspacesView)sender).OnScopeChanged(e)));
 
         public bool HasRefreshButton
@@ -43,8 +37,8 @@ namespace Orc.WorkspaceManagement.Views
             set { SetValue(HasRefreshButtonProperty, value); }
         }
 
-        public static readonly DependencyProperty HasRefreshButtonProperty = DependencyProperty.Register(
-            "HasRefreshButton", typeof(bool), typeof(WorkspacesView), new PropertyMetadata(false));
+        public static readonly DependencyProperty HasRefreshButtonProperty = DependencyProperty.Register(nameof(HasRefreshButton), 
+            typeof(bool), typeof(WorkspacesView), new PropertyMetadata(false));
         #endregion
 
         #region Methods
@@ -57,5 +51,18 @@ namespace Orc.WorkspaceManagement.Views
             }
         }
         #endregion
+
+        private void OnWorkspacePreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var workspace = ((FrameworkElement)sender).DataContext as IWorkspace;
+            if (workspace != null)
+            {
+                var vm = ViewModel as WorkspacesViewModel;
+                if (vm != null)
+                {
+                    vm.SelectedWorkspace = workspace;
+                }
+            }
+        }
     }
 }

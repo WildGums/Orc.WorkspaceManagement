@@ -110,7 +110,7 @@ namespace Orc.WorkspaceManagement.Behaviors
                 var name = $"column_{index}";
                 var columnValue = AssociatedObject.LoadValueFromWorkspace(name, "unknown", workspace, prefix);
 
-                if (columnValue == null)
+                if (columnValue is null)
                 {
                     continue;
                 }

@@ -16,7 +16,7 @@ namespace Orc.WorkspaceManagement.Test
         {
             public static IWorkspaceManager WithEmptyInitializer(IWorkspacesStorageService workspacesStorageService = null)
             {
-                if (workspacesStorageService == null)
+                if (workspacesStorageService is null)
                 {
                     workspacesStorageService = Mock.Of<IWorkspacesStorageService>();
                 }
