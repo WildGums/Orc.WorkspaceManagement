@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net46;net47;netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <AssemblyName>Orc.WorkspaceManagement</AssemblyName>
@@ -16,15 +16,15 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="MethodTimer.Fody" Version="2.3.2" PrivateAssets="all" />
     <PackageReference Include="Catel.Core" Version="5.10.0" />
     <PackageReference Include="Catel.Fody" Version="3.9.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="4.2.1" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MethodTimer.Fody" Version="2.3.3" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="1.9.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
-    <PackageReference Include="Orc.FileSystem" Version="3.0.0" />
+    <PackageReference Include="Orc.FileSystem" Version="3.1.0" />
     <PackageReference Include="WpfAnalyzers" Version="2.2.0.2" PrivateAssets="all" />
   </ItemGroup>
 
