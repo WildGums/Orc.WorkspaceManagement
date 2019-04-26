@@ -456,14 +456,11 @@ namespace Orc.WorkspaceManagement
 
             await _workspacesStorageService.SaveWorkspacesAsync(baseDirectory, _workspaces);
 
-            foreach (var workspace in _workspaces)
-            {
-                workspace.UpdateIsDirtyFlag(false);
-            }
+            Workspace.UpdateIsDirtyFlag(false);
 
             Saved?.Invoke(this, EventArgs.Empty);
 
-            Log.Info($"[{Scope}] Saved all workspaces to '{baseDirectory}'");
+            Log.Info($"[{Scope}] Saved current workspace to '{baseDirectory}'");
 
             return true;
         }
