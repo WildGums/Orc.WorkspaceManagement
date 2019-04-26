@@ -90,7 +90,7 @@
                 return;
             }
 
-            IsDirty = true;
+            UpdateIsDirtyFlag(true);
         }
 
         protected override void OnDeserialized()
@@ -143,6 +143,8 @@
         public void UpdateIsDirtyFlag(bool isDirty)
         {
             IsDirty = isDirty;
+
+            UpdateDisplayName();
         }
 
         public void SetWorkspaceValue(string name, object value)
