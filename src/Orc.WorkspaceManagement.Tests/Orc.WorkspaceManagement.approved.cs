@@ -6,6 +6,11 @@ public class static ModuleInitializer
 }
 namespace Orc.WorkspaceManagement
 {
+    public class CancelWorkspaceEventArgs : System.ComponentModel.CancelEventArgs
+    {
+        public CancelWorkspaceEventArgs(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
+    }
     public class EmptyWorkspaceInitializer : Orc.WorkspaceManagement.IWorkspaceInitializer
     {
         public EmptyWorkspaceInitializer() { }
@@ -52,8 +57,8 @@ namespace Orc.WorkspaceManagement
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        public event System.EventHandler<System.EventArgs> Saved;
-        public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
+        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> Saved;
+        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;
@@ -202,8 +207,8 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        public event System.EventHandler<System.EventArgs> Saved;
-        public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
+        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> Saved;
+        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;

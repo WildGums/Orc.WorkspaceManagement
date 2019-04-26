@@ -97,8 +97,8 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<CancelEventArgs> Initializing;
         public event EventHandler<EventArgs> Initialized;
 
-        public event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        public event EventHandler<EventArgs> Saved;
+        public event AsyncEventHandler<CancelWorkspaceEventArgs> SavingAsync;
+        public event EventHandler<WorkspaceEventArgs> Saved;
 
         public event EventHandler<EventArgs> WorkspacesChanged;
 
@@ -439,15 +439,17 @@ namespace Orc.WorkspaceManagement
         }
 
         /// <summary>
-        /// Saves all the workspaces to disk.
+        /// Saves workspace to disk.
         /// </summary>
         public async Task<bool> SaveAsync()
         {
             var baseDirectory = BaseDirectory;
 
-            Log.Debug($"[{Scope}] Saving all workspaces to '{baseDirectory}'");
+            Log.Debug($"[{Scope}] Saving workspace to '{baseDirectory}'");
 
-            var cancelEventArgs = new CancelEventArgs();
+            var workspace = Workspace;
+
+            var cancelEventArgs = new CancelWorkspaceEventArgs(workspace);
             await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
@@ -456,9 +458,9 @@ namespace Orc.WorkspaceManagement
 
             await _workspacesStorageService.SaveWorkspacesAsync(baseDirectory, _workspaces);
 
-            Workspace.UpdateIsDirtyFlag(false);
+            workspace?.UpdateIsDirtyFlag(false);
 
-            Saved?.Invoke(this, EventArgs.Empty);
+            Saved?.Invoke(this, new WorkspaceEventArgs(workspace));
 
             Log.Info($"[{Scope}] Saved current workspace to '{baseDirectory}'");
 
