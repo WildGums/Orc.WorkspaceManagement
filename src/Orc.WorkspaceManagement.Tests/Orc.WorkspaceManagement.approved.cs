@@ -57,13 +57,17 @@ namespace Orc.WorkspaceManagement
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> Saved;
-        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> SavingAsync;
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        public event System.EventHandler<System.EventArgs> Saved;
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceRemoved;
+        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceSaved;
+        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> WorkspaceSavingAsync;
         public event System.EventHandler<System.EventArgs> WorkspacesChanged;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
@@ -207,13 +211,17 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> Saved;
-        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> SavingAsync;
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        public event System.EventHandler<System.EventArgs> Saved;
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceRemoved;
+        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceSaved;
+        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> WorkspaceSavingAsync;
         public event System.EventHandler<System.EventArgs> WorkspacesChanged;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
