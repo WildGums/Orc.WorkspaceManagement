@@ -20,8 +20,13 @@
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
 
-        event AsyncEventHandler<CancelWorkspaceEventArgs> SavingAsync;
-        event EventHandler<WorkspaceEventArgs> Saved;
+        event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
+        event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSavingAsync", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        event AsyncEventHandler<CancelEventArgs> SavingAsync;
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSaved", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        event EventHandler<EventArgs> Saved;
 
         event EventHandler<EventArgs> WorkspacesChanged;
 
