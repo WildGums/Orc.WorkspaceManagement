@@ -20,8 +20,8 @@
         event EventHandler<CancelEventArgs> Initializing;
         event EventHandler<EventArgs> Initialized;
 
-        event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        event EventHandler<EventArgs> Saved;
+        event AsyncEventHandler<CancelWorkspaceEventArgs> SavingAsync;
+        event EventHandler<WorkspaceEventArgs> Saved;
 
         event EventHandler<EventArgs> WorkspacesChanged;
 
