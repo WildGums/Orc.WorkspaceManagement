@@ -97,9 +97,6 @@ namespace Orc.WorkspaceManagement
         public event EventHandler<CancelEventArgs> Initializing;
         public event EventHandler<EventArgs> Initialized;
 
-        public event AsyncEventHandler<CancelWorkspaceEventArgs> SavingAsync;
-        public event EventHandler<WorkspaceEventArgs> Saved;
-
         public event EventHandler<EventArgs> WorkspacesChanged;
 
         public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
@@ -112,6 +109,14 @@ namespace Orc.WorkspaceManagement
 
         public event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
         public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
+
+        public event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
+        public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSavingAsync", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        public event AsyncEventHandler<CancelEventArgs> SavingAsync;
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSaved", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        public event EventHandler<EventArgs> Saved;
         #endregion
 
         #region IWorkspaceManager Members
@@ -451,6 +456,7 @@ namespace Orc.WorkspaceManagement
 
             var cancelEventArgs = new CancelWorkspaceEventArgs(workspace);
             await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
+            await WorkspaceSavingAsync.SafeInvokeAsync(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
                 return false;
@@ -460,7 +466,9 @@ namespace Orc.WorkspaceManagement
 
             workspace?.UpdateIsDirtyFlag(false);
 
-            Saved?.Invoke(this, new WorkspaceEventArgs(workspace));
+            var workspaceEventArgs = new WorkspaceEventArgs(workspace);
+            Saved?.Invoke(this, workspaceEventArgs);
+            WorkspaceSaved?.Invoke(this, workspaceEventArgs);
 
             Log.Info($"[{Scope}] Saved current workspace to '{baseDirectory}'");
 

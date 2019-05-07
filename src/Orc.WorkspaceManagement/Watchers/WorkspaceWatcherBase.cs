@@ -48,8 +48,8 @@ namespace Orc.WorkspaceManagement
             workspaceManager.WorkspaceProviderAdded += OnWorkspaceProviderAdded;
             workspaceManager.WorkspaceProviderRemoved += OnWorkspaceProviderRemoved;
 
-            workspaceManager.SavingAsync += OnSavingAsync;
-            workspaceManager.Saved += OnSaved;
+            workspaceManager.WorkspaceSavingAsync += OnSavingAsync;
+            workspaceManager.WorkspaceSaved += OnSaved;
         }
         #endregion
 
@@ -69,8 +69,8 @@ namespace Orc.WorkspaceManagement
             WorkspaceManager.WorkspaceProviderAdded -= OnWorkspaceProviderAdded;
             WorkspaceManager.WorkspaceProviderRemoved -= OnWorkspaceProviderRemoved;
 
-            WorkspaceManager.SavingAsync -= OnSavingAsync;
-            WorkspaceManager.Saved -= OnSaved;
+            WorkspaceManager.WorkspaceSavingAsync -= OnSavingAsync;
+            WorkspaceManager.WorkspaceSaved -= OnSaved;
         }
 
         public void Dispose()
@@ -197,12 +197,12 @@ namespace Orc.WorkspaceManagement
             OnWorkspaceProviderRemoved(e.WorkspaceProvider);
         }
 
-        private async Task OnSavingAsync(object sender, CancelEventArgs e)
+        private async Task OnSavingAsync(object sender, CancelWorkspaceEventArgs e)
         {
             e.Cancel = !await OnSavingAsync();
         }
 
-        private void OnSaved(object sender, EventArgs e)
+        private void OnSaved(object sender, WorkspaceEventArgs e)
         {
             OnSaved();
         }
