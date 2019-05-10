@@ -57,9 +57,9 @@ namespace Orc.WorkspaceManagement
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
         public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
         public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
@@ -211,9 +211,9 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
         public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
         public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;

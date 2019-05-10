@@ -113,9 +113,9 @@ namespace Orc.WorkspaceManagement
         public event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
         public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
 
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSavingAsync", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSavingAsync", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.0")]
         public event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSaved", RemoveInVersion = "3.3", TreatAsErrorFromVersion = "3.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSaved", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.0")]
         public event EventHandler<EventArgs> Saved;
         #endregion
 
