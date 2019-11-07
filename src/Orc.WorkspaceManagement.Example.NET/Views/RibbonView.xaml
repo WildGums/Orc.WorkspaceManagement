@@ -6,7 +6,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:fluent="urn:fluent-ribbon"
                    xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views;assembly=Orc.WorkspaceManagement.Xaml"
-                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:ribbon="clr-namespace:Orc.WorkspaceManagement.Example"
                    xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters;assembly=Orc.WorkspaceManagement.Xaml"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
@@ -16,16 +16,16 @@
             <fluent:RibbonTabItem Header="View">
                 <fluent:RibbonGroupBox Header="Workspaces">
                     <fluent:SplitButton Header="{Binding CurrentWorkspace.DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}" 
-                                        LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Plus}}"
+                                        LargeIcon="{orccontrols:FontImage {x:Static ribbon:FontAwesome.Plus}}"
                                         ClosePopupOnMouseDown="True" 
                                         Command="{Binding AddWorkspace}">
                         <views:WorkspacesView />
                     </fluent:SplitButton>
 
-                    <fluent:Button Command="{Binding SaveWorkspace}" Content="Update" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Save}}"/>
-                    <fluent:Button Command="{Binding EditWorkspace}" Content="Edit..." LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Edit}}"/>
-                    <fluent:Button Command="{Binding RemoveWorkspace}" Content="Remove" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.Remove}}"/>
-                    <fluent:Button Command="{Binding ChooseBaseDirectory}" Content="Choose another directory" LargeIcon="{orchestra:FontImage {x:Static ribbon:FontAwesome.FolderOpenO}}"/>
+                    <fluent:Button Command="{Binding SaveWorkspace}" Content="Update" LargeIcon="{orccontrols:FontImage {x:Static ribbon:FontAwesome.Save}}"/>
+                    <fluent:Button Command="{Binding EditWorkspace}" Content="Edit..." LargeIcon="{orccontrols:FontImage {x:Static ribbon:FontAwesome.Edit}}"/>
+                    <fluent:Button Command="{Binding RemoveWorkspace}" Content="Remove" LargeIcon="{orccontrols:FontImage {x:Static ribbon:FontAwesome.Remove}}"/>
+                    <fluent:Button Command="{Binding ChooseBaseDirectory}" Content="Choose another directory" LargeIcon="{orccontrols:FontImage {x:Static ribbon:FontAwesome.FolderOpenO}}"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon.Tabs>

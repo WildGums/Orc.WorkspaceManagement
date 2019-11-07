@@ -24,15 +24,16 @@
                 Title = "Demo workspace",
                 WorkspaceGroup = "Group name",
                 CanDelete = false,
-                CanEdit = false
+                CanEdit = false,
+                Persist = false
             });
 
             return workspaces;
         }
 
-        public override async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
-        {
-            await base.SaveWorkspacesAsync(path, workspaces.Where(x => x.WorkspaceGroup is null));
-        }
+        //public override async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
+        //{
+        //    await base.SaveWorkspacesAsync(path, workspaces.Where(x => x.WorkspaceGroup is null));
+        //}
     }
 }
