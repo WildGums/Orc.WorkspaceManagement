@@ -5,10 +5,13 @@
     using Catel;
     using Catel.Configuration;
     using Catel.Data;
+    using Catel.Logging;
     using Catel.Runtime.Serialization;
 
     public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Workspace>
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
             nameof(Title),
@@ -159,8 +162,26 @@
 
             try
             {
-                var value = this.GetConfigurationValue(name, default(T));
-                return value;
+                var value = GetConfigurationValue(name);
+                if (value is T)
+                {
+                    return (T)value;
+                }
+
+                if (value is null)
+                {
+                    return defaultValue;
+                }
+
+                // Cast if necessary
+                if (value is string stringValue)
+                {
+                    return (T)StringToObjectHelper.ToRightType(typeof(T), stringValue);
+                }
+
+                Log.Warning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
+
+                return defaultValue;
             }
             catch (Exception)
             {
