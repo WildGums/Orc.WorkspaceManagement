@@ -28,6 +28,7 @@
         });
 
         private bool _updatingDisplayName;
+        private bool _isDirty;
 
         #region Constructors
         public Workspace() 
@@ -56,7 +57,18 @@
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
         public bool IsVisible { get; set; }
-        public new bool IsDirty { get; private set; }
+
+        public new bool IsDirty
+        {
+            get { return _isDirty; }
+            private set
+            {
+                _isDirty = value;
+                RaisePropertyChanged(nameof(IsDirty));
+
+                UpdateDisplayName();
+            }
+        }
 
         [ExcludeFromSerialization]
         public object Scope { get; set; }
