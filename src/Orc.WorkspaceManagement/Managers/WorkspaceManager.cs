@@ -16,12 +16,13 @@ namespace Orc.WorkspaceManagement
     using Catel.IoC;
     using Catel.IO;
     using Catel.Logging;
+    using Catel.Services;
 
     public class WorkspaceManager : IWorkspaceManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly IServiceLocator _serviceLocator;
-
+        private readonly Catel.Services.IAppDataService _appDataService;
         private readonly IWorkspaceInitializer _workspaceInitializer;
 
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
@@ -37,18 +38,22 @@ namespace Orc.WorkspaceManagement
         /// <param name="workspaceInitializer">The workspace initializer.</param>
         /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
         /// <param name="serviceLocator"></param>
+        /// <param name="appDataService">The app data service.</param>
         public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator, IAppDataService appDataService)
         {
             Argument.IsNotNull(() => workspaceInitializer);
             Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => appDataService);
 
             _workspaceInitializer = workspaceInitializer;
             _workspacesStorageService = workspacesStorageService;
             _serviceLocator = serviceLocator;
+            _appDataService = appDataService;
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
-            BaseDirectory = Path.Combine(Path.GetApplicationDataDirectory(), "workspaces");
+            BaseDirectory = Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
             DefaultWorkspaceTitle = "Default";
         }
         #endregion

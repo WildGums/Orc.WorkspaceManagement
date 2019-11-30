@@ -198,7 +198,7 @@ namespace Orc.WorkspaceManagement
     }
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager
     {
-        public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IAppDataService appDataService) { }
         public bool AutoRefreshEnabled { get; set; }
         public string BaseDirectory { get; set; }
         public string DefaultWorkspaceTitle { get; set; }
