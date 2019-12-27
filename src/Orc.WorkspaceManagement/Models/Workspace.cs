@@ -63,6 +63,11 @@
             get { return _isDirty; }
             private set
             {
+                if(Equals(_isDirty, value))
+                {
+                    return;
+                }
+
                 _isDirty = value;
                 RaisePropertyChanged(nameof(IsDirty));
 

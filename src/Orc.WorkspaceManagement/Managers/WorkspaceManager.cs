@@ -532,7 +532,7 @@ namespace Orc.WorkspaceManagement
 
             try
             {
-                // TODO: use ReloadWorkspaceAsync(workspace)
+                await ReloadWorkspaceAsync(workspace);
                 await TrySetWorkspaceAsync(workspace);
             }
             finally
