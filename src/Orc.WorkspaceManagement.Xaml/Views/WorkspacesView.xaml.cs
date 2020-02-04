@@ -8,6 +8,7 @@ namespace Orc.WorkspaceManagement.Views
 {
     using System;
     using System.Windows;
+    using System.Windows.Controls;
     using Catel.MVVM.Views;
     using ViewModels;
 
@@ -54,6 +55,12 @@ namespace Orc.WorkspaceManagement.Views
 
         private void OnWorkspacePreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            // Don't handle if source is a button
+            if (e.Source is Button)
+            {
+                return;
+            }
+
             var workspace = ((FrameworkElement)sender).DataContext as IWorkspace;
             if (workspace != null)
             {

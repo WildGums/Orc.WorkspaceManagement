@@ -131,6 +131,13 @@
             {
                 Log.Debug("Loading workspace from '{0}'", fileName);
 
+                if (!_fileService.Exists(fileName))
+                {
+                    Log.Warning("File '{0}' not found. Maybe this workspace hasn't been saved yet or doesn't need a save location'.", fileName);
+
+                    return null;
+                }
+
                 using (var fileStream = _fileService.Open(fileName, FileMode.Open))
                 {
                     var workspace = _xmlSerializer.Deserialize<Workspace>(fileStream);

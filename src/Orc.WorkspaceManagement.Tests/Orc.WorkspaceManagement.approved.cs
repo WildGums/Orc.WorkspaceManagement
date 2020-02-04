@@ -57,9 +57,9 @@ namespace Orc.WorkspaceManagement
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
         public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
         public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
@@ -138,7 +138,6 @@ namespace Orc.WorkspaceManagement
         public static readonly Catel.Data.PropertyData CanDeleteProperty;
         public static readonly Catel.Data.PropertyData CanEditProperty;
         public static readonly Catel.Data.PropertyData DisplayNameProperty;
-        public static readonly Catel.Data.PropertyData IsDirtyProperty;
         public static readonly Catel.Data.PropertyData IsVisibleProperty;
         public static readonly Catel.Data.PropertyData PersistProperty;
         public static readonly Catel.Data.PropertyData ScopeProperty;
@@ -199,7 +198,7 @@ namespace Orc.WorkspaceManagement
     }
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager
     {
-        public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IAppDataService appDataService) { }
         public bool AutoRefreshEnabled { get; set; }
         public string BaseDirectory { get; set; }
         public string DefaultWorkspaceTitle { get; set; }
@@ -211,9 +210,9 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
         public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 3.3.0.", true)]
+        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
         public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;

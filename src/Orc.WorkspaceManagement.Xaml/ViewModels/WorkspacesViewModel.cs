@@ -64,10 +64,8 @@
             {
                 if (value != null)
                 {
-                    _workspaceManager.TrySetWorkspaceAsync(value).ContinueWith(_ =>
-                    {
-                        RaiseSelectedWorkspaceChanged();
-                    });
+                    _dispatcherService.InvokeTaskAsync(async () => await _workspaceManager.TrySetWorkspaceAsync(value))
+                        .ContinueWith(_ => RaiseSelectedWorkspaceChanged());
                 }
             }
         }

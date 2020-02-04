@@ -5,10 +5,13 @@
     using Catel;
     using Catel.Configuration;
     using Catel.Data;
+    using Catel.Logging;
     using Catel.Runtime.Serialization;
 
     public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Workspace>
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private static readonly HashSet<string> IgnoredProperties = new HashSet<string>(new[]
         {
             nameof(Title),
@@ -25,6 +28,7 @@
         });
 
         private bool _updatingDisplayName;
+        private bool _isDirty;
 
         #region Constructors
         public Workspace() 
@@ -53,7 +57,23 @@
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
         public bool IsVisible { get; set; }
-        public new bool IsDirty { get; private set; }
+
+        public new bool IsDirty
+        {
+            get { return _isDirty; }
+            private set
+            {
+                if(Equals(_isDirty, value))
+                {
+                    return;
+                }
+
+                _isDirty = value;
+                RaisePropertyChanged(nameof(IsDirty));
+
+                UpdateDisplayName();
+            }
+        }
 
         [ExcludeFromSerialization]
         public object Scope { get; set; }
@@ -159,8 +179,26 @@
 
             try
             {
-                var value = this.GetConfigurationValue(name, default(T));
-                return value;
+                var value = GetConfigurationValue(name);
+                if (value is T)
+                {
+                    return (T)value;
+                }
+
+                if (value is null)
+                {
+                    return defaultValue;
+                }
+
+                // Cast if necessary
+                if (value is string stringValue)
+                {
+                    return (T)StringToObjectHelper.ToRightType(typeof(T), stringValue);
+                }
+
+                Log.Warning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
+
+                return defaultValue;
             }
             catch (Exception)
             {
