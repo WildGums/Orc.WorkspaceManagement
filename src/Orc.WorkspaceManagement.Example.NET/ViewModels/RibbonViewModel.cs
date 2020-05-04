@@ -123,11 +123,14 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         public async Task OnChooseBaseDirectoryAsync()
         {
-            _selectDirectoryService.ShowNewFolderButton = true;
-
-            if (await _selectDirectoryService.DetermineDirectoryAsync())
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(new DetermineDirectoryContext
             {
-                await _workspaceManager.SetWorkspaceSchemesDirectoryAsync(_selectDirectoryService.DirectoryName);
+                ShowNewFolderButton = true,
+            });
+
+            if (result.Result)
+            {
+                await _workspaceManager.SetWorkspaceSchemesDirectoryAsync(result.DirectoryName);
             }
         }
         #endregion
