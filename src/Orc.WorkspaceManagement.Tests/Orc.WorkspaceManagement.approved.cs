@@ -1,6 +1,6 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
@@ -16,13 +16,6 @@ namespace Orc.WorkspaceManagement
         public EmptyWorkspaceInitializer() { }
         public System.Threading.Tasks.Task InitializeAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
     }
-    public class InvalidWorkspaceException : Orc.WorkspaceManagement.WorkspaceException
-    {
-        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
-        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
-        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
-        protected InvalidWorkspaceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-    }
     public interface IWorkspace
     {
         bool CanDelete { get; set; }
@@ -31,7 +24,7 @@ namespace Orc.WorkspaceManagement
         bool IsDirty { get; }
         bool IsVisible { get; set; }
         bool Persist { get; set; }
-        [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
+        [Catel.Runtime.Serialization.ExcludeFromSerialization]
         object Scope { get; set; }
         string Title { get; }
         string WorkspaceGroup { get; set; }
@@ -55,22 +48,22 @@ namespace Orc.WorkspaceManagement
         object Scope { get; set; }
         Orc.WorkspaceManagement.IWorkspace Workspace { get; }
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
-        public event System.EventHandler<System.EventArgs> Initialized;
-        public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
-        public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
-        public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceRemoved;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceSaved;
-        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> WorkspaceSavingAsync;
-        public event System.EventHandler<System.EventArgs> WorkspacesChanged;
-        public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceUpdatedEventArgs> WorkspaceUpdated;
-        public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
+        event System.EventHandler<System.EventArgs> Initialized;
+        event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
+        [System.Obsolete("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
+        event System.EventHandler<System.EventArgs> Saved;
+        [System.Obsolete("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
+        event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderAdded;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceRemoved;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceSaved;
+        event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> WorkspaceSavingAsync;
+        event System.EventHandler<Orc.WorkspaceManagement.WorkspaceUpdatedEventArgs> WorkspaceUpdated;
+        event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
+        event System.EventHandler<System.EventArgs> WorkspacesChanged;
         System.Threading.Tasks.Task AddAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         void AddProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider);
         System.Threading.Tasks.Task ApplyWorkspaceUsingProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace);
@@ -90,23 +83,23 @@ namespace Orc.WorkspaceManagement
         System.Threading.Tasks.Task<bool> TrySetWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace value);
         System.Threading.Tasks.Task UpdateIsDirtyFlagAsync(Orc.WorkspaceManagement.IWorkspace workspace);
     }
-    public class static IWorkspaceManagerExtensions
+    public static class IWorkspaceManagerExtensions
     {
         public static System.Threading.Tasks.Task AddAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.IWorkspace workspace, bool autoSelect) { }
         public static System.Threading.Tasks.Task AddProviderAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider, bool callApplyWorkspaceForCurrentWorkspace) { }
         public static System.Threading.Tasks.Task AddProviderAsync<TWorkspaceProvider>(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, bool callApplyWorkspaceForCurrentWorkspace)
             where TWorkspaceProvider : Orc.WorkspaceManagement.IWorkspaceProvider { }
         public static System.Threading.Tasks.Task<bool> CheckIsDirtyAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
-        public static System.Threading.Tasks.Task EnsureDefaultWorkspaceAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default", bool autoSelect = True) { }
+        public static System.Threading.Tasks.Task EnsureDefaultWorkspaceAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default", bool autoSelect = true) { }
         public static Orc.WorkspaceManagement.IWorkspace FindWorkspace(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string workspaceName) { }
         public static TWorkspace FindWorkspace<TWorkspace>(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string workspaceName)
             where TWorkspace : Orc.WorkspaceManagement.IWorkspace { }
         public static TWorkspace GetWorkspace<TWorkspace>(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager)
             where TWorkspace : Orc.WorkspaceManagement.IWorkspace { }
-        public static System.Threading.Tasks.Task InitializeAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound = True, bool alwaysEnsureDefaultWorkspace = True, string defaultWorkspaceName = "Default", bool autoSelect = True) { }
+        public static System.Threading.Tasks.Task InitializeAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default", bool autoSelect = true) { }
         public static System.Threading.Tasks.Task<bool> IsWorkspaceDirtyAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.IWorkspace workspace) { }
         public static System.Threading.Tasks.Task RefreshCurrentWorkspaceAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
-        public static System.Threading.Tasks.Task SetWorkspaceSchemesDirectoryAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = True, bool alwaysEnsureDefaultWorkspace = True, string defaultWorkspaceName = "Default", bool autoselectDefault = True) { }
+        public static System.Threading.Tasks.Task SetWorkspaceSchemesDirectoryAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default", bool autoselectDefault = true) { }
         public static System.Threading.Tasks.Task StoreAndSaveAsync(this Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
     }
     public interface IWorkspaceProvider
@@ -120,18 +113,25 @@ namespace Orc.WorkspaceManagement
     public interface IWorkspacesStorageService
     {
         string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace);
-        [System.ObsoleteAttribute("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName);
         System.Threading.Tasks.Task<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaceAsync(string fileName);
-        [System.ObsoleteAttribute("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path);
         System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace>> LoadWorkspacesAsync(string path);
-        [System.ObsoleteAttribute("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
         void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
         System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
-        [System.ObsoleteAttribute("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
         void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
         System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
+    }
+    public class InvalidWorkspaceException : Orc.WorkspaceManagement.WorkspaceException
+    {
+        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
+        protected InvalidWorkspaceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
     }
     public class Workspace : Catel.Configuration.DynamicConfiguration, Orc.WorkspaceManagement.IWorkspace, System.Collections.Generic.IEqualityComparer<Orc.WorkspaceManagement.Workspace>
     {
@@ -152,9 +152,9 @@ namespace Orc.WorkspaceManagement
         public bool IsDirty { get; }
         public bool IsVisible { get; set; }
         public bool Persist { get; set; }
-        [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
+        [Catel.Runtime.Serialization.ExcludeFromSerialization]
         public object Scope { get; set; }
-        [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
+        [Catel.Runtime.Serialization.ExcludeFromSerialization]
         public object Tag { get; set; }
         public string Title { get; set; }
         public string WorkspaceGroup { get; set; }
@@ -162,8 +162,8 @@ namespace Orc.WorkspaceManagement
         public override bool Equals(object obj) { }
         public bool Equals(Orc.WorkspaceManagement.Workspace x, Orc.WorkspaceManagement.Workspace y) { }
         public System.Collections.Generic.List<string> GetAllWorkspaceValueNames() { }
-        public int GetHashCode(Orc.WorkspaceManagement.Workspace obj) { }
         public override int GetHashCode() { }
+        public int GetHashCode(Orc.WorkspaceManagement.Workspace obj) { }
         public T GetWorkspaceValue<T>(string name, T defaultValue) { }
         protected override void OnDeserialized() { }
         protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
@@ -180,11 +180,11 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message) { }
-        public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
         protected WorkspaceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace, string message, System.Exception innerException) { }
         public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
     }
-    public class static WorkspaceExtensions
+    public static class WorkspaceExtensions
     {
         public static void SynchronizeWithWorkspace(this Orc.WorkspaceManagement.IWorkspace workspace, Orc.WorkspaceManagement.IWorkspace newWorkspaceData) { }
     }
@@ -192,8 +192,8 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message) { }
-        public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message, System.Exception innerException) { }
         protected WorkspaceManagementInitializationException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, string message, System.Exception innerException) { }
         public Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; }
     }
     public class WorkspaceManager : Orc.WorkspaceManagement.IWorkspaceManager
@@ -210,9 +210,9 @@ namespace Orc.WorkspaceManagement
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
         public event System.EventHandler<System.EventArgs> Initialized;
         public event System.EventHandler<System.ComponentModel.CancelEventArgs> Initializing;
-        [System.ObsoleteAttribute("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `WorkspaceSaved` instead. Will be removed in version 4.0.0.", true)]
         public event System.EventHandler<System.EventArgs> Saved;
-        [System.ObsoleteAttribute("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
+        [System.Obsolete("Use `WorkspaceSavingAsync` instead. Will be removed in version 4.0.0.", true)]
         public event Catel.AsyncEventHandler<System.ComponentModel.CancelEventArgs> SavingAsync;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceAdded;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceInfoRequested;
@@ -221,9 +221,9 @@ namespace Orc.WorkspaceManagement
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceRemoved;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceEventArgs> WorkspaceSaved;
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.CancelWorkspaceEventArgs> WorkspaceSavingAsync;
-        public event System.EventHandler<System.EventArgs> WorkspacesChanged;
         public event System.EventHandler<Orc.WorkspaceManagement.WorkspaceUpdatedEventArgs> WorkspaceUpdated;
         public event Catel.AsyncEventHandler<Orc.WorkspaceManagement.WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
+        public event System.EventHandler<System.EventArgs> WorkspacesChanged;
         public System.Threading.Tasks.Task AddAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public void AddProvider(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider) { }
         public System.Threading.Tasks.Task ApplyWorkspaceUsingProvidersAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
@@ -248,9 +248,9 @@ namespace Orc.WorkspaceManagement
     {
         protected readonly Catel.IoC.IServiceLocator ServiceLocator;
         protected WorkspaceProviderBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.IoC.IServiceLocator serviceLocator) { }
-        public virtual object Scope { get; set; }
         public object Tag { get; set; }
         protected Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; set; }
+        public virtual object Scope { get; set; }
         public abstract System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         public virtual System.Threading.Tasks.Task<bool> CheckIsDirtyAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public abstract System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace);
@@ -259,27 +259,6 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceProviderEventArgs(Orc.WorkspaceManagement.IWorkspaceProvider workspaceProvider) { }
         public Orc.WorkspaceManagement.IWorkspaceProvider WorkspaceProvider { get; }
-    }
-    public class WorkspacesStorageService : Orc.WorkspaceManagement.IWorkspacesStorageService
-    {
-        protected readonly Orc.FileSystem.IDirectoryService _directoryService;
-        protected readonly Orc.FileSystem.IFileService _fileService;
-        protected readonly Catel.Runtime.Serialization.ISerializationManager _serializationManager;
-        protected readonly Catel.Runtime.Serialization.Xml.IXmlSerializer _xmlSerializer;
-        public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Orc.FileSystem.IFileService fileService, Orc.FileSystem.IDirectoryService directoryService) { }
-        public string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace) { }
-        [System.ObsoleteAttribute("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
-        public virtual Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName) { }
-        public virtual System.Threading.Tasks.Task<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaceAsync(string fileName) { }
-        [System.ObsoleteAttribute("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
-        public virtual System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path) { }
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace>> LoadWorkspacesAsync(string path) { }
-        [System.ObsoleteAttribute("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
-        public virtual void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
-        public virtual System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
-        [System.ObsoleteAttribute("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
-        public virtual void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
-        public virtual System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
     }
     public class WorkspaceUpdatedEventArgs : System.EventArgs
     {
@@ -290,7 +269,7 @@ namespace Orc.WorkspaceManagement
     }
     public class WorkspaceUpdatingEventArgs : System.ComponentModel.CancelEventArgs
     {
-        public WorkspaceUpdatingEventArgs(Orc.WorkspaceManagement.IWorkspace oldWorkspace, Orc.WorkspaceManagement.IWorkspace newWorkspace, bool cancel = False) { }
+        public WorkspaceUpdatingEventArgs(Orc.WorkspaceManagement.IWorkspace oldWorkspace, Orc.WorkspaceManagement.IWorkspace newWorkspace, bool cancel = false) { }
         public bool IsRefresh { get; }
         public Orc.WorkspaceManagement.IWorkspace NewWorkspace { get; set; }
         public Orc.WorkspaceManagement.IWorkspace OldWorkspace { get; set; }
@@ -300,8 +279,8 @@ namespace Orc.WorkspaceManagement
         protected readonly Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager;
         protected WorkspaceWatcherBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
-        protected virtual void Dispose(bool disposing) { }
         public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
         protected virtual void OnSaved() { }
         protected virtual System.Threading.Tasks.Task<bool> OnSavingAsync() { }
         protected virtual void OnWorkspaceAdded(Orc.WorkspaceManagement.IWorkspace workspace) { }
@@ -311,5 +290,26 @@ namespace Orc.WorkspaceManagement
         protected virtual void OnWorkspaceUpdated(Orc.WorkspaceManagement.IWorkspace oldWorkspace, Orc.WorkspaceManagement.IWorkspace newWorkspace, bool isRefresh) { }
         protected virtual System.Threading.Tasks.Task<bool> OnWorkspaceUpdatingAsync(Orc.WorkspaceManagement.IWorkspace oldWorkspace, Orc.WorkspaceManagement.IWorkspace newWorkspace, bool isRefresh) { }
         protected virtual bool ShouldIgnoreWorkspaceChange() { }
+    }
+    public class WorkspacesStorageService : Orc.WorkspaceManagement.IWorkspacesStorageService
+    {
+        protected readonly Orc.FileSystem.IDirectoryService _directoryService;
+        protected readonly Orc.FileSystem.IFileService _fileService;
+        protected readonly Catel.Runtime.Serialization.ISerializationManager _serializationManager;
+        protected readonly Catel.Runtime.Serialization.Xml.IXmlSerializer _xmlSerializer;
+        public WorkspacesStorageService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Orc.FileSystem.IFileService fileService, Orc.FileSystem.IDirectoryService directoryService) { }
+        public string GetWorkspaceFileName(string directory, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        [System.Obsolete("Use `LoadWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
+        public virtual Orc.WorkspaceManagement.IWorkspace LoadWorkspace(string fileName) { }
+        public virtual System.Threading.Tasks.Task<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaceAsync(string fileName) { }
+        [System.Obsolete("Use `LoadWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
+        public virtual System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> LoadWorkspaces(string path) { }
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace>> LoadWorkspacesAsync(string path) { }
+        [System.Obsolete("Use `SaveWorkspaceAsync` instead. Will be removed in version 4.0.0.", true)]
+        public virtual void SaveWorkspace(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public virtual System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace) { }
+        [System.Obsolete("Use `SaveWorkspacesAsync` instead. Will be removed in version 4.0.0.", true)]
+        public virtual void SaveWorkspaces(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
+        public virtual System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
     }
 }

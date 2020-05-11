@@ -19,7 +19,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         }
 
         public static readonly DependencyProperty PersistSizeProperty =
-            DependencyProperty.Register("PersistSize", typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(PersistSize), typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
 
 
         public bool PersistGridSettings
@@ -29,7 +29,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         }
 
         public static readonly DependencyProperty PersistGridSettingsProperty =
-            DependencyProperty.Register("PersistGridSettings", typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(PersistGridSettings), typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
         #endregion
 
         #region Methods

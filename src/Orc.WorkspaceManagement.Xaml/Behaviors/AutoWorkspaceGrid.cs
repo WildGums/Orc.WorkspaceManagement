@@ -32,7 +32,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         // Using a DependencyProperty as the backing store for RowsToPersist.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RowsToPersistProperty =
-            DependencyProperty.Register("RowsToPersist", typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(RowsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
 
 
         public string ColumnsToPersist
@@ -43,7 +43,7 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         // Using a DependencyProperty as the backing store for ColumnsToPersist.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ColumnsToPersistProperty =
-            DependencyProperty.Register("ColumnsToPersist", typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(ColumnsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
         #endregion
 
         protected override void OnAssociatedObjectLoaded()
