@@ -117,11 +117,6 @@ namespace Orc.WorkspaceManagement
 
         public event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
         public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
-
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSavingAsync", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.0")]
-        public event AsyncEventHandler<CancelEventArgs> SavingAsync;
-        [ObsoleteEx(ReplacementTypeOrMember = "WorkspaceSaved", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.0")]
-        public event EventHandler<EventArgs> Saved;
         #endregion
 
         #region IWorkspaceManager Members
@@ -460,7 +455,6 @@ namespace Orc.WorkspaceManagement
             var workspace = Workspace;
 
             var cancelEventArgs = new CancelWorkspaceEventArgs(workspace);
-            await SavingAsync.SafeInvokeAsync(this, cancelEventArgs);
             await WorkspaceSavingAsync.SafeInvokeAsync(this, cancelEventArgs);
             if (cancelEventArgs.Cancel)
             {
@@ -472,7 +466,6 @@ namespace Orc.WorkspaceManagement
             workspace?.UpdateIsDirtyFlag(false);
 
             var workspaceEventArgs = new WorkspaceEventArgs(workspace);
-            Saved?.Invoke(this, workspaceEventArgs);
             WorkspaceSaved?.Invoke(this, workspaceEventArgs);
 
             Log.Info($"[{Scope}] Saved current workspace to '{baseDirectory}'");

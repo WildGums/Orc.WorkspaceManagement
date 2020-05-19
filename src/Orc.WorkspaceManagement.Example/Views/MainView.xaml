@@ -6,36 +6,46 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:views="clr-namespace:Orc.WorkspaceManagement.Example.Views"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:behaviors="clr-namespace:Orc.WorkspaceManagement.Behaviors;assembly=Orc.WorkspaceManagement.Xaml"
-                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
+                   xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors" 
+                   xmlns:orcworkspacemanagement="http://schemas.wildgums.com/orc/workspacemanagement" 
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
                    mc:Ignorable="d" 
                    d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="LayoutRoot">
-        <i:Interaction.Behaviors>
-            <behaviors:AutoWorkspaceGrid KeyPrefix="mainWindowGrid" RowsToPersist="none" ColumnsToPersist="0,4" />
-        </i:Interaction.Behaviors>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+        <orctheming:ThemeSwitcherView Grid.Row="0" />
 
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
-            
-        </StackPanel>
+        <Grid Grid.Row="1">
+            <xamlbehaviors:Interaction.Behaviors>
+                <orcworkspacemanagement:AutoWorkspaceGrid KeyPrefix="mainWindowGrid" RowsToPersist="none" ColumnsToPersist="0,4" />
+            </xamlbehaviors:Interaction.Behaviors>
 
-        <Label Grid.Row="1" Grid.ColumnSpan="5">
-            <TextBlock TextWrapping="Wrap">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
+
+            </StackPanel>
+
+            <Label Grid.Row="1" Grid.ColumnSpan="5">
+                <TextBlock TextWrapping="Wrap">
                 Use any of the buttons above to manage the workspace. It shows how to use the workspace manager and how
                 to interact with it.
                 <LineBreak /><LineBreak />
@@ -44,29 +54,30 @@
                 <LineBreak /><LineBreak />
                 Note that managing a workspace isn't a view model specific thing, so writing / reading a workspace can happen in 
                 both the views and view models.
-            </TextBlock>
-        </Label>
+                </TextBlock>
+            </Label>
 
-        <views:AView Grid.Row="2" Grid.Column="0">
-            <i:Interaction.Behaviors>
-                <behaviors:AutoWorkspace PersistSize="False" />
-            </i:Interaction.Behaviors>
-        </views:AView>
+            <views:AView Grid.Row="2" Grid.Column="0">
+                <xamlbehaviors:Interaction.Behaviors>
+                    <orcworkspacemanagement:AutoWorkspace PersistSize="False" />
+                </xamlbehaviors:Interaction.Behaviors>
+            </views:AView>
 
-        <GridSplitter Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
+            <GridSplitter Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
 
-        <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="Bold" Text="{Binding SelectedWorkspace.Title}" />
-        </Label>
+            <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="Bold" Text="{Binding SelectedWorkspace.Title}" />
+            </Label>
 
-        <GridSplitter Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
+            <GridSplitter Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
 
-        <views:BView Grid.Row="2" Grid.Column="4">
-            <i:Interaction.Behaviors>
-                <behaviors:AutoWorkspace PersistSize="False" />
-            </i:Interaction.Behaviors>
-        </views:BView>
+            <views:BView Grid.Row="2" Grid.Column="4">
+                <xamlbehaviors:Interaction.Behaviors>
+                    <orcworkspacemanagement:AutoWorkspace PersistSize="False" />
+                </xamlbehaviors:Interaction.Behaviors>
+            </views:BView>
 
-        <orccontrols:LogViewerControl Grid.Row="3" Grid.ColumnSpan="5" Height="200" />
+            <orccontrols:LogViewerControl Grid.Row="3" Grid.ColumnSpan="5" Height="200" />
+        </Grid>
     </Grid>
 </catel:UserControl>

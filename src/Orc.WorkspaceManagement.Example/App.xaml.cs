@@ -2,14 +2,9 @@
 {
     using System.Globalization;
     using System.Windows;
-
-    using Catel.ApiCop;
-    using Catel.ApiCop.Listeners;
     using Catel.IoC;
     using Catel.Logging;
-    using Catel.Reflection;
     using Catel.Services;
-    using Catel.Windows;
     using Orchestra;
     using Orchestra.Services;
     using Orchestra.Views;
@@ -44,15 +39,6 @@
             var serviceLocator = ServiceLocator.Default;
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            // Get advisory report in console
-            ApiCopManager.AddListener(new ConsoleApiCopListener());
-            ApiCopManager.WriteResults();
-
-            base.OnExit(e);
         }
     }
 }
