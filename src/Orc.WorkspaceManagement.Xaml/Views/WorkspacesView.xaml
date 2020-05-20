@@ -13,7 +13,7 @@
         <converters:TriggerConverter x:Key="TriggerConverter" />
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" Background="White">
+    <Grid x:Name="layoutRoot" Background="{DynamicResource Orc.Brushes.Control.Default.Background}">
         <ItemsControl ItemsSource="{Binding WorkspaceGroups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
