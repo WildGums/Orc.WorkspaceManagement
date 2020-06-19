@@ -114,6 +114,7 @@ namespace Orc.WorkspaceManagement
         System.Threading.Tasks.Task SaveWorkspaceAsync(string fileName, Orc.WorkspaceManagement.IWorkspace workspace);
         System.Threading.Tasks.Task SaveWorkspacesAsync(string path, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces);
     }
+    [System.Serializable]
     public class InvalidWorkspaceException : Orc.WorkspaceManagement.WorkspaceException
     {
         public InvalidWorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
@@ -164,6 +165,7 @@ namespace Orc.WorkspaceManagement
         public WorkspaceEventArgs(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
     }
+    [System.Serializable]
     public class WorkspaceException : System.Exception
     {
         public WorkspaceException(Orc.WorkspaceManagement.IWorkspace workspace) { }
@@ -176,6 +178,7 @@ namespace Orc.WorkspaceManagement
     {
         public static void SynchronizeWithWorkspace(this Orc.WorkspaceManagement.IWorkspace workspace, Orc.WorkspaceManagement.IWorkspace newWorkspaceData) { }
     }
+    [System.Serializable]
     public class WorkspaceManagementInitializationException : System.Exception
     {
         public WorkspaceManagementInitializationException(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
