@@ -14,6 +14,7 @@
 
         <Geometry x:Key="DeleteGeometry">M453.423,396.115L676.033,618.725L618.721,676.037L396.111,453.427L173.501,676.037L116.188,618.725L338.798,396.115L116.188,173.505L173.501,116.193L396.111,338.803L618.721,116.193L676.033,173.505L453.423,396.115Z</Geometry>
         <Geometry x:Key="RefreshGeometry">M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z</Geometry>
+        <Geometry x:Key="ArrowRightGeometry">M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z</Geometry>
     </UserControl.Resources>
 
     <Grid x:Name="layoutRoot" Background="{DynamicResource Orc.Brushes.Control.Default.Background}">
@@ -51,9 +52,16 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Image Grid.Column="0" Source="/Orc.WorkspaceManagement.Xaml;component/Resources/Images/selected.png" Stretch="None"
-                                               Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                               Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
+                                        <Path Grid.Column="0"
+                                              Margin="0,2,0,0"
+                                              Height="10"
+                                              Width="10"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource ArrowRightGeometry}"
+                                              Stretch="Fill"
+                                              Fill="{DynamicResource Orc.Brushes.Control.Default.Foreground}"
+                                              Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
 
                                         <Label Grid.Column="1" 
                                                Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
