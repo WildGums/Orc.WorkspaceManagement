@@ -1,14 +1,39 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Behaviors")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Converters")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Views")]
-[assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.wildgums.com/orc/workspacemanagement", "orcworkspacemanagement")]
-[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Behaviors")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Converters")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/workspacemanagement", "Orc.WorkspaceManagement.Views")]
+[assembly: System.Windows.Markup.XmlnsPrefix("http://schemas.wildgums.com/orc/workspacemanagement", "orcworkspacemanagement")]
+[assembly: System.Windows.ThemeInfo(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
+}
+namespace Orc.WorkspaceManagement
+{
+    public class BehaviorWorkspaceProvider : Orc.WorkspaceManagement.WorkspaceProviderBase
+    {
+        public BehaviorWorkspaceProvider(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.Behaviors.IWorkspaceBehavior workspaceBehavior, Catel.Services.IDispatcherService dispatcherService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public override System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
+        public override System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
+    }
+    public static class FrameworkElementExtensions
+    {
+        public static void LoadGridValuesFromWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+        public static void LoadSizeFromWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+        public static T LoadValueFromWorkspace<T>(this System.Windows.FrameworkElement frameworkElement, string name, T defaultValue, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+        public static void SaveGridValuesToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+        public static void SaveSizeToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+        public static void SaveValueToWorkspace(this System.Windows.FrameworkElement frameworkElement, string name, object value, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
+    }
+    [System.Diagnostics.DebuggerDisplay("{Title}")]
+    public class WorkspaceGroup
+    {
+        public WorkspaceGroup(string title, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
+        public string Title { get; }
+        public System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
+    }
 }
 namespace Orc.WorkspaceManagement.Behaviors
 {
@@ -53,31 +78,6 @@ namespace Orc.WorkspaceManagement.Behaviors
         protected abstract void SaveSettings(Orc.WorkspaceManagement.IWorkspace workspace, string prefix);
     }
 }
-namespace Orc.WorkspaceManagement
-{
-    public class BehaviorWorkspaceProvider : Orc.WorkspaceManagement.WorkspaceProviderBase
-    {
-        public BehaviorWorkspaceProvider(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.Behaviors.IWorkspaceBehavior workspaceBehavior, Catel.Services.IDispatcherService dispatcherService, Catel.IoC.IServiceLocator serviceLocator) { }
-        public override System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
-        public override System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
-    }
-    public class static FrameworkElementExtensions
-    {
-        public static void LoadGridValuesFromWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-        public static void LoadSizeFromWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-        public static T LoadValueFromWorkspace<T>(this System.Windows.FrameworkElement frameworkElement, string name, T defaultValue, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-        public static void SaveGridValuesToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-        public static void SaveSizeToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-        public static void SaveValueToWorkspace(this System.Windows.FrameworkElement frameworkElement, string name, object value, Orc.WorkspaceManagement.IWorkspace workspace = null, string prefix = null) { }
-    }
-    [System.Diagnostics.DebuggerDisplayAttribute("{Title}")]
-    public class WorkspaceGroup
-    {
-        public WorkspaceGroup(string title, System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspace> workspaces) { }
-        public string Title { get; }
-        public System.Collections.Generic.List<Orc.WorkspaceManagement.IWorkspace> Workspaces { get; }
-    }
-}
 namespace Orc.WorkspaceManagement.Converters
 {
     public class IsCurrentWorkspaceToBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
@@ -109,6 +109,17 @@ namespace Orc.WorkspaceManagement.Converters
 }
 namespace Orc.WorkspaceManagement.ViewModels
 {
+    public class WorkspaceViewModel : Catel.MVVM.ViewModelBase
+    {
+        public static readonly Catel.Data.PropertyData WorkspaceProperty;
+        public static readonly Catel.Data.PropertyData WorkspaceTitleProperty;
+        public WorkspaceViewModel(Orc.WorkspaceManagement.IWorkspace workspace, Catel.Services.ILanguageService languageService) { }
+        [Catel.MVVM.Model]
+        public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
+        [Catel.MVVM.ViewModelToModel("Workspace", "Title")]
+        public string WorkspaceTitle { get; set; }
+        protected override void ValidateFields(System.Collections.Generic.List<Catel.Data.IFieldValidationResult> validationResults) { }
+    }
     public class WorkspacesViewModel : Catel.MVVM.ViewModelBase
     {
         public static readonly Catel.Data.PropertyData ScopeProperty;
@@ -123,34 +134,23 @@ namespace Orc.WorkspaceManagement.ViewModels
         protected override System.Threading.Tasks.Task CloseAsync() { }
         protected override System.Threading.Tasks.Task InitializeAsync() { }
     }
-    public class WorkspaceViewModel : Catel.MVVM.ViewModelBase
-    {
-        public static readonly Catel.Data.PropertyData WorkspaceProperty;
-        public static readonly Catel.Data.PropertyData WorkspaceTitleProperty;
-        public WorkspaceViewModel(Orc.WorkspaceManagement.IWorkspace workspace, Catel.Services.ILanguageService languageService) { }
-        [Catel.MVVM.ModelAttribute()]
-        public Orc.WorkspaceManagement.IWorkspace Workspace { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("Workspace", "Title")]
-        public string WorkspaceTitle { get; set; }
-        protected override void ValidateFields(System.Collections.Generic.List<Catel.Data.IFieldValidationResult> validationResults) { }
-    }
 }
 namespace Orc.WorkspaceManagement.Views
 {
+    public class WorkspaceWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
+    {
+        public WorkspaceWindow() { }
+        public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel viewModel) { }
+        public void InitializeComponent() { }
+    }
     public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector, System.Windows.Markup.IStyleConnector
     {
         public static readonly System.Windows.DependencyProperty HasRefreshButtonProperty;
         public static readonly System.Windows.DependencyProperty ScopeProperty;
         public WorkspacesView() { }
         public bool HasRefreshButton { get; set; }
-        [Catel.MVVM.Views.ViewToViewModelAttribute("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
+        [Catel.MVVM.Views.ViewToViewModel("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
         public object Scope { get; set; }
-        public void InitializeComponent() { }
-    }
-    public class WorkspaceWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
-    {
-        public WorkspaceWindow() { }
-        public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel viewModel) { }
         public void InitializeComponent() { }
     }
 }
