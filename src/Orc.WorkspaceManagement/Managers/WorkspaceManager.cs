@@ -365,9 +365,9 @@ namespace Orc.WorkspaceManagement
             return removed;
         }
 
-        /// <summary> 
-        /// Reloads the workspace by reading the information from the original location. 
-        /// </summary> 
+        /// <summary>
+        /// Reloads the workspace by reading the information from the original location.
+        /// </summary>
         public Task ReloadWorkspaceAsync()
         {
             return ReloadWorkspaceAsync(Workspace);
