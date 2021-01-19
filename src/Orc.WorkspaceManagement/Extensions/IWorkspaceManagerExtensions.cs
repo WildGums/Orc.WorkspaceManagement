@@ -170,6 +170,11 @@ namespace Orc.WorkspaceManagement
                 return true;
             }
 
+            if (!workspace.Persist || !workspace.CanEdit)
+            {
+                return false;
+            }
+
             if (workspace.Equals(workspaceManager.RefreshingWorkspace))
             {
                 return false;
@@ -192,6 +197,11 @@ namespace Orc.WorkspaceManagement
             Argument.IsNotNull(() => workspace);
 
             if (workspaceManager.Providers is null)
+            {
+                return false;
+            }
+
+            if (!workspace.Persist || !workspace.CanEdit)
             {
                 return false;
             }
