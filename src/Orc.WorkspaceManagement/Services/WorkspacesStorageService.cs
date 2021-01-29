@@ -44,21 +44,28 @@
 
             var workspaces = new List<IWorkspace>();
 
-            if (_directoryService.Exists(path))
+            try
             {
-                // Note: since Catel caches serializable members of an object, we might have introduced new dynamic members,
-                // so we need to clear the cache in order to make sure we always (deserialize) the right members
-                _serializationManager.Clear(typeof(Workspace));
-                _serializationManager.Clear(typeof(DynamicConfiguration));
-
-                foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
+                if (_directoryService.Exists(path))
                 {
-                    var workspace = await LoadWorkspaceAsync(workspaceFile);
-                    if (workspace != null)
+                    // Note: since Catel caches serializable members of an object, we might have introduced new dynamic members,
+                    // so we need to clear the cache in order to make sure we always (deserialize) the right members
+                    _serializationManager.Clear(typeof(Workspace));
+                    _serializationManager.Clear(typeof(DynamicConfiguration));
+
+                    foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
                     {
-                        workspaces.Add(workspace);
+                        var workspace = await LoadWorkspaceAsync(workspaceFile);
+                        if (workspace != null)
+                        {
+                            workspaces.Add(workspace);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load workspaces '{path}'");
             }
 
             return workspaces;
