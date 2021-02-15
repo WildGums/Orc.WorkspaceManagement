@@ -7,9 +7,14 @@
 namespace Orc.WorkspaceManagement.Views
 {
     using System;
+    using System.ComponentModel;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
     using Catel.MVVM.Views;
+    using Catel.Windows;
     using ViewModels;
 
     public partial class WorkspacesView
@@ -62,14 +67,27 @@ namespace Orc.WorkspaceManagement.Views
             }
 
             var workspace = ((FrameworkElement)sender).DataContext as IWorkspace;
-            if (workspace != null)
+            if (workspace == null)
             {
-                var vm = ViewModel as WorkspacesViewModel;
-                if (vm != null)
-                {
-                    vm.SelectedWorkspace = workspace;
-                }
+                return;
             }
+
+            if (ViewModel is WorkspacesViewModel vm)
+            {
+                vm.SelectedWorkspace = workspace;
+            }
+        }
+
+        private void UIElement_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+          
+            var mouseWheelEventArgs = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = UIElement.MouseWheelEvent
+            };
+
+            MainScroll.RaiseEvent(mouseWheelEventArgs);
         }
     }
 }
