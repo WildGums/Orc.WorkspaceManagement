@@ -18,7 +18,10 @@
     </UserControl.Resources>
 
     <Grid x:Name="layoutRoot" Background="{DynamicResource Orc.Brushes.Control.Default.Background}">
-        <ItemsControl ItemsSource="{Binding WorkspaceGroups}">
+
+        <ScrollViewer x:Name="MainScroll"
+                      PreviewMouseWheel="UIElement_OnPreviewMouseWheel" > 
+            <ItemsControl ItemsSource="{Binding WorkspaceGroups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -141,6 +144,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        </ScrollViewer>
     </Grid>
 
 </catel:UserControl>
