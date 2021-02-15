@@ -20,6 +20,7 @@
     <Grid x:Name="layoutRoot" Background="{DynamicResource Orc.Brushes.Control.Default.Background}">
 
         <ScrollViewer x:Name="MainScroll"
+                      VerticalScrollBarVisibility="Auto"
                       PreviewMouseWheel="UIElement_OnPreviewMouseWheel" > 
             <ItemsControl ItemsSource="{Binding WorkspaceGroups}">
             <ItemsControl.ItemTemplate>
