@@ -200,8 +200,8 @@ namespace Orc.WorkspaceManagement
             {
                 return false;
             }
-
-            if (!workspace.Persist || !workspace.CanEdit)
+            
+            if (!Equals(workspaceManager.DefaultWorkspaceTitle, workspace.Title) && (!workspace.Persist || !workspace.CanEdit))
             {
                 return false;
             }
