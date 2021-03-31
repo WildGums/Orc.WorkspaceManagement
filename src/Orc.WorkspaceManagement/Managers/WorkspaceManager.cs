@@ -386,12 +386,6 @@ namespace Orc.WorkspaceManagement
                 return;
             }
 
-            if (!workspace.CanEdit)
-            {
-                Log.Warning($"[{Scope}] Workspace is read-only, cannot reload workspace");
-                return;
-            }
-
             //TODO: implement reloding (resetting) default workspace as well
             var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
             var workspaceFromDisk = await _workspacesStorageService.LoadWorkspaceAsync(workspacePath);
