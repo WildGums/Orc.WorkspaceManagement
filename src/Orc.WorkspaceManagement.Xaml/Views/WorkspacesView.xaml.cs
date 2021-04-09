@@ -51,7 +51,7 @@ namespace Orc.WorkspaceManagement.Views
         private void OnScopeChanged(DependencyPropertyChangedEventArgs e)
         {
             var vm = ViewModel as WorkspacesViewModel;
-            if (vm != null)
+            if (vm is not null)
             {
                 vm.Scope = Scope;
             }
@@ -67,7 +67,7 @@ namespace Orc.WorkspaceManagement.Views
             }
 
             var workspace = ((FrameworkElement)sender).DataContext as IWorkspace;
-            if (workspace == null)
+            if (workspace is null)
             {
                 return;
             }

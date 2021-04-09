@@ -121,13 +121,13 @@ namespace Orc.WorkspaceManagement
         private async Task OnWorkspaceUpdatingAsync(object sender, WorkspaceUpdatingEventArgs e)
         {
 #if DEBUG
-            if (_switchStopwatch != null)
+            if (_switchStopwatch is not null)
             {
                 _switchStopwatch.Stop();
                 _switchStopwatch = null;
             }
 
-            if (_totalStopwatch != null)
+            if (_totalStopwatch is not null)
             {
                 _totalStopwatch.Stop();
                 _totalStopwatch = null;

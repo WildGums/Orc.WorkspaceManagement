@@ -71,7 +71,7 @@ namespace Orc.WorkspaceManagement
             if (callApplyWorkspaceForCurrentWorkspace)
             {
                 var workspace = workspaceManager.Workspace;
-                if (workspace != null)
+                if (workspace is not null)
                 {
                     await workspaceProvider.ApplyWorkspaceAsync(workspace);
                 }

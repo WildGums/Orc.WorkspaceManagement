@@ -11,7 +11,7 @@
             Title = title;
             Workspaces = new List<IWorkspace>();
 
-            if (workspaces != null)
+            if (workspaces is not null)
             {
                 Workspaces.AddRange(workspaces);
             }

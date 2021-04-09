@@ -32,7 +32,7 @@ namespace Orc.WorkspaceManagement.Converters
 
             var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
 
-            return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
+            return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion
     }

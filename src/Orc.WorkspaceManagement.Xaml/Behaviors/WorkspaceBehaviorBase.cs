@@ -51,7 +51,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             WorkspaceManager.AddProvider(_workspaceProvider);
 
             var workspace = WorkspaceManager.Workspace;
-            if (workspace != null)
+            if (workspace is not null)
             {
                 LoadSettings(workspace, KeyPrefix);
             }
