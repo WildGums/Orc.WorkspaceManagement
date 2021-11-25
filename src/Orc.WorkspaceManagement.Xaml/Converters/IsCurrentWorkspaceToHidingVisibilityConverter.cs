@@ -10,7 +10,9 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
     {
         #region Fields
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly IServiceLocator _serviceLocator;
+#pragma warning restore IDISP006 // Implement IDisposable.
         #endregion
 
         #region Constructors
