@@ -128,7 +128,12 @@ namespace Orc.WorkspaceManagement.Behaviors
                 }
                 else
                 {
-                    gridLength = new GridLength(double.Parse(columnValue));
+                    if (!double.TryParse(columnValue, out var gridValue))
+                    {
+                        return;
+                    }
+
+                    gridLength = new GridLength(gridValue);
                 }
 
                 AssociatedObject.ColumnDefinitions[index].SetCurrentValue(ColumnDefinition.WidthProperty, gridLength);
