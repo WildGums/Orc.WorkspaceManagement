@@ -187,6 +187,11 @@ namespace Orc.WorkspaceManagement
 
         public async Task UpdateIsDirtyFlagAsync(IWorkspace workspace)
         {
+            if (workspace is null)
+            {
+                return;
+            }
+
             var isDirty = await this.IsWorkspaceDirtyAsync(workspace);
             workspace.UpdateIsDirtyFlag(isDirty);
         }
