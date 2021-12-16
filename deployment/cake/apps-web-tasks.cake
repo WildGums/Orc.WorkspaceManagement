@@ -1,12 +1,8 @@
-#pragma warning disable 1998
-
 #l "apps-web-variables.cake"
 #l "lib-octopusdeploy.cake"
 
-#addin "nuget:?package=MagicChunks&version=2.0.0.119"
-#addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
-#addin "nuget:?package=Microsoft.Azure.KeyVault.Core&version=1.0.0"
-#addin "nuget:?package=WindowsAzure.Storage&version=9.1.1"
+#addin "nuget:?package=Microsoft.Azure.KeyVault.Core&version=3.0.5"
+#addin "nuget:?package=WindowsAzure.Storage&version=9.3.3"
 
 //-------------------------------------------------------------
 
@@ -83,7 +79,7 @@ public class WebProcessor : ProcessorBase
                 PlatformTarget = PlatformTarget.MSIL
             };
 
-            ConfigureMsBuild(BuildContext, msBuildSettings, webApp);
+            ConfigureMsBuild(BuildContext, msBuildSettings, webApp, "build");
 
             // Always disable SourceLink
             msBuildSettings.WithProperty("EnableSourceLink", "false");
@@ -99,7 +95,7 @@ public class WebProcessor : ProcessorBase
 
             // TODO: Enable GitLink / SourceLink, see RepositoryUrl, RepositoryBranchName, RepositoryCommitId variables
 
-            RunMsBuild(BuildContext, webApp, projectFileName, msBuildSettings);
+            RunMsBuild(BuildContext, webApp, projectFileName, msBuildSettings, "build");
         }
     }
 

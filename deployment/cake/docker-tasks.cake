@@ -1,10 +1,7 @@
-#pragma warning disable 1998
-
 #l "docker-variables.cake"
 #l "lib-octopusdeploy.cake"
 
-#addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-#addin "nuget:?package=Cake.Docker&version=0.9.9"
+#addin "nuget:?package=Cake.Docker&version=1.0.0"
 
 //-------------------------------------------------------------
 
@@ -50,7 +47,7 @@ public class DockerImagesProcessor : ProcessorBase
         var dockerRegistryUrl = GetDockerRegistryUrl(projectName);
 
         var tag = string.Format("{0}/{1}:{2}", dockerRegistryUrl, GetDockerImageName(projectName), version);
-        return tag.ToLower();
+        return tag.TrimStart(' ', '/').ToLower();
     }
 
     private void ConfigureDockerSettings(AutoToolSettings dockerSettings)
@@ -125,7 +122,7 @@ public class DockerImagesProcessor : ProcessorBase
                 PlatformTarget = PlatformTarget.MSIL
             };
 
-            ConfigureMsBuild(BuildContext, msBuildSettings, dockerImage);
+            ConfigureMsBuild(BuildContext, msBuildSettings, dockerImage, "build");
 
             // Always disable SourceLink
             msBuildSettings.WithProperty("EnableSourceLink", "false");
@@ -139,7 +136,7 @@ public class DockerImagesProcessor : ProcessorBase
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
             msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
 
-            RunMsBuild(BuildContext, dockerImage, projectFileName, msBuildSettings);
+            RunMsBuild(BuildContext, dockerImage, projectFileName, msBuildSettings, "build");
         }        
     }
 
@@ -193,6 +190,8 @@ public class DockerImagesProcessor : ProcessorBase
 
             var msBuildSettings = new DotNetCoreMSBuildSettings();
 
+            ConfigureMsBuildForDotNetCore(BuildContext, msBuildSettings, dockerImage, "pack");
+
             // Note: we need to set OverridableOutputPath because we need to be able to respect
             // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
             // are properties passed in using the command line)
@@ -233,7 +232,7 @@ public class DockerImagesProcessor : ProcessorBase
             {
                 NoCache = true, // Don't use cache, always make sure to fetch the right images
                 File = dockerImageSpecificationFileName,
-                Platform = "linux",
+                //Platform = "linux",
                 Tag = new string[] { GetDockerImageTag(dockerImage, BuildContext.General.Version.NuGet) }
             };
 
