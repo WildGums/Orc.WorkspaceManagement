@@ -1,19 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceWindow.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Views
+﻿namespace Orc.WorkspaceManagement.Views
 {
-    using Catel.Windows;
     using ViewModels;
 
     /// <summary>
     /// Interaction logic for WorkspaceWindow.xaml.
     /// </summary>
-    public partial class WorkspaceWindow : DataWindow
+    public partial class WorkspaceWindow
     {
         #region Constructors
         /// <summary>
