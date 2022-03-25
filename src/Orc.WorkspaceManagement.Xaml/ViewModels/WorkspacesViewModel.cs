@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows;
     using Catel;
     using Catel.Collections;
     using Catel.Data;
@@ -62,7 +63,7 @@
             get => _workspaceManager?.Workspace;
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     _dispatcherService.InvokeTaskAsync(async () => await _workspaceManager.TrySetWorkspaceAsync(value))
                         .ContinueWith(_ => RaiseSelectedWorkspaceChanged());
@@ -132,7 +133,7 @@
                 }
             };
 
-            if (modelValidation != null)
+            if (modelValidation is not null)
             {
                 modelValidation.Validating += handler;
             }
@@ -146,7 +147,7 @@
 
                 if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
                 {
-                    if (modelValidation != null)
+                    if (modelValidation is not null)
                     {
                         modelValidation.Validating -= handler;
                     }
@@ -247,7 +248,7 @@
                 return;
             }
 
-            if (previousWorkspaceManager != null)
+            if (previousWorkspaceManager is not null)
             {
                 previousWorkspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
             }
@@ -256,7 +257,7 @@
 
             _workspaceManager = workspaceManager;
 
-            if (workspaceManager != null)
+            if (workspaceManager is not null)
             {
                 _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
             }
@@ -281,7 +282,7 @@
             SelectedWorkspace = null;
 
             var workspaceManager = _workspaceManager;
-            if (workspaceManager != null)
+            if (workspaceManager is not null)
             {
                 workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
 
@@ -312,8 +313,6 @@
                                        orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
                                        group workspace by workspace.WorkspaceGroup into g
                                        select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
-
-                Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{workspaceGroups.Count}' workspace groups available");
 
                 WorkspaceGroups = workspaceGroups;
 

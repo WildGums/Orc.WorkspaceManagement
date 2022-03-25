@@ -60,6 +60,7 @@ namespace Orc.WorkspaceManagement
         #region Methods
         protected virtual void Dispose(bool disposing)
         {
+#pragma warning disable IDISP023 // Don't use reference types in finalizer context.
             WorkspaceManager.WorkspaceUpdatingAsync -= OnWorkspaceUpdatingAsync;
             WorkspaceManager.WorkspaceUpdated -= OnWorkspaceUpdated;
 
@@ -71,6 +72,7 @@ namespace Orc.WorkspaceManagement
 
             WorkspaceManager.WorkspaceSavingAsync -= OnSavingAsync;
             WorkspaceManager.WorkspaceSaved -= OnSaved;
+#pragma warning restore IDISP023 // Don't use reference types in finalizer context.
         }
 
         public void Dispose()
@@ -121,13 +123,13 @@ namespace Orc.WorkspaceManagement
         private async Task OnWorkspaceUpdatingAsync(object sender, WorkspaceUpdatingEventArgs e)
         {
 #if DEBUG
-            if (_switchStopwatch != null)
+            if (_switchStopwatch is not null)
             {
                 _switchStopwatch.Stop();
                 _switchStopwatch = null;
             }
 
-            if (_totalStopwatch != null)
+            if (_totalStopwatch is not null)
             {
                 _totalStopwatch.Stop();
                 _totalStopwatch = null;

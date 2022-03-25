@@ -2,20 +2,26 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
-                  xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors">
+                  xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors"
+                  xmlns:controls="clr-namespace:Orc.Automation.Controls;assembly=Orc.Automation">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="400" />
-        </Grid.ColumnDefinitions>
+    <controls:AutomationInformer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="400" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="0" Text="{catel:LanguageBinding WorkspaceManagement_Title}" />
-        <TextBox Grid.Column="1" Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
-            <xamlbehaviors:Interaction.Behaviors>
-                <catel:UpdateBindingOnTextChanged />
-            </xamlbehaviors:Interaction.Behaviors>
-        </TextBox>
-    </Grid>
+            <TextBlock Grid.Column="0" 
+                       Text="{catel:LanguageBinding WorkspaceManagement_Title}" />
+
+            <TextBox Grid.Column="1"
+                     Text="{Binding WorkspaceTitle, NotifyOnValidationError=True, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
+                <xamlbehaviors:Interaction.Behaviors>
+                    <catel:UpdateBindingOnTextChanged />
+                </xamlbehaviors:Interaction.Behaviors>
+            </TextBox>
+        </Grid>
+    </controls:AutomationInformer>
 
 </catel:DataWindow>

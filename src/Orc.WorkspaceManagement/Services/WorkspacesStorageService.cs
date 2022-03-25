@@ -56,7 +56,7 @@
                     foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
                     {
                         var workspace = await LoadWorkspaceAsync(workspaceFile);
-                        if (workspace != null)
+                        if (workspace is not null)
                         {
                             workspaces.Add(workspace);
                         }

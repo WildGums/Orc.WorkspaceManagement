@@ -77,7 +77,9 @@
                                         <Border Grid.Column="2" 
                                                 BorderThickness="0"
                                                 Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToHidingVisibilityConverter}}">
-                                            <Button CommandParameter="{Binding }" 
+                                              
+                                            <Button x:Name="RefreshWorkspaceButton"
+                                                    CommandParameter="{Binding }" 
                                                     ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
                                                     Width="24" 
                                                     Padding="5 6.5 5 6.5"
@@ -99,7 +101,8 @@
                                             </Button>
                                         </Border>
 
-                                        <Button Grid.Column="3" 
+                                        <Button x:Name="EditWorkspaceButton"
+                                                Grid.Column="3" 
                                                 Content="..."
                                                 CommandParameter="{Binding }" 
                                                 ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
@@ -117,7 +120,8 @@
 
                                         </Button>
 
-                                        <Button Grid.Column="4"
+                                        <Button x:Name="RemoveWorkspaceButton"
+                                                Grid.Column="4"
                                                 CommandParameter="{Binding }"
                                                 ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}"
                                                 Width="24"

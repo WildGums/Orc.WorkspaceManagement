@@ -53,7 +53,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
             {
                 var existingWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
-                if (existingWorkspace != null)
+                if (existingWorkspace is not null)
                 {
                     if (await _messageService.ShowAsync(
                         $"Workspace '{workspace}' already exists. Are you sure you want to overwrite the existing workspace?",
@@ -75,7 +75,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         private bool OnSaveWorkspaceCanExecute()
         {
-            return (CurrentWorkspace != null);
+            return (CurrentWorkspace is not null);
         }
 
         private async Task OnSaveWorkspaceExecuteAsync()
@@ -88,7 +88,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
 
         private bool OnEditWorkspaceCanExecute()
         {
-            return (CurrentWorkspace != null);
+            return (CurrentWorkspace is not null);
         }
 
         private async Task OnEditWorkspaceExecuteAsync()

@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.WorkspaceManagement.Test.Extensions
+namespace Orc.WorkspaceManagement.Test
 {
     using System;
     using System.Collections.Generic;

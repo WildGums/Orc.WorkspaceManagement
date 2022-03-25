@@ -10,7 +10,9 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
     {
         #region Fields
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly IServiceLocator _serviceLocator;
+#pragma warning restore IDISP006 // Implement IDisposable.
         #endregion
 
         #region Constructors
@@ -32,7 +34,7 @@ namespace Orc.WorkspaceManagement.Converters
 
             var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
 
-            return workspaceManager != null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
+            return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
         }
         #endregion
     }
