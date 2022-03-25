@@ -1,6 +1,8 @@
 ﻿namespace Orc.WorkspaceManagement.Views
 {
-    using ViewModels;
+    using System.Windows.Automation.Peers;
+    using Automation;
+    using WorkspaceViewModel = ViewModels.WorkspaceViewModel;
 
     /// <summary>
     /// Interaction logic for WorkspaceWindow.xaml.
@@ -29,5 +31,10 @@
             InitializeComponent();
         }
         #endregion
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new WorkspaceWindowPeer(this);
+        }
     }
 }

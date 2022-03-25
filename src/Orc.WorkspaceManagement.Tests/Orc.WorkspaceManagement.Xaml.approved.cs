@@ -10,6 +10,104 @@ public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
+namespace Orc.Automation
+{
+    [Orc.Automation.AutomatedControl(ClassName="#32770")]
+    public class MessageBox : Orc.Automation.AutomationControl
+    {
+        public MessageBox(System.Windows.Automation.AutomationElement element) { }
+        public string Message { get; }
+        public string Title { get; }
+        public void Cancel() { }
+        public void No() { }
+        public void Ok() { }
+        public void Yes() { }
+    }
+    public class MessageBoxMap : Orc.Automation.AutomationBase
+    {
+        public MessageBoxMap(System.Windows.Automation.AutomationElement element) { }
+        public Orc.Automation.Controls.Button CancelButton { get; }
+        public Orc.Automation.Controls.Text ContentText { get; }
+        public Orc.Automation.Controls.Button NoButton { get; }
+        public Orc.Automation.Controls.Button OkButton { get; }
+        public Orc.Automation.Controls.Button YesButton { get; }
+    }
+}
+namespace Orc.WorkspaceManagement.Automation
+{
+    public class WorkspaceViewGroupItem
+    {
+        public WorkspaceViewGroupItem() { }
+        public string GroupName { get; set; }
+        public System.Collections.Generic.IReadOnlyList<Orc.WorkspaceManagement.Automation.WorkspaceViewItem> Items { get; set; }
+    }
+    [Orc.Automation.AutomatedControl(ControlTypeName="Pane")]
+    public class WorkspaceViewGroupList : Orc.Automation.Controls.FrameworkElement
+    {
+        public WorkspaceViewGroupList(System.Windows.Automation.AutomationElement element) { }
+        public System.Collections.Generic.IReadOnlyList<Orc.WorkspaceManagement.Automation.WorkspaceViewGroupItem> GetGroupItems() { }
+    }
+    public class WorkspaceViewItem : Orc.Automation.Controls.ListItem
+    {
+        public WorkspaceViewItem(System.Windows.Automation.AutomationElement element) { }
+        public bool CanDelete() { }
+        public bool CanEdit() { }
+        public bool CanRefresh() { }
+        public void Delete() { }
+        public Orc.WorkspaceManagement.Automation.WorkspaceWindow Edit() { }
+        public void Refresh() { }
+    }
+    public class WorkspaceViewItemMap : Orc.Automation.AutomationBase
+    {
+        public WorkspaceViewItemMap(System.Windows.Automation.AutomationElement element) { }
+        public Orc.Automation.Controls.Button EditWorkspaceButton { get; }
+        public Orc.Automation.Controls.Button RefreshWorkspaceButton { get; }
+        public Orc.Automation.Controls.Button RemoveWorkspaceButton { get; }
+        public Orc.Automation.Controls.Text Title { get; }
+    }
+    public class WorkspaceViewMap : Orc.Automation.AutomationBase
+    {
+        public WorkspaceViewMap(System.Windows.Automation.AutomationElement element) { }
+        public Orc.WorkspaceManagement.Automation.WorkspaceViewGroupList GroupList { get; }
+    }
+    [Orc.Automation.ActiveAutomationModel]
+    public class WorkspaceViewModel : Orc.Automation.ControlModel
+    {
+        public static readonly Catel.Data.PropertyData HasRefreshButtonProperty;
+        public static readonly Catel.Data.PropertyData ScopeProperty;
+        public WorkspaceViewModel(Orc.Automation.AutomationElementAccessor accessor) { }
+        public bool HasRefreshButton { get; set; }
+        public object Scope { get; set; }
+    }
+    public class WorkspaceViewPeer : Orc.Automation.AutomationControlPeerBase<Orc.WorkspaceManagement.Views.WorkspacesView>
+    {
+        public WorkspaceViewPeer(Orc.WorkspaceManagement.Views.WorkspacesView owner) { }
+    }
+    public class WorkspaceWindow : Orc.Automation.Controls.Window
+    {
+        public WorkspaceWindow(System.Windows.Automation.AutomationElement element) { }
+        public string Title { get; set; }
+        public void Accept() { }
+        public void Decline() { }
+    }
+    public class WorkspaceWindowMap : Orc.Automation.AutomationBase
+    {
+        public WorkspaceWindowMap(System.Windows.Automation.AutomationElement element) { }
+        public Orc.Automation.Controls.Button CancelButton { get; }
+        public Orc.Automation.Controls.Button OkButton { get; }
+        public Orc.Automation.Controls.Edit TitleEdit { get; }
+    }
+    public class WorkspaceWindowPeer : Orc.Automation.AutomationControlPeerBase<Orc.WorkspaceManagement.Views.WorkspaceWindow>
+    {
+        public WorkspaceWindowPeer(Orc.WorkspaceManagement.Views.WorkspaceWindow owner) { }
+    }
+    [Orc.Automation.AutomatedControl(Class=typeof(Orc.WorkspaceManagement.Views.WorkspacesView))]
+    public class WorkspacesView : Orc.Automation.Controls.FrameworkElement<Orc.WorkspaceManagement.Automation.WorkspaceViewModel, Orc.WorkspaceManagement.Automation.WorkspaceViewMap>
+    {
+        public WorkspacesView(System.Windows.Automation.AutomationElement element) { }
+        public System.Collections.Generic.IReadOnlyList<Orc.WorkspaceManagement.Automation.WorkspaceViewGroupItem> GroupItems { get; }
+    }
+}
 namespace Orc.WorkspaceManagement
 {
     public class BehaviorWorkspaceProvider : Orc.WorkspaceManagement.WorkspaceProviderBase
@@ -142,6 +240,7 @@ namespace Orc.WorkspaceManagement.Views
         public WorkspaceWindow() { }
         public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel viewModel) { }
         public void InitializeComponent() { }
+        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() { }
     }
     public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector, System.Windows.Markup.IStyleConnector
     {
@@ -152,5 +251,18 @@ namespace Orc.WorkspaceManagement.Views
         [Catel.MVVM.Views.ViewToViewModel("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
         public object Scope { get; set; }
         public void InitializeComponent() { }
+        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() { }
+    }
+}
+namespace XamlGeneratedNamespace
+{
+    public sealed class GeneratedInternalTypeHelper : System.Windows.Markup.InternalTypeHelper
+    {
+        public GeneratedInternalTypeHelper() { }
+        protected override void AddEventHandler(System.Reflection.EventInfo eventInfo, object target, System.Delegate handler) { }
+        protected override System.Delegate CreateDelegate(System.Type delegateType, object target, string handler) { }
+        protected override object CreateInstance(System.Type type, System.Globalization.CultureInfo culture) { }
+        protected override object GetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, System.Globalization.CultureInfo culture) { }
+        protected override void SetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, object value, System.Globalization.CultureInfo culture) { }
     }
 }

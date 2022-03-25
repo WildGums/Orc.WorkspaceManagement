@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows;
     using Catel;
     using Catel.Collections;
     using Catel.Data;
@@ -312,8 +313,6 @@
                                        orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
                                        group workspace by workspace.WorkspaceGroup into g
                                        select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
-
-                Log.Debug($"Updating available workspaces using workspace manager with scope '{_workspaceManager?.Scope}', '{workspaceGroups.Count}' workspace groups available");
 
                 WorkspaceGroups = workspaceGroups;
 

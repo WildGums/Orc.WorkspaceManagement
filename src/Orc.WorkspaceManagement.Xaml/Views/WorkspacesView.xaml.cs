@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspacesView.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Orc.WorkspaceManagement.Views
+﻿namespace Orc.WorkspaceManagement.Views
 {
-    using System;
-    using System.ComponentModel;
-    using System.Reflection;
     using System.Windows;
+    using System.Windows.Automation.Peers;
     using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using Automation;
     using Catel.MVVM.Views;
-    using Catel.Windows;
     using ViewModels;
 
     public partial class WorkspacesView
@@ -50,15 +41,14 @@ namespace Orc.WorkspaceManagement.Views
         #region Methods
         private void OnScopeChanged(DependencyPropertyChangedEventArgs e)
         {
-            var vm = ViewModel as WorkspacesViewModel;
-            if (vm is not null)
+            if (ViewModel is WorkspacesViewModel vm)
             {
                 vm.Scope = Scope;
             }
         }
         #endregion
 
-        private void OnWorkspacePreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnWorkspacePreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Don't handle if source is a button
             if (e.Source is Button)
@@ -66,8 +56,7 @@ namespace Orc.WorkspaceManagement.Views
                 return;
             }
 
-            var workspace = ((FrameworkElement)sender).DataContext as IWorkspace;
-            if (workspace is null)
+            if (((FrameworkElement)sender).DataContext is not IWorkspace workspace)
             {
                 return;
             }
@@ -88,6 +77,11 @@ namespace Orc.WorkspaceManagement.Views
             };
 
             MainScroll.RaiseEvent(mouseWheelEventArgs);
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new WorkspaceViewPeer(this);
         }
     }
 }
