@@ -13,6 +13,11 @@
 
         private WorkspaceViewItemMap Map => Map<WorkspaceViewItemMap>();
 
+        public override void Select()
+        {
+            Element.MouseClick();
+        }
+
         public bool CanRefresh()
         {
             return Map.RefreshWorkspaceButton.IsVisible();
@@ -43,7 +48,7 @@
             Wait.UntilResponsive();
 
             var hostWindow = Element.GetHostWindow();
-            var editWorkspaceWindow = hostWindow.Find<WorkspaceWindow>();
+            var editWorkspaceWindow = hostWindow?.Find<WorkspaceWindow>();
 
             return editWorkspaceWindow;
         }
