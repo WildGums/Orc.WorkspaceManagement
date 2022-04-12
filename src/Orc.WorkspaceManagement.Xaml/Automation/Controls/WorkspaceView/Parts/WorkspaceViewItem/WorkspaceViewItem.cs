@@ -64,9 +64,8 @@
             {
                 return;
             }
-
+            
             var hostWindow = Element.GetHostWindow();
-
             hostWindow.SetFocus();
 
             Map.RemoveWorkspaceButton.Click();
