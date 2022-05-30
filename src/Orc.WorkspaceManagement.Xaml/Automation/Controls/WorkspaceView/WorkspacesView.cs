@@ -1,7 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Automation
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Windows.Automation;
     using Orc.Automation;
     using Orc.Automation.Controls;
