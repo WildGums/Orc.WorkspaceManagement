@@ -1,8 +1,10 @@
 ﻿namespace Orc.WorkspaceManagement.Automation
 {
     using System.Windows.Automation;
+    using Orc.Automation;
     using Orc.Automation.Controls;
 
+    [AutomatedControl(Class = typeof(Views.WorkspaceWindow), ControlTypeName = nameof(ControlType.Window))]
     public class WorkspaceWindow : Window
     {
         public WorkspaceWindow(AutomationElement element) 

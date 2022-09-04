@@ -4,11 +4,10 @@
     using FilterBuilder.Tests;
     using NUnit.Framework;
     using Orc.Automation;
-    using FilterBuilderControl = Views.WorkspacesView;
 
     [Explicit]
     [TestFixture]
-    public class WorkspacesViewFacts : StyledControlTestFacts<FilterBuilderControl>
+    public class WorkspacesViewFacts : StyledControlTestFacts<Views.WorkspacesView>
     {
         [Target]
         public WorkspacesView Target { get; set; }

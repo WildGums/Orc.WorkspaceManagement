@@ -10,29 +10,6 @@ public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
-namespace Orc.Automation
-{
-    [Orc.Automation.AutomatedControl(ClassName="#32770")]
-    public class MessageBox : Orc.Automation.AutomationControl
-    {
-        public MessageBox(System.Windows.Automation.AutomationElement element) { }
-        public string Message { get; }
-        public string Title { get; }
-        public void Cancel() { }
-        public void No() { }
-        public void Ok() { }
-        public void Yes() { }
-    }
-    public class MessageBoxMap : Orc.Automation.AutomationBase
-    {
-        public MessageBoxMap(System.Windows.Automation.AutomationElement element) { }
-        public Orc.Automation.Controls.Button CancelButton { get; }
-        public Orc.Automation.Controls.Text ContentText { get; }
-        public Orc.Automation.Controls.Button NoButton { get; }
-        public Orc.Automation.Controls.Button OkButton { get; }
-        public Orc.Automation.Controls.Button YesButton { get; }
-    }
-}
 namespace Orc.WorkspaceManagement.Automation
 {
     public class WorkspaceViewGroupItem
@@ -56,6 +33,7 @@ namespace Orc.WorkspaceManagement.Automation
         public void Delete() { }
         public Orc.WorkspaceManagement.Automation.WorkspaceWindow Edit() { }
         public void Refresh() { }
+        public override void Select() { }
     }
     public class WorkspaceViewItemMap : Orc.Automation.AutomationBase
     {
@@ -83,6 +61,7 @@ namespace Orc.WorkspaceManagement.Automation
     {
         public WorkspaceViewPeer(Orc.WorkspaceManagement.Views.WorkspacesView owner) { }
     }
+    [Orc.Automation.AutomatedControl(Class=typeof(Orc.WorkspaceManagement.Views.WorkspaceWindow), ControlTypeName="Window")]
     public class WorkspaceWindow : Orc.Automation.Controls.Window
     {
         public WorkspaceWindow(System.Windows.Automation.AutomationElement element) { }
@@ -100,12 +79,20 @@ namespace Orc.WorkspaceManagement.Automation
     public class WorkspaceWindowPeer : Orc.Automation.AutomationControlPeerBase<Orc.WorkspaceManagement.Views.WorkspaceWindow>
     {
         public WorkspaceWindowPeer(Orc.WorkspaceManagement.Views.WorkspaceWindow owner) { }
+        protected override System.Windows.Automation.Peers.AutomationControlType GetAutomationControlTypeCore() { }
     }
     [Orc.Automation.AutomatedControl(Class=typeof(Orc.WorkspaceManagement.Views.WorkspacesView))]
     public class WorkspacesView : Orc.Automation.Controls.FrameworkElement<Orc.WorkspaceManagement.Automation.WorkspaceViewModel, Orc.WorkspaceManagement.Automation.WorkspaceViewMap>
     {
         public WorkspacesView(System.Windows.Automation.AutomationElement element) { }
         public System.Collections.Generic.IReadOnlyList<Orc.WorkspaceManagement.Automation.WorkspaceViewGroupItem> GroupItems { get; }
+    }
+    public static class WorkspacesViewExtensions
+    {
+        public static void DeleteItem(this Orc.WorkspaceManagement.Automation.WorkspacesView workspacesView, string name, string groupName = null) { }
+        public static Orc.WorkspaceManagement.Automation.WorkspaceWindow EditItem(this Orc.WorkspaceManagement.Automation.WorkspacesView workspacesView, string name, string groupName = null) { }
+        public static Orc.WorkspaceManagement.Automation.WorkspaceViewItem GetItem(this Orc.WorkspaceManagement.Automation.WorkspacesView workspacesView, string name, string groupName = null) { }
+        public static void SelectWorkspace(this Orc.WorkspaceManagement.Automation.WorkspacesView workspacesView, string name, string groupName = null) { }
     }
 }
 namespace Orc.WorkspaceManagement
