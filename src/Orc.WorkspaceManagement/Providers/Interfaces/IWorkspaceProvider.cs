@@ -1,11 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceProvider.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System.Threading.Tasks;
 
@@ -14,9 +7,9 @@ namespace Orc.WorkspaceManagement
     /// </summary>
     public interface IWorkspaceProvider
     {
-        object Scope { get; set; }
+        object? Scope { get; set; }
 
-        object Tag { get; set; }
+        object? Tag { get; set; }
 
         /// <summary>
         /// Provides the information for the workspace with the current state.

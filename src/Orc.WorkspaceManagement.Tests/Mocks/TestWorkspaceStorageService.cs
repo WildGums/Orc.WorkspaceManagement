@@ -1,10 +1,9 @@
 ﻿namespace Orc.WorkspaceManagement.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Windows;
-    using Catel;
     using FilterBuilder.Tests;
 
     public class TestWorkspaceStorageService : IWorkspacesStorageService
@@ -38,7 +37,7 @@
 
         public string GetWorkspaceFileName(string directory, IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             return $"{(workspace as Workspace)?.Scope}/{workspace.Title}";
         }

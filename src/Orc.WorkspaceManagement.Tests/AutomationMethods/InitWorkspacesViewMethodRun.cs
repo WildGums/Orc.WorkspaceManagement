@@ -1,5 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Tests
 {
+    using System.Threading.Tasks;
     using System.Windows;
     using Catel.IoC;
     using Catel.Services;
@@ -36,8 +37,10 @@
             {
                 RegisterScope(scope);
             }
-            
+
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
             var vm = this.GetTypeFactory().CreateInstanceWithParametersAndAutoCompletion<WorkspacesViewModel>();
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
             workspacesView.DataContext = vm;
 
             return true;
@@ -56,7 +59,9 @@
             var workspaceManager = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<WorkspaceManager>(scope);
             workspaceManager.Scope = scope;
             workspaceManager.SetWorkspaceSchemesDirectoryAsync(scope?.ToString() ?? string.Empty);
-            TaskHelper.RunAndWaitAsync(async () => await workspaceManager.InitializeAsync());
+            
+            var task = Task.Run(async () => await workspaceManager.InitializeAsync());
+            Task.WaitAll(task);
           
             serviceLocator.RegisterInstance(typeof(IWorkspaceManager), workspaceManager, scope);
         }

@@ -4,19 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Windows;
     using Catel;
-    using Catel.Collections;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using Catel.Threading;
 
     public class WorkspacesViewModel : ViewModelBase
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IUIVisualizerService _uiVisualizerService;
@@ -25,20 +21,18 @@
         private readonly IMessageService _messageService;
         private readonly ILanguageService _languageService;
 
-        private IWorkspaceManager _workspaceManager;
-        #endregion
+        private IWorkspaceManager? _workspaceManager;
 
-        #region Constructors
         public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService,
             IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
             ILanguageService languageService)
         {
-            Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => dispatcherService);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => languageService);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
+            ArgumentNullException.ThrowIfNull(messageService);
+            ArgumentNullException.ThrowIfNull(languageService);
 
             _workspaceManager = workspaceManager;
             _uiVisualizerService = uiVisualizerService;
@@ -53,17 +47,15 @@
             RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
             Refresh = new TaskCommand<IWorkspace>(OnRefreshAsync, OnRefreshCanExecute);
         }
-        #endregion
 
-        #region Properties
         public List<WorkspaceGroup> WorkspaceGroups { get; private set; }
 
-        public IWorkspace SelectedWorkspace
+        public IWorkspace? SelectedWorkspace
         {
             get => _workspaceManager?.Workspace;
             set
             {
-                if (value is not null)
+                if (value is not null && _workspaceManager is not null)
                 {
                     _dispatcherService.InvokeTaskAsync(async () => await _workspaceManager.TrySetWorkspaceAsync(value))
                         .ContinueWith(_ => RaiseSelectedWorkspaceChanged());
@@ -71,13 +63,11 @@
             }
         }
 
-        public object Scope { get; set; }
-        #endregion
+        public object? Scope { get; set; }
 
-        #region Commands
         public TaskCommand<IWorkspace> Refresh { get; private set; }
 
-        private bool OnRefreshCanExecute(IWorkspace workspace)
+        private bool OnRefreshCanExecute(IWorkspace? workspace)
         {
             if (workspace is null)
             {
@@ -87,9 +77,19 @@
             return workspace.IsDirty;
         }
 
-        private async Task OnRefreshAsync(IWorkspace workspace)
+        private async Task OnRefreshAsync(IWorkspace? workspace)
         {
+            if (workspace is null)
+            {
+                return;
+            }
+
             if (!workspace.IsDirty)
+            {
+                return;
+            }
+
+            if (_workspaceManager is null)
             {
                 return;
             }
@@ -99,7 +99,7 @@
 
         public TaskCommand<IWorkspace> EditWorkspace { get; private set; }
 
-        private bool OnEditWorkspaceCanExecute(IWorkspace workspace)
+        private bool OnEditWorkspaceCanExecute(IWorkspace? workspace)
         {
             if (workspace is null)
             {
@@ -119,17 +119,27 @@
             return true;
         }
 
-        private Task OnEditWorkspaceExecuteAsync(IWorkspace workspace)
+        private Task OnEditWorkspaceExecuteAsync(IWorkspace? workspace)
         {
+            if (workspace is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (_workspaceManager is null)
+            {
+                return Task.CompletedTask;
+            }
+
             var modelValidation = workspace as IValidatable;
 
-            EventHandler<ValidationEventArgs> handler = null;
+            EventHandler<ValidationEventArgs>? handler = null;
             handler = (sender, e) =>
             {
                 if (_workspaceManager.Workspaces.Any(x => x.Title.EqualsIgnoreCase(workspace.Title) && x != workspace))
                 {
                     e.ValidationContext.Add(FieldValidationResult.CreateError(nameof(Title),
-                        _languageService.GetString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
+                        _languageService.GetRequiredString("WorkspaceManagement_WorkspaceWithCurrentTitleAlreadyExists")));
                 }
             };
 
@@ -145,7 +155,8 @@
             {
                 await Task.Delay(50);
 
-                if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
+                var result = await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace);
+                if (result.DialogResult ?? false)
                 {
                     if (modelValidation is not null)
                     {
@@ -156,12 +167,12 @@
                 }
             }, false);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         public TaskCommand<IWorkspace> RemoveWorkspace { get; private set; }
 
-        private bool OnRemoveWorkspaceCanExecute(IWorkspace workspace)
+        private bool OnRemoveWorkspaceCanExecute(IWorkspace? workspace)
         {
             if (workspace is null)
             {
@@ -176,8 +187,18 @@
             return true;
         }
 
-        private Task OnRemoveWorkspaceExecuteAsync(IWorkspace workspace)
+        private Task OnRemoveWorkspaceExecuteAsync(IWorkspace? workspace)
         {
+            if (workspace is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (_workspaceManager is null)
+            {
+                return Task.CompletedTask;
+            }
+
             // Dispatch to make sure this plays nice with Fluent.Ribbon dropdowns
 #pragma warning disable AvoidAsyncVoid // Avoid async void
             _dispatcherService.BeginInvoke(async () =>
@@ -185,8 +206,8 @@
             {
                 await Task.Delay(50);
 
-                if (await _messageService.ShowAsync(string.Format(_languageService.GetString("WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace"), workspace.Title),
-                        _languageService.GetString("WorkspaceManagement_AreYouSure"), MessageButton.YesNo, MessageImage.Question) == MessageResult.No)
+                if (await _messageService.ShowAsync(string.Format(_languageService.GetRequiredString("WorkspaceManagement_AreYouSureYouWantToRemoveTheWorkspace"), workspace.Title),
+                        _languageService.GetRequiredString("WorkspaceManagement_AreYouSure"), MessageButton.YesNo, MessageImage.Question) == MessageResult.No)
                 {
                     return;
                 }
@@ -195,11 +216,9 @@
                 await _workspaceManager.SaveAsync();
             }, false);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
-        #endregion
 
-        #region Methods
         private void RaiseSelectedWorkspaceChanged()
         {
             _dispatcherService.Invoke(() => RaisePropertyChanged(nameof(SelectedWorkspace)));
@@ -231,16 +250,16 @@
             return base.CloseAsync();
         }
 
-        private void OnWorkspacesChanged(object sender, EventArgs e)
+        private void OnWorkspacesChanged(object? sender, EventArgs e)
         {
             var workspaceManager = _workspaceManager;
 
-            Log.Debug($"Workspaces have changed, updating workspaces, current workspace manager scope is '{workspaceManager.Scope}'");
+            Log.Debug($"Workspaces have changed, updating workspaces, current workspace manager scope is '{workspaceManager?.Scope}'");
 
             UpdateWorkspaces();
         }
 
-        private void SetWorkspaceManager(IWorkspaceManager workspaceManager)
+        private void SetWorkspaceManager(IWorkspaceManager? workspaceManager)
         {
             var previousWorkspaceManager = _workspaceManager;
             if (ReferenceEquals(workspaceManager, previousWorkspaceManager))
@@ -259,7 +278,7 @@
 
             if (workspaceManager is not null)
             {
-                _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
+                workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
             }
         }
 
@@ -304,11 +323,17 @@
                 return;
             }
 
+            var workspaceManager = _workspaceManager;
+            if (workspaceManager is null)
+            {
+                return;
+            }
+
             _updatingWorkspace = true;
 
             try
             {
-                var workspaceGroups = (from workspace in _workspaceManager.Workspaces
+                var workspaceGroups = (from workspace in workspaceManager.Workspaces
                                        where workspace.IsVisible
                                        orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
                                        group workspace by workspace.WorkspaceGroup into g
@@ -323,6 +348,5 @@
                 _updatingWorkspace = false;
             }
         }
-        #endregion
     }
 }

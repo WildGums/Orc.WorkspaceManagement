@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RibbonViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Example.ViewModels
+﻿namespace Orc.WorkspaceManagement.Example.ViewModels
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -39,18 +32,16 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             ChooseBaseDirectory = new TaskCommand(OnChooseBaseDirectoryAsync);
         }
 
-        #region Properties
-        public IWorkspace CurrentWorkspace { get; private set; }
-        #endregion
+        public IWorkspace? CurrentWorkspace { get; private set; }
 
-        #region Commands
         public TaskCommand AddWorkspace { get; private set; }
 
         private async Task OnAddWorkspaceExecuteAsync()
         {
             var workspace = new Workspace();
 
-            if (await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace) ?? false)
+            var result = await _uiVisualizerService.ShowDialogAsync<WorkspaceViewModel>(workspace);
+            if (result.DialogResult ?? false)
             {
                 var existingWorkspace = _workspaceManager.FindWorkspace(workspace.Title);
                 if (existingWorkspace is not null)
@@ -133,9 +124,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
                 await _workspaceManager.SetWorkspaceSchemesDirectoryAsync(result.DirectoryName);
             }
         }
-        #endregion
-
-        #region Methods
+        
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -154,7 +143,7 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
             return base.CloseAsync();
         }
 
-        private void OnCurrentWorkspaceChanged(object sender, WorkspaceUpdatedEventArgs e)
+        private void OnCurrentWorkspaceChanged(object? sender, WorkspaceUpdatedEventArgs e)
         {
             UpdateCurrentWorkspace();
         }
@@ -163,6 +152,5 @@ namespace Orc.WorkspaceManagement.Example.ViewModels
         {
             CurrentWorkspace = _workspaceManager.Workspace;
         }
-        #endregion
     }
 }

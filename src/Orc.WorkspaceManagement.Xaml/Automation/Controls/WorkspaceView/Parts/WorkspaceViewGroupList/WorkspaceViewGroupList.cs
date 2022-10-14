@@ -36,6 +36,7 @@
             }
 
             var groupItems = new List<WorkspaceViewGroupItem>();
+
             foreach (var group in groupNamesElements.Zip(itemList))
             {
                 var groupName = group.First;

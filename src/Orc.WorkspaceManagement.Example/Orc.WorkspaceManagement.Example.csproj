@@ -5,6 +5,7 @@
     <RootNamespace>Orc.WorkspaceManagement.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <SonarQubeExclude>true</SonarQubeExclude>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -21,8 +22,8 @@
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.6.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Orc.Controls" Version="4.8.0" />
-    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="6.8.1" />
+    <PackageReference Include="Orc.Controls" Version="5.0.0-alpha0053" />
+    <PackageReference Include="Orchestra.Shell.Ribbon.Fluent" Version="7.0.0-alpha0051" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceManager.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Collections.Generic;
@@ -27,11 +20,10 @@ namespace Orc.WorkspaceManagement
 
         private readonly List<IWorkspaceProvider> _workspaceProviders = new List<IWorkspaceProvider>();
         private readonly List<IWorkspace> _workspaces = new List<IWorkspace>();
-        private object _scope;
+        private object? _scope;
 
         private IWorkspacesStorageService _workspacesStorageService;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
         /// </summary>
@@ -42,10 +34,10 @@ namespace Orc.WorkspaceManagement
         public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService,
             IServiceLocator serviceLocator, IAppDataService appDataService)
         {
-            Argument.IsNotNull(() => workspaceInitializer);
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => appDataService);
+            ArgumentNullException.ThrowIfNull(workspaceInitializer);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
+            ArgumentNullException.ThrowIfNull(appDataService);
 
             _workspaceInitializer = workspaceInitializer;
             _workspacesStorageService = workspacesStorageService;
@@ -53,12 +45,10 @@ namespace Orc.WorkspaceManagement
             _appDataService = appDataService;
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
-            BaseDirectory = Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
+            BaseDirectory = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
             DefaultWorkspaceTitle = "Default";
         }
-        #endregion
 
-        #region Properties
         public int UniqueIdentifier { get; }
 
         /// <summary>
@@ -78,51 +68,47 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public object Scope
+        public object? Scope
         {
             get => _scope;
             set
             {
                 _scope = value;
-                _workspacesStorageService = _serviceLocator.ResolveType<IWorkspacesStorageService>(_scope);
+                _workspacesStorageService = _serviceLocator.ResolveRequiredType<IWorkspacesStorageService>(_scope);
             }
         }
 
         public IEnumerable<IWorkspace> Workspaces => _workspaces.ToArray();
 
-        public IWorkspace Workspace { get; private set; }
+        public IWorkspace? Workspace { get; private set; }
 
         public string DefaultWorkspaceTitle { get; set; }
 
-        public IWorkspace RefreshingWorkspace { get; private set; }
+        public IWorkspace? RefreshingWorkspace { get; private set; }
         public bool AutoRefreshEnabled { get; set; } = true;
-        #endregion
 
-        #region Events
-        public event EventHandler<CancelEventArgs> Initializing;
-        public event EventHandler<EventArgs> Initialized;
+        public event EventHandler<CancelEventArgs>? Initializing;
+        public event EventHandler<EventArgs>? Initialized;
 
-        public event EventHandler<EventArgs> WorkspacesChanged;
+        public event EventHandler<EventArgs>? WorkspacesChanged;
 
-        public event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
-        public event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+        public event EventHandler<WorkspaceEventArgs>? WorkspaceAdded;
+        public event EventHandler<WorkspaceEventArgs>? WorkspaceRemoved;
 
-        public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
-        public event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
+        public event EventHandler<WorkspaceProviderEventArgs>? WorkspaceProviderAdded;
+        public event EventHandler<WorkspaceProviderEventArgs>? WorkspaceProviderRemoved;
 
-        public event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
+        public event EventHandler<WorkspaceEventArgs>? WorkspaceInfoRequested;
 
-        public event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
-        public event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
+        public event AsyncEventHandler<WorkspaceUpdatingEventArgs>? WorkspaceUpdatingAsync;
+        public event EventHandler<WorkspaceUpdatedEventArgs>? WorkspaceUpdated;
 
-        public event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
-        public event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
-        #endregion
+        public event AsyncEventHandler<CancelWorkspaceEventArgs>? WorkspaceSavingAsync;
+        public event EventHandler<WorkspaceEventArgs>? WorkspaceSaved;
 
-        #region IWorkspaceManager Members
-        public async Task SetWorkspaceAsync(IWorkspace value)
+        public async Task SetWorkspaceAsync(IWorkspace? value)
         {
-            Argument.IsNotNull(() => value);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!await TrySetWorkspaceAsync(value))
             {
@@ -131,7 +117,7 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        public async Task<bool> TrySetWorkspaceAsync(IWorkspace value)
+        public async Task<bool> TrySetWorkspaceAsync(IWorkspace? value)
         {
             var oldWorkspace = Workspace;
             var newWorkspace = value;
@@ -156,7 +142,7 @@ namespace Orc.WorkspaceManagement
                 return false;
             }
 
-            if (!(oldWorkspace is null))
+            if (oldWorkspace is not null)
             {
                 await UpdateIsDirtyFlagAsync(oldWorkspace);
             }
@@ -165,7 +151,10 @@ namespace Orc.WorkspaceManagement
 
             Workspace = newWorkspace;
 
-            await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
+            if (newWorkspace is not null)
+            {
+                await ApplyWorkspaceUsingProvidersAsync(newWorkspace);
+            }
 
             WorkspaceUpdated?.Invoke(this, new WorkspaceUpdatedEventArgs(oldWorkspace, newWorkspace));
 
@@ -174,10 +163,14 @@ namespace Orc.WorkspaceManagement
                 Log.Debug($"[{Scope}] Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
 
                 await ReloadWorkspaceAsync(oldWorkspace);
-                oldWorkspace.UpdateIsDirtyFlag(oldIsDirty.Value);
+
+                if (oldIsDirty.HasValue)
+                {
+                    oldWorkspace.UpdateIsDirtyFlag(oldIsDirty.Value);
+                }
             }
 
-            if (!(newWorkspace is null))
+            if (newWorkspace is not null)
             {
                 await UpdateIsDirtyFlagAsync(newWorkspace);
             }
@@ -245,7 +238,7 @@ namespace Orc.WorkspaceManagement
 
             if (autoSelect && _workspaces.Any())
             {
-                await TrySetWorkspaceAsync(_workspaces.FirstOrDefault());
+                await TrySetWorkspaceAsync(_workspaces.First());
             }
             else
             {
@@ -265,7 +258,7 @@ namespace Orc.WorkspaceManagement
         /// <param name="workspaceProvider">The workspace provider.</param>
         public void AddProvider(IWorkspaceProvider workspaceProvider)
         {
-            Argument.IsNotNull(() => workspaceProvider);
+            ArgumentNullException.ThrowIfNull(workspaceProvider);
 
 #if DEBUG
             Log.Debug($"[{Scope}] Adding provider {workspaceProvider.GetType()} to the WorkspaceManager (Scope = '{Scope ?? "null"}')");
@@ -286,7 +279,7 @@ namespace Orc.WorkspaceManagement
         /// <returns><c>true</c> if the workspace provider is deleted; otherwise <c>false</c>.</returns>
         public bool RemoveProvider(IWorkspaceProvider workspaceProvider)
         {
-            Argument.IsNotNull(() => workspaceProvider);
+            ArgumentNullException.ThrowIfNull(workspaceProvider);
 
 #if DEBUG
             Log.Debug($"[{Scope}] Removing provider {workspaceProvider.GetType()} from the WorkspaceManager (Tag == \"{Scope ?? "null"}\")");
@@ -314,7 +307,7 @@ namespace Orc.WorkspaceManagement
         /// <param name="workspace">The workspace.</param>
         public async Task AddAsync(IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             if (!_workspaces.Contains(workspace))
             {
@@ -338,7 +331,7 @@ namespace Orc.WorkspaceManagement
         /// <returns><c>true</c> if the workspace is deleted; otherwise <c>false</c>.</returns>
         public async Task<bool> RemoveAsync(IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             Log.Debug($"[{Scope}] Deleting workspace '{workspace}'");
 
@@ -375,7 +368,13 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public Task ReloadWorkspaceAsync()
         {
-            return ReloadWorkspaceAsync(Workspace);
+            var workspace = Workspace;
+            if (workspace is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return ReloadWorkspaceAsync(workspace);
         }
 
         /// <summary>
@@ -410,7 +409,13 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public Task StoreWorkspaceAsync()
         {
-            return StoreWorkspaceAsync(Workspace);
+            var workspace = Workspace;
+            if (workspace is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return StoreWorkspaceAsync(workspace);
         }
 
         /// <summary>
@@ -447,11 +452,15 @@ namespace Orc.WorkspaceManagement
         /// </summary>
         public async Task<bool> SaveAsync()
         {
+            var workspace = Workspace;
+            if (workspace is null)
+            {
+                return false;
+            }
+
             var baseDirectory = BaseDirectory;
 
             Log.Debug($"[{Scope}] Saving workspace to '{baseDirectory}'");
-
-            var workspace = Workspace;
 
             var cancelEventArgs = new CancelWorkspaceEventArgs(workspace);
             await WorkspaceSavingAsync.SafeInvokeAsync(this, cancelEventArgs);
@@ -462,7 +471,7 @@ namespace Orc.WorkspaceManagement
 
             await _workspacesStorageService.SaveWorkspacesAsync(baseDirectory, _workspaces);
 
-            workspace?.UpdateIsDirtyFlag(false);
+            workspace.UpdateIsDirtyFlag(false);
 
             var workspaceEventArgs = new WorkspaceEventArgs(workspace);
             WorkspaceSaved?.Invoke(this, workspaceEventArgs);
@@ -503,6 +512,7 @@ namespace Orc.WorkspaceManagement
         public async Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace)
         {
             var workspaceProviders = GetWorkspaceProviders();
+
             foreach (var provider in workspaceProviders)
             {
                 try
@@ -532,6 +542,5 @@ namespace Orc.WorkspaceManagement
                 RefreshingWorkspace = oldValue;
             }
         }
-        #endregion
     }
 }

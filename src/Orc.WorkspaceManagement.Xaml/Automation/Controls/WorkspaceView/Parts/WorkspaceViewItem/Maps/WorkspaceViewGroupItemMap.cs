@@ -11,9 +11,9 @@
         {
         }
 
-        public Text Title => By.One<Text>();
-        public Button EditWorkspaceButton => By.Id("EditWorkspaceButton").One<Button>();
-        public Button RemoveWorkspaceButton => By.Id("RemoveWorkspaceButton").One<Button>();
-        public Button RefreshWorkspaceButton => By.Id("RefreshWorkspaceButton").One<Button>();
+        public Text? Title => By.One<Text>();
+        public Button? EditWorkspaceButton => By.Id("EditWorkspaceButton").One<Button>();
+        public Button? RemoveWorkspaceButton => By.Id("RemoveWorkspaceButton").One<Button>();
+        public Button? RefreshWorkspaceButton => By.Id("RefreshWorkspaceButton").One<Button>();
     }
 }

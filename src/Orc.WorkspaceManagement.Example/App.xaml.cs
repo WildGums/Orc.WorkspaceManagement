@@ -22,7 +22,7 @@
             LogManager.AddDebugListener(true);
 #endif
 
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
 
             // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
             // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),
@@ -37,7 +37,7 @@
             Log.Info("Calling base.OnStartup");
 
             var serviceLocator = ServiceLocator.Default;
-            var shellService = serviceLocator.ResolveType<IShellService>();
+            var shellService = serviceLocator.ResolveRequiredType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
         }
     }

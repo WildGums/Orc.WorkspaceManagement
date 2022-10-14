@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModuleInitializer.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using Catel.IoC;
+﻿using Catel.IoC;
 using Catel.Services;
 using Orc.WorkspaceManagement;
 
@@ -25,7 +18,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
         serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
 
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement", "Orc.WorkspaceManagement.Properties", "Resources"));
     }
 }

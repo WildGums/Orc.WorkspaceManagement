@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceBehaviorBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Behaviors
+﻿namespace Orc.WorkspaceManagement.Behaviors
 {
     using System.Windows;
-    using System.Windows.Media.Animation;
     using Catel.IoC;
     using Catel.Services;
     using Catel.Windows.Interactivity;
@@ -18,32 +10,27 @@ namespace Orc.WorkspaceManagement.Behaviors
     {
         private readonly BehaviorWorkspaceProvider _workspaceProvider;
 
-        #region Constructors
         protected WorkspaceBehaviorBase()
         {
             var dependencyResolver = this.GetDependencyResolver();
-            WorkspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
-            var dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+            WorkspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
+            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
 
             _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService, this.GetServiceLocator());
         }
-        #endregion
 
-        #region Properties
         protected IWorkspaceManager WorkspaceManager { get; private set; }
 
-        public string KeyPrefix
+        public string? KeyPrefix
         {
-            get { return (string)GetValue(KeyPrefixProperty); }
+            get { return (string?)GetValue(KeyPrefixProperty); }
             set { SetValue(KeyPrefixProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for KeyPrefix.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty KeyPrefixProperty =
             DependencyProperty.Register(nameof(KeyPrefix), typeof(string), typeof(WorkspaceBehaviorBase<T>), new PropertyMetadata(""));
-        #endregion
 
-        #region Methods
         protected override void OnAssociatedObjectLoaded()
         {
             base.OnAssociatedObjectLoaded();
@@ -64,9 +51,9 @@ namespace Orc.WorkspaceManagement.Behaviors
             base.OnAssociatedObjectUnloaded();
         }
 
-        protected abstract void SaveSettings(IWorkspace workspace, string prefix);
+        protected abstract void SaveSettings(IWorkspace workspace, string? prefix);
 
-        protected abstract void LoadSettings(IWorkspace workspace, string prefix);
+        protected abstract void LoadSettings(IWorkspace workspace, string? prefix);
 
         public void Load(IWorkspace workspace)
         {
@@ -77,6 +64,5 @@ namespace Orc.WorkspaceManagement.Behaviors
         {
             SaveSettings(workspace, KeyPrefix);
         }
-        #endregion
     }
 }

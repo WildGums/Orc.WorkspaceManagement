@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Catel;
     using Catel.Configuration;
     using Catel.Data;
@@ -30,7 +31,6 @@
         private bool _updatingDisplayName;
         private bool _isDirty;
 
-        #region Constructors
         public Workspace() 
             : this(string.Empty)
         {
@@ -46,12 +46,10 @@
             IsVisible = true;
             IsDirty = false;
         }
-        #endregion
 
-        #region IWorkspace Members
         public string Title { get; set; }
-        public string DisplayName { get; set; }
-        public string WorkspaceGroup { get; set; }
+        public string? DisplayName { get; set; }
+        public string? WorkspaceGroup { get; set; }
 
         public bool Persist { get; set; }
         public bool CanEdit { get; set; }
@@ -76,10 +74,10 @@
         }
 
         [ExcludeFromSerialization]
-        public object Scope { get; set; }
+        public object? Scope { get; set; }
 
         [ExcludeFromSerialization]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         public void ClearWorkspaceValues()
         {
@@ -91,9 +89,14 @@
             }
         }
 
-        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (_updatingDisplayName)
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
                 return;
             }
@@ -165,7 +168,7 @@
             IsDirty = isDirty;
         }
 
-        public void SetWorkspaceValue(string name, object value)
+        public void SetWorkspaceValue(string name, object? value)
         {
             SetConfigurationValue(name, value);
         }
@@ -193,7 +196,11 @@
                 // Cast if necessary
                 if (value is string stringValue)
                 {
-                    return (T)StringToObjectHelper.ToRightType(typeof(T), stringValue);
+                    var convertedType = StringToObjectHelper.ToRightType(typeof(T), stringValue);
+                    if (convertedType is T correctConvertedType)
+                    {
+                        return correctConvertedType;
+                    }
                 }
 
                 Log.Warning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
@@ -205,10 +212,8 @@
                 return defaultValue;
             }
         }
-        #endregion
 
-        #region Methods
-        private bool Equals(Workspace other)
+        private bool Equals(Workspace? other)
         {
             if (other is null)
             {
@@ -223,7 +228,7 @@
             return string.Equals(Title, other.Title);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {
@@ -247,9 +252,8 @@
         {
             return Title;
         }
-        #endregion
 
-        public bool Equals(Workspace x, Workspace y)
+        public bool Equals(Workspace? x, Workspace? y)
         {
             return x?.Equals(y)??y is null;
         }

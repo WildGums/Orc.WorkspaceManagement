@@ -4,7 +4,7 @@
 
     public class WorkspaceViewGroupItem 
     {
-        public string GroupName { get; set; }
-        public IReadOnlyList<WorkspaceViewItem> Items { get; set; }
+        public string? GroupName { get; set; }
+        public IReadOnlyList<WorkspaceViewItem>? Items { get; set; }
     }
 }

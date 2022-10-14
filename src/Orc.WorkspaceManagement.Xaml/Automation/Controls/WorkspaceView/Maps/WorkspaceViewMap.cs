@@ -10,6 +10,6 @@
         {
         }
 
-        public WorkspaceViewGroupList GroupList => By.One<WorkspaceViewGroupList>();
+        public WorkspaceViewGroupList? GroupList => By.One<WorkspaceViewGroupList>();
     }
 }

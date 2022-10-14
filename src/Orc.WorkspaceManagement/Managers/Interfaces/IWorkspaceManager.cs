@@ -10,34 +10,34 @@
     {
         string BaseDirectory { get; set; }
         IEnumerable<IWorkspace> Workspaces { get; }
-        IWorkspace Workspace { get; }
+        IWorkspace? Workspace { get; }
         IEnumerable<IWorkspaceProvider> Providers { get; }
         string DefaultWorkspaceTitle { get; set; }
-        object Scope { get; set; }
-        IWorkspace RefreshingWorkspace { get; }
+        object? Scope { get; set; }
+        IWorkspace? RefreshingWorkspace { get; }
         bool AutoRefreshEnabled { get; set; }
 
-        event EventHandler<CancelEventArgs> Initializing;
-        event EventHandler<EventArgs> Initialized;
+        event EventHandler<CancelEventArgs>? Initializing;
+        event EventHandler<EventArgs>? Initialized;
 
-        event AsyncEventHandler<CancelWorkspaceEventArgs> WorkspaceSavingAsync;
-        event EventHandler<WorkspaceEventArgs> WorkspaceSaved;
+        event AsyncEventHandler<CancelWorkspaceEventArgs>? WorkspaceSavingAsync;
+        event EventHandler<WorkspaceEventArgs>? WorkspaceSaved;
 
-        event EventHandler<EventArgs> WorkspacesChanged;
+        event EventHandler<EventArgs>? WorkspacesChanged;
 
-        event EventHandler<WorkspaceEventArgs> WorkspaceAdded;
-        event EventHandler<WorkspaceEventArgs> WorkspaceRemoved;
+        event EventHandler<WorkspaceEventArgs>? WorkspaceAdded;
+        event EventHandler<WorkspaceEventArgs>? WorkspaceRemoved;
 
-        event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderAdded;
-        event EventHandler<WorkspaceProviderEventArgs> WorkspaceProviderRemoved;
+        event EventHandler<WorkspaceProviderEventArgs>? WorkspaceProviderAdded;
+        event EventHandler<WorkspaceProviderEventArgs>? WorkspaceProviderRemoved;
 
-        event EventHandler<WorkspaceEventArgs> WorkspaceInfoRequested;
+        event EventHandler<WorkspaceEventArgs>? WorkspaceInfoRequested;
 
-        event AsyncEventHandler<WorkspaceUpdatingEventArgs> WorkspaceUpdatingAsync;
-        event EventHandler<WorkspaceUpdatedEventArgs> WorkspaceUpdated;
+        event AsyncEventHandler<WorkspaceUpdatingEventArgs>? WorkspaceUpdatingAsync;
+        event EventHandler<WorkspaceUpdatedEventArgs>? WorkspaceUpdated;
 
-        Task SetWorkspaceAsync(IWorkspace value);
-        Task<bool> TrySetWorkspaceAsync(IWorkspace value);
+        Task SetWorkspaceAsync(IWorkspace? value);
+        Task<bool> TrySetWorkspaceAsync(IWorkspace? value);
         Task UpdateIsDirtyFlagAsync(IWorkspace workspace);
 
         /// <summary>

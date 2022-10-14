@@ -20,12 +20,12 @@
 
         public bool CanRefresh()
         {
-            return Map.RefreshWorkspaceButton.IsVisible();
+            return Map.RefreshWorkspaceButton?.IsVisible() ?? false;
         }
 
         public bool CanEdit()
         {
-            return Map.EditWorkspaceButton.IsVisible();
+            return Map.EditWorkspaceButton?.IsVisible() ?? false;
         }
 
         public void Refresh()
@@ -36,14 +36,14 @@
             }
         }
 
-        public WorkspaceWindow Edit()
+        public WorkspaceWindow? Edit()
         {
             if (!CanEdit())
             {
                 return null;
             }
 
-            Map.EditWorkspaceButton.Click();
+            Map.EditWorkspaceButton?.Click();
 
             Wait.UntilResponsive();
 
@@ -55,7 +55,7 @@
 
         public bool CanDelete()
         {
-            return Map.RemoveWorkspaceButton.IsVisible();
+            return Map.RemoveWorkspaceButton?.IsVisible() ?? false;
         }
 
         public void Delete()
@@ -66,18 +66,18 @@
             }
             
             var hostWindow = Element.GetHostWindow();
-            hostWindow.SetFocus();
+            hostWindow?.SetFocus();
 
-            Map.RemoveWorkspaceButton.Click();
+            Map.RemoveWorkspaceButton?.Click();
 
             Wait.UntilResponsive();
 
-            var messageBox = hostWindow.Find<MessageBox>();
+            var messageBox = hostWindow?.Find<MessageBox>();
             messageBox?.Yes();
 
             Wait.UntilResponsive();
 
-            hostWindow.SetFocus();
+            hostWindow?.SetFocus();
         }
     }
 }

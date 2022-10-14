@@ -14,10 +14,19 @@
 
         private WorkspaceWindowMap Map => Map<WorkspaceWindowMap>();
 
-        public string Title
+        public string? Title
         {
-            get => Map.TitleEdit.Text;
-            set => Map.TitleEdit.Text = value;
+            get => Map.TitleEdit?.Text;
+            set
+            {
+                var titleEdit = Map.TitleEdit;
+                if (titleEdit is null)
+                {
+                    return;
+                }
+
+                titleEdit.Text = value ?? string.Empty;
+            }
         }
         public void Accept() => Map.OkButton?.Click();
         public void Decline() => Map.CancelButton?.Click();

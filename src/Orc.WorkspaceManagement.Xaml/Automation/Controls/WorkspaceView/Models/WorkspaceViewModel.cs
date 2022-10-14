@@ -10,7 +10,7 @@
         {
         }
 
-        public object Scope { get; set; }
+        public object? Scope { get; set; }
         public bool HasRefreshButton { get; set; }
     }
 }

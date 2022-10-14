@@ -27,10 +27,10 @@
         public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer,
             IFileService fileService, IDirectoryService directoryService)
         {
-            Argument.IsNotNull(() => serializationManager);
-            Argument.IsNotNull(() => xmlSerializer);
-            Argument.IsNotNull(() => fileService);
-            Argument.IsNotNull(() => directoryService);
+            ArgumentNullException.ThrowIfNull(serializationManager);
+            ArgumentNullException.ThrowIfNull(xmlSerializer);
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(directoryService);
 
             _serializationManager = serializationManager;
             _xmlSerializer = xmlSerializer;
@@ -71,11 +71,11 @@
             return workspaces;
         }
 
-        public virtual async Task<IWorkspace> LoadWorkspaceAsync(string fileName)
+        public virtual async Task<IWorkspace?> LoadWorkspaceAsync(string fileName)
         {
             Argument.IsNotNullOrEmpty(() => fileName);
 
-            IWorkspace result = null;
+            IWorkspace? result = null;
 
             try
             {
@@ -114,7 +114,7 @@
         public virtual async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
         {
             Argument.IsNotNullOrEmpty(() => path);
-            Argument.IsNotNull(() => workspaces);
+            ArgumentNullException.ThrowIfNull(workspaces);
 
             _directoryService.Create(path);
 
@@ -144,7 +144,7 @@
         public virtual async Task SaveWorkspaceAsync(string fileName, IWorkspace workspace)
         {
             Argument.IsNotNullOrEmpty(() => fileName);
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             if (!workspace.Persist)
             {
@@ -160,9 +160,9 @@
 
         public string GetWorkspaceFileName(string directory, IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
-            var workspaceFile = Path.Combine(directory, $"{workspace.Title.GetSlug()}{WorkspaceFileExtension}");
+            var workspaceFile = System.IO.Path.Combine(directory, $"{workspace.Title.GetSlug()}{WorkspaceFileExtension}");
             return workspaceFile;
         }
     }

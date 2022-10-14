@@ -1,8 +1,7 @@
 ﻿namespace Orc.WorkspaceManagement.Test.Mocks
 {
+    using System;
     using System.Threading.Tasks;
-    using Catel;
-    using Catel.Threading;
 
     public class WorkspaceProvider : IWorkspaceProvider
     {
@@ -17,7 +16,7 @@
 
         public void ProvideInformation(IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             workspace.SetWorkspaceValue(_key, _value);
         }
@@ -30,7 +29,7 @@
         {
             ProvideInformation(workspace);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         public void ApplyWorkspace(IWorkspace workspace)
@@ -42,13 +41,13 @@
         {
             ApplyWorkspace(workspace);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
 
         }
 
         public Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
         {
-            return TaskHelper<bool>.FromResult(false);
+            return Task.FromResult(false);
         }
     }
 }

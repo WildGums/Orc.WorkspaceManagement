@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BehaviorWorkspaceProvider.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
+    using System;
     using System.Threading.Tasks;
     using Behaviors;
-    using Catel;
     using Catel.IoC;
     using Catel.Services;
-    using Catel.Threading;
 
     public class BehaviorWorkspaceProvider : WorkspaceProviderBase
     {
@@ -23,8 +15,8 @@ namespace Orc.WorkspaceManagement
             IServiceLocator serviceLocator) 
             : base(workspaceManager, serviceLocator)
         {
-            Argument.IsNotNull(() => workspaceBehavior);
-            Argument.IsNotNull(() => dispatcherService);
+            ArgumentNullException.ThrowIfNull(workspaceBehavior);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _workspaceBehavior = workspaceBehavior;
             _dispatcherService = dispatcherService;
@@ -34,7 +26,7 @@ namespace Orc.WorkspaceManagement
         {
             if (workspace is null)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Save(workspace));
@@ -44,7 +36,7 @@ namespace Orc.WorkspaceManagement
         {
             if (workspace is null)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Load(workspace));

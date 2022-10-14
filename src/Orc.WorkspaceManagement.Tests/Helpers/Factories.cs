@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Factories.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Test
+﻿namespace Orc.WorkspaceManagement.Test
 {
     using Catel.IoC;
     using Catel.Services;
@@ -24,7 +17,7 @@ namespace Orc.WorkspaceManagement.Test
 
                 var serviceLocator = ServiceLocator.Default;
                 var emptyWorkspaceInitializer = new EmptyWorkspaceInitializer();
-                var appDataService = serviceLocator.ResolveType<IAppDataService>();
+                var appDataService = serviceLocator.ResolveRequiredType<IAppDataService>();
 
                 return new WorkspaceManagement.WorkspaceManager(emptyWorkspaceInitializer, workspacesStorageService, serviceLocator, appDataService);
             }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoWorkspaceGrid.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Behaviors
+﻿namespace Orc.WorkspaceManagement.Behaviors
 {
     using System;
     using System.Collections.Generic;
@@ -23,10 +16,9 @@ namespace Orc.WorkspaceManagement.Behaviors
         {
         }
 
-        #region Properties
-        public string RowsToPersist
+        public string? RowsToPersist
         {
-            get { return (string)GetValue(RowsToPersistProperty); }
+            get { return (string?)GetValue(RowsToPersistProperty); }
             set { SetValue(RowsToPersistProperty, value); }
         }
 
@@ -35,16 +27,16 @@ namespace Orc.WorkspaceManagement.Behaviors
             DependencyProperty.Register(nameof(RowsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
 
 
-        public string ColumnsToPersist
+        public string? ColumnsToPersist
         {
-            get { return (string)GetValue(ColumnsToPersistProperty); }
+            get { return (string?)GetValue(ColumnsToPersistProperty); }
             set { SetValue(ColumnsToPersistProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ColumnsToPersist.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ColumnsToPersistProperty =
             DependencyProperty.Register(nameof(ColumnsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
-        #endregion
+
 
         protected override void OnAssociatedObjectLoaded()
         {
@@ -56,6 +48,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         private void GetDefaultValues()
         {
             var rows = GetRows();
+
             foreach (var index in rows)
             {
                 var defaultValueName = $"row_{index}_default";
@@ -65,6 +58,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
 
             var columns = GetColumns();
+
             foreach (var index in columns)
             {
                 var defaultValueName = $"column_{index}_default";
@@ -74,9 +68,10 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
         }
 
-        protected override void SaveSettings(IWorkspace workspace, string prefix)
+        protected override void SaveSettings(IWorkspace workspace, string? prefix)
         {
             var rows = GetRows();
+
             foreach (var index in rows)
             {
                 var name = $"row_{index}";
@@ -95,16 +90,17 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
         }
 
-        protected override void LoadSettings(IWorkspace workspace, string prefix)
+        protected override void LoadSettings(IWorkspace workspace, string? prefix)
         {
             LoadGridRowSettings(workspace, prefix);
 
             LoadGridColumnsSettings(workspace, prefix);
         }
 
-        private void LoadGridColumnsSettings(IWorkspace workspace, string prefix)
+        private void LoadGridColumnsSettings(IWorkspace workspace, string? prefix)
         {
             var columns = GetColumns();
+
             foreach (var index in columns)
             {
                 var name = $"column_{index}";
@@ -140,9 +136,10 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
         }
 
-        private void LoadGridRowSettings(IWorkspace workspace, string prefix)
+        private void LoadGridRowSettings(IWorkspace workspace, string? prefix)
         {
             var rows = GetRows();
+
             foreach (var index in rows)
             {
                 var name = $"row_{index}";
@@ -178,7 +175,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             return GetItemsFromString(ColumnsToPersist, AssociatedObject.ColumnDefinitions.Count);
         }
 
-        private static List<int> GetItemsFromString(string input, int totalItems)
+        private static List<int> GetItemsFromString(string? input, int totalItems)
         {
             var items = new List<int>();
 

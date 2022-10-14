@@ -12,8 +12,8 @@
         }
 
      //   public Text TitleText => By.One<Text>();
-        public Edit TitleEdit => By.One<Edit>();
-        public Button OkButton => By.Name("OK").One<Button>();
-        public Button CancelButton => By.Name("Cancel").One<Button>();
+        public Edit? TitleEdit => By.One<Edit>();
+        public Button? OkButton => By.Name("OK").One<Button>();
+        public Button? CancelButton => By.Name("Cancel").One<Button>();
     }
 }

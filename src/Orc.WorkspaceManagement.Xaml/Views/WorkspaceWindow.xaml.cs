@@ -9,7 +9,6 @@
     /// </summary>
     public partial class WorkspaceWindow
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkspaceWindow"/> class.
         /// </summary>
@@ -25,12 +24,11 @@
         /// <remarks>
         /// This constructor can be used to use view-model injection.
         /// </remarks>
-        public WorkspaceWindow(WorkspaceViewModel viewModel)
+        public WorkspaceWindow(WorkspaceViewModel? viewModel)
             : base(viewModel)
         {
             InitializeComponent();
         }
-        #endregion
 
         protected override AutomationPeer OnCreateAutomationPeer()
         {

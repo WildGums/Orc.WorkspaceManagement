@@ -13,7 +13,7 @@
         {
         }
 
-        public IReadOnlyList<WorkspaceViewGroupItem> GroupItems
-            => Map.GroupList.GetGroupItems();
+        public IReadOnlyList<WorkspaceViewGroupItem>? GroupItems
+            => Map.GroupList?.GetGroupItems();
     }
 }

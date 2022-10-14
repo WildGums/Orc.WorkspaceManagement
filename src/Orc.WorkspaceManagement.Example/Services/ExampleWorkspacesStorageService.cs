@@ -1,7 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Example.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;

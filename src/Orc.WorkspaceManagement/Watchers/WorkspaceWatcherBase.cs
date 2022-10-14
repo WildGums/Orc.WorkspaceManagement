@@ -1,24 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceWatcherBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Logging;
-    using Catel.Threading;
+
 #if DEBUG
     using System.Diagnostics;
 #endif
 
     public abstract class WorkspaceWatcherBase : IDisposable
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         protected readonly IWorkspaceManager WorkspaceManager;
@@ -26,16 +17,15 @@ namespace Orc.WorkspaceManagement
         private bool _justAddedWorkspace;
 
 #if DEBUG
-        private Stopwatch _switchStopwatch;
-        private Stopwatch _totalStopwatch;
+        private Stopwatch? _switchStopwatch;
+        private Stopwatch? _totalStopwatch;
 #endif
-        #endregion
 
-        #region Constructors
         protected WorkspaceWatcherBase(IWorkspaceManager workspaceManager)
         {
+            ArgumentNullException.ThrowIfNull(workspaceManager);
+
             WorkspaceManager = workspaceManager;
-            Argument.IsNotNull(() => workspaceManager);
 
             IgnoreSwitchToNewlyCreatedWorkspace = true;
 
@@ -51,13 +41,9 @@ namespace Orc.WorkspaceManagement
             workspaceManager.WorkspaceSavingAsync += OnSavingAsync;
             workspaceManager.WorkspaceSaved += OnSaved;
         }
-        #endregion
 
-        #region Properties
         protected bool IgnoreSwitchToNewlyCreatedWorkspace { get; set; }
-        #endregion
 
-        #region Methods
         protected virtual void Dispose(bool disposing)
         {
 #pragma warning disable IDISP023 // Don't use reference types in finalizer context.
@@ -86,12 +72,12 @@ namespace Orc.WorkspaceManagement
             return IgnoreSwitchToNewlyCreatedWorkspace && _justAddedWorkspace;
         }
 
-        protected virtual Task<bool> OnWorkspaceUpdatingAsync(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
+        protected virtual Task<bool> OnWorkspaceUpdatingAsync(IWorkspace? oldWorkspace, IWorkspace? newWorkspace, bool isRefresh)
         {
-            return TaskHelper<bool>.FromResult(true);
+            return Task.FromResult(true);
         }
 
-        protected virtual void OnWorkspaceUpdated(IWorkspace oldWorkspace, IWorkspace newWorkspace, bool isRefresh)
+        protected virtual void OnWorkspaceUpdated(IWorkspace? oldWorkspace, IWorkspace? newWorkspace, bool isRefresh)
         {
         }
 
@@ -113,14 +99,14 @@ namespace Orc.WorkspaceManagement
 
         protected virtual Task<bool> OnSavingAsync()
         {
-            return TaskHelper<bool>.FromResult(true);
+            return Task.FromResult(true);
         }
 
         protected virtual void OnSaved()
         {
         }
 
-        private async Task OnWorkspaceUpdatingAsync(object sender, WorkspaceUpdatingEventArgs e)
+        private async Task OnWorkspaceUpdatingAsync(object? sender, WorkspaceUpdatingEventArgs e)
         {
 #if DEBUG
             if (_switchStopwatch is not null)
@@ -149,7 +135,7 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        private void OnWorkspaceUpdated(object sender, WorkspaceUpdatedEventArgs e)
+        private void OnWorkspaceUpdated(object? sender, WorkspaceUpdatedEventArgs e)
         {
             if (!ShouldIgnoreWorkspaceChange())
             {
@@ -165,16 +151,16 @@ namespace Orc.WorkspaceManagement
 #if DEBUG
             var type = GetType();
 
-            _switchStopwatch.Stop();
-            MethodTimeLogger.Log(type, "Switch", _switchStopwatch.ElapsedMilliseconds, "");
+            _switchStopwatch?.Stop();
+            MethodTimeLogger.Log(type, "Switch", _switchStopwatch?.ElapsedMilliseconds ?? 0, "");
 
-            _totalStopwatch.Stop();
-            MethodTimeLogger.Log(type, "Total", _totalStopwatch.ElapsedMilliseconds, "");
+            _totalStopwatch?.Stop();
+            MethodTimeLogger.Log(type, "Total", _totalStopwatch?.ElapsedMilliseconds ?? 0, "");
 #endif
         }
 
 
-        private void OnWorkspaceAdded(object sender, WorkspaceEventArgs e)
+        private void OnWorkspaceAdded(object? sender, WorkspaceEventArgs e)
         {
             OnWorkspaceAdded(e.Workspace);
 
@@ -184,30 +170,29 @@ namespace Orc.WorkspaceManagement
             }
         }
 
-        private void OnWorkspaceRemoved(object sender, WorkspaceEventArgs e)
+        private void OnWorkspaceRemoved(object? sender, WorkspaceEventArgs e)
         {
             OnWorkspaceRemoved(e.Workspace);
         }
 
-        private void OnWorkspaceProviderAdded(object sender, WorkspaceProviderEventArgs e)
+        private void OnWorkspaceProviderAdded(object? sender, WorkspaceProviderEventArgs e)
         {
             OnWorkspaceProviderAdded(e.WorkspaceProvider);
         }
 
-        private void OnWorkspaceProviderRemoved(object sender, WorkspaceProviderEventArgs e)
+        private void OnWorkspaceProviderRemoved(object? sender, WorkspaceProviderEventArgs e)
         {
             OnWorkspaceProviderRemoved(e.WorkspaceProvider);
         }
 
-        private async Task OnSavingAsync(object sender, CancelWorkspaceEventArgs e)
+        private async Task OnSavingAsync(object? sender, CancelWorkspaceEventArgs e)
         {
             e.Cancel = !await OnSavingAsync();
         }
 
-        private void OnSaved(object sender, WorkspaceEventArgs e)
+        private void OnSaved(object? sender, WorkspaceEventArgs e)
         {
             OnSaved();
         }
-        #endregion
     }
 }

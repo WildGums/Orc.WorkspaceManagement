@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceManagerExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,22 +11,22 @@ namespace Orc.WorkspaceManagement
     {
         public static Task RefreshCurrentWorkspaceAsync(this IWorkspaceManager workspaceManager)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
             return workspaceManager.TrySetWorkspaceAsync(workspaceManager.Workspace);
         }
 
-        public static TWorkspace GetWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager)
+        public static TWorkspace? GetWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager)
             where TWorkspace : IWorkspace
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
-            return (TWorkspace)workspaceManager.Workspace;
+            return (TWorkspace?)workspaceManager.Workspace;
         }
 
-        public static IWorkspace FindWorkspace(this IWorkspaceManager workspaceManager, string workspaceName)
+        public static IWorkspace? FindWorkspace(this IWorkspaceManager workspaceManager, string workspaceName)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
             Argument.IsNotNullOrWhitespace(() => workspaceName);
 
             return (from workspace in workspaceManager.Workspaces
@@ -40,18 +34,18 @@ namespace Orc.WorkspaceManagement
                     select workspace).FirstOrDefault();
         }
 
-        public static TWorkspace FindWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager, string workspaceName)
+        public static TWorkspace? FindWorkspace<TWorkspace>(this IWorkspaceManager workspaceManager, string workspaceName)
             where TWorkspace : IWorkspace
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
-            return (TWorkspace) FindWorkspace(workspaceManager, workspaceName);
+            return (TWorkspace?) FindWorkspace(workspaceManager, workspaceName);
         }
 
         public static async Task AddAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace, bool autoSelect)
         {
-            Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             await workspaceManager.AddAsync(workspace);
 
@@ -63,8 +57,8 @@ namespace Orc.WorkspaceManagement
 
         public static async Task AddProviderAsync(this IWorkspaceManager workspaceManager, IWorkspaceProvider workspaceProvider, bool callApplyWorkspaceForCurrentWorkspace)
         {
-            Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => workspaceProvider);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceProvider);
 
             workspaceManager.AddProvider(workspaceProvider);
 
@@ -81,15 +75,15 @@ namespace Orc.WorkspaceManagement
         public static Task AddProviderAsync<TWorkspaceProvider>(this IWorkspaceManager workspaceManager, bool callApplyWorkspaceForCurrentWorkspace)
             where TWorkspaceProvider : IWorkspaceProvider
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
-            var workspaceProvider = TypeFactory.Default.CreateInstance<TWorkspaceProvider>();
+            var workspaceProvider = TypeFactory.Default.CreateRequiredInstance<TWorkspaceProvider>();
             return workspaceManager.AddProviderAsync(workspaceProvider, callApplyWorkspaceForCurrentWorkspace);
         }
 
         public static async Task EnsureDefaultWorkspaceAsync(this IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default", bool autoSelect = true)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
             workspaceManager.DefaultWorkspaceTitle = defaultWorkspaceName;
 
@@ -113,7 +107,7 @@ namespace Orc.WorkspaceManagement
         public static async Task InitializeAsync(this IWorkspaceManager workspaceManager, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true,
             string defaultWorkspaceName = "Default", bool autoSelect = true)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
             if (!await workspaceManager.TryInitializeAsync(false))
             {
@@ -139,7 +133,7 @@ namespace Orc.WorkspaceManagement
         public static Task SetWorkspaceSchemesDirectoryAsync(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true,
             bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default", bool autoselectDefault = true)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
             Argument.IsNotNullOrEmpty(() => directoryName);
             Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
 
@@ -154,7 +148,7 @@ namespace Orc.WorkspaceManagement
         /// <returns>Task.</returns>
         public static async Task StoreAndSaveAsync(this IWorkspaceManager workspaceManager)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
             await workspaceManager.StoreWorkspaceAsync();
             await workspaceManager.SaveAsync();
@@ -162,7 +156,7 @@ namespace Orc.WorkspaceManagement
 
         public static async Task<bool> CheckIsDirtyAsync(this IWorkspaceManager workspaceManager)
         {
-            Argument.IsNotNull(() => workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
 
             var workspace = workspaceManager.Workspace;
             if (workspace is null)
@@ -193,8 +187,8 @@ namespace Orc.WorkspaceManagement
 
         public static async Task<bool> IsWorkspaceDirtyAsync(this IWorkspaceManager workspaceManager, IWorkspace workspace)
         {
-            Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => workspace);
+            ArgumentNullException.ThrowIfNull(workspaceManager);
+            ArgumentNullException.ThrowIfNull(workspace);
 
             if (workspaceManager.Providers is null)
             {

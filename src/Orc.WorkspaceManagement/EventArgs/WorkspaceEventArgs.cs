@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceEventArgs.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
 
@@ -13,6 +6,8 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceEventArgs(IWorkspace workspace)
         {
+            ArgumentNullException.ThrowIfNull(workspace);
+
             Workspace = workspace;
         }
 

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceInitializer.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using Catel.Threading;
     using System.Threading.Tasks;
@@ -15,7 +8,7 @@ namespace Orc.WorkspaceManagement
         public Task InitializeAsync(IWorkspace workspace)
         {
             // nothing
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
     }
 }

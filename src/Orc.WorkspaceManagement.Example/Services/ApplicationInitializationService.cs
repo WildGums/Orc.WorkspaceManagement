@@ -4,11 +4,7 @@
     using Orchestra.Services;
     using System.Threading.Tasks;
     using System.Windows.Media;
-    using Behaviors;
-    using Catel;
     using Catel.IoC;
-    using Catel.Threading;
-    using Orchestra.Markup;
     using WorkspaceManagement;
 
     public class ApplicationInitializationService : ApplicationInitializationServiceBase
@@ -17,7 +13,7 @@
 
         public ApplicationInitializationService(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             _serviceLocator = serviceLocator;
         }
@@ -27,7 +23,7 @@
             InitializeFonts();
             RegisterTypes();
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private void InitializeFonts()

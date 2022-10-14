@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoWorkspace.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Behaviors
+﻿namespace Orc.WorkspaceManagement.Behaviors
 {
     using System.Windows;
 
     public class AutoWorkspace : WorkspaceBehaviorBase<FrameworkElement>
     {
-        #region Properties
         public bool PersistSize
         {
             get { return (bool)GetValue(PersistSizeProperty); }
@@ -30,11 +22,8 @@ namespace Orc.WorkspaceManagement.Behaviors
 
         public static readonly DependencyProperty PersistGridSettingsProperty =
             DependencyProperty.Register(nameof(PersistGridSettings), typeof(bool), typeof(AutoWorkspace), new PropertyMetadata(true));
-        #endregion
 
-        #region Methods
-
-        protected override void SaveSettings(IWorkspace workspace, string prefix)
+        protected override void SaveSettings(IWorkspace workspace, string? prefix)
         {
             if (PersistSize)
             {
@@ -47,7 +36,7 @@ namespace Orc.WorkspaceManagement.Behaviors
             }
         }
 
-        protected override void LoadSettings(IWorkspace workspace, string prefix)
+        protected override void LoadSettings(IWorkspace workspace, string? prefix)
         {
             if (PersistSize)
             {
@@ -59,6 +48,5 @@ namespace Orc.WorkspaceManagement.Behaviors
                 AssociatedObject.LoadGridValuesFromWorkspace(workspace, prefix);
             }
         }
-        #endregion
     }
 }

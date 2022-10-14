@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceException.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
-    using System.Runtime.Serialization;
 
-    [Serializable]
     public class WorkspaceException : Exception
     {
         public WorkspaceException(IWorkspace workspace)
@@ -28,11 +19,6 @@ namespace Orc.WorkspaceManagement
             : base(message, innerException)
         {
             Workspace = workspace;
-        }
-
-        protected WorkspaceException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
         public IWorkspace Workspace { get; }

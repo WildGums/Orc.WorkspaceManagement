@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceManagementInitializationException.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement
 {
     using System;
     using System.Runtime.Serialization;
 
-    [Serializable]
     public class WorkspaceManagementInitializationException : Exception
     {
         public WorkspaceManagementInitializationException(IWorkspaceManager workspaceManager)
@@ -29,11 +21,6 @@ namespace Orc.WorkspaceManagement
             : base(message, innerException)
         {
             WorkspaceManager = workspaceManager;
-        }
-
-        protected WorkspaceManagementInitializationException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
         public IWorkspaceManager WorkspaceManager { get; private set; }
