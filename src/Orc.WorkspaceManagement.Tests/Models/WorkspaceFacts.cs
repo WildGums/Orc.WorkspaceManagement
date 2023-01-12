@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Test.Models
+﻿namespace Orc.WorkspaceManagement.Test.Models
 {
     using NUnit.Framework;
 

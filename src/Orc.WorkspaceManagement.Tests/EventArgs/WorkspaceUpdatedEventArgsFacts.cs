@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceUpdatedEventArgsFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Test.EventArgs
+﻿namespace Orc.WorkspaceManagement.Test.EventArgs
 {
     using NUnit.Framework;
 

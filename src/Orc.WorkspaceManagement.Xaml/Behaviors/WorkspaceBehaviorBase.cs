@@ -29,7 +29,7 @@
 
         // Using a DependencyProperty as the backing store for KeyPrefix.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty KeyPrefixProperty =
-            DependencyProperty.Register(nameof(KeyPrefix), typeof(string), typeof(WorkspaceBehaviorBase<T>), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(KeyPrefix), typeof(string), typeof(WorkspaceBehaviorBase<T>), new PropertyMetadata(string.Empty));
 
         protected override void OnAssociatedObjectLoaded()
         {

@@ -24,7 +24,7 @@
 
         // Using a DependencyProperty as the backing store for RowsToPersist.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RowsToPersistProperty =
-            DependencyProperty.Register(nameof(RowsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(RowsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(string.Empty));
 
 
         public string? ColumnsToPersist
@@ -35,7 +35,7 @@
 
         // Using a DependencyProperty as the backing store for ColumnsToPersist.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ColumnsToPersistProperty =
-            DependencyProperty.Register(nameof(ColumnsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(ColumnsToPersist), typeof(string), typeof(AutoWorkspaceGrid), new PropertyMetadata(string.Empty));
 
 
         protected override void OnAssociatedObjectLoaded()

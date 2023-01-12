@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceManagerFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.WorkspaceManagement.Test.Managers
+﻿namespace Orc.WorkspaceManagement.Test.Managers
 {
     using System;
     using System.Linq;
