@@ -152,10 +152,10 @@
             var type = GetType();
 
             _switchStopwatch?.Stop();
-            MethodTimeLogger.Log(type, "Switch", _switchStopwatch?.ElapsedMilliseconds ?? 0, "");
+            MethodTimeLogger.Log(type, "Switch", _switchStopwatch?.ElapsedMilliseconds ?? 0, string.Empty);
 
             _totalStopwatch?.Stop();
-            MethodTimeLogger.Log(type, "Total", _totalStopwatch?.ElapsedMilliseconds ?? 0, "");
+            MethodTimeLogger.Log(type, "Total", _totalStopwatch?.ElapsedMilliseconds ?? 0, string.Empty);
 #endif
         }
 
