@@ -1,8 +1,7 @@
-﻿namespace Orc.WorkspaceManagement.Example.ViewModels
-{
-    using Catel.MVVM;
+﻿namespace Orc.WorkspaceManagement.Example.ViewModels;
 
-    public class StatusBarViewModel : ViewModelBase
-    {
-    }
+using Catel.MVVM;
+
+public class StatusBarViewModel : ViewModelBase
+{
 }

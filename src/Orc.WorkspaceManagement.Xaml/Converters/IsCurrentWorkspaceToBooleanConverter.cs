@@ -1,30 +1,29 @@
-﻿namespace Orc.WorkspaceManagement.Converters
+﻿namespace Orc.WorkspaceManagement.Converters;
+
+using System;
+using Catel;
+using Catel.IoC;
+using Catel.MVVM.Converters;
+using WorkspaceManagement;
+
+public class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
 {
-    using System;
-    using Catel;
-    using Catel.IoC;
-    using Catel.MVVM.Converters;
-    using Orc.WorkspaceManagement;
+    private readonly IWorkspaceManager _workspaceManager;
 
-    public class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
+    public IsCurrentWorkspaceToBooleanConverter()
     {
-        private readonly IWorkspaceManager _workspaceManager;
+        var dependencyResolver = this.GetDependencyResolver();
+        _workspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
+    }
 
-        public IsCurrentWorkspaceToBooleanConverter()
+    protected override object? Convert(object? value, Type targetType, object? parameter)
+    {
+        var workspace = value as IWorkspace;
+        if (workspace is null)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _workspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
+            return false;
         }
 
-        protected override object? Convert(object? value, Type targetType, object? parameter)
-        {
-            var workspace = value as IWorkspace;
-            if (workspace is null)
-            {
-                return false;
-            }
-
-            return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
-        }
+        return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
     }
 }

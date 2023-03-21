@@ -1,10 +1,9 @@
-﻿namespace Orc.WorkspaceManagement.Example.Views
+﻿namespace Orc.WorkspaceManagement.Example.Views;
+
+public partial class StatusBarView
 {
-    public partial class StatusBarView
+    public StatusBarView()
     {
-        public StatusBarView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

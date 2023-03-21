@@ -1,10 +1,9 @@
-﻿namespace Orc.WorkspaceManagement.Example.Views
+﻿namespace Orc.WorkspaceManagement.Example.Views;
+
+public partial class RibbonView
 {
-    public partial class RibbonView
+    public RibbonView()
     {
-        public RibbonView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

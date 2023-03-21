@@ -1,16 +1,15 @@
-﻿namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement;
+
+using System;
+
+public class WorkspaceEventArgs : EventArgs
 {
-    using System;
-
-    public class WorkspaceEventArgs : EventArgs
+    public WorkspaceEventArgs(IWorkspace workspace)
     {
-        public WorkspaceEventArgs(IWorkspace workspace)
-        {
-            ArgumentNullException.ThrowIfNull(workspace);
+        ArgumentNullException.ThrowIfNull(workspace);
 
-            Workspace = workspace;
-        }
-
-        public IWorkspace Workspace { get; private set; }
+        Workspace = workspace;
     }
+
+    public IWorkspace Workspace { get; }
 }

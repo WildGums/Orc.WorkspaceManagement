@@ -1,17 +1,16 @@
-﻿namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement;
+
+using System;
+using System.ComponentModel;
+
+public class CancelWorkspaceEventArgs : CancelEventArgs
 {
-    using System;
-    using System.ComponentModel;
-
-    public class CancelWorkspaceEventArgs : CancelEventArgs
+    public CancelWorkspaceEventArgs(IWorkspace workspace)
     {
-        public CancelWorkspaceEventArgs(IWorkspace workspace)
-        {
-            ArgumentNullException.ThrowIfNull(workspace);
+        ArgumentNullException.ThrowIfNull(workspace);
 
-            Workspace = workspace;
-        }
-
-        public IWorkspace Workspace { get; private set; }
+        Workspace = workspace;
     }
+
+    public IWorkspace Workspace { get; }
 }

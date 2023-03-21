@@ -1,10 +1,9 @@
-﻿namespace Orc.WorkspaceManagement.Example.Views
+﻿namespace Orc.WorkspaceManagement.Example.Views;
+
+public partial class AView
 {
-    public partial class AView
+    public AView()
     {
-        public AView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

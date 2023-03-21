@@ -1,18 +1,12 @@
-﻿namespace Orc.WorkspaceManagement.Converters
+﻿namespace Orc.WorkspaceManagement.Converters;
+
+using System;
+using Catel.MVVM.Converters;
+
+public class UnderscoreToDoubleUnderscoresStringConverter : ValueConverterBase<string>
 {
-    using System;
-    using Catel.MVVM.Converters;
-
-    public class UnderscoreToDoubleUnderscoresStringConverter : ValueConverterBase<string>
+    protected override object? Convert(string? value, Type targetType, object? parameter)
     {
-        protected override object? Convert(string? value, Type targetType, object? parameter)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            return value.Replace("_", "__");
-        }
+        return string.IsNullOrWhiteSpace(value) ? value : value.Replace("_", "__");
     }
 }

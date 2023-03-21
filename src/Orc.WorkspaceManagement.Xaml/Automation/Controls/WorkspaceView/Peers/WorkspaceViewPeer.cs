@@ -1,12 +1,11 @@
-﻿namespace Orc.WorkspaceManagement.Automation
-{
-    using Orc.Automation;
+﻿namespace Orc.WorkspaceManagement.Automation;
 
-    public class WorkspaceViewPeer : AutomationControlPeerBase<Views.WorkspacesView>
+using Orc.Automation;
+
+public class WorkspaceViewPeer : AutomationControlPeerBase<Views.WorkspacesView>
+{
+    public WorkspaceViewPeer(Views.WorkspacesView owner) 
+        : base(owner)
     {
-        public WorkspaceViewPeer(Views.WorkspacesView owner) 
-            : base(owner)
-        {
-        }
     }
 }

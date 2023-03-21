@@ -1,14 +1,13 @@
-﻿namespace Orc.WorkspaceManagement
-{
-    using Catel.Threading;
-    using System.Threading.Tasks;
+﻿namespace Orc.WorkspaceManagement;
 
-    public class EmptyWorkspaceInitializer : IWorkspaceInitializer
+using Catel.Threading;
+using System.Threading.Tasks;
+
+public class EmptyWorkspaceInitializer : IWorkspaceInitializer
+{
+    public Task InitializeAsync(IWorkspace workspace)
     {
-        public Task InitializeAsync(IWorkspace workspace)
-        {
-            // nothing
-            return Task.CompletedTask;
-        }
+        // nothing
+        return Task.CompletedTask;
     }
 }
