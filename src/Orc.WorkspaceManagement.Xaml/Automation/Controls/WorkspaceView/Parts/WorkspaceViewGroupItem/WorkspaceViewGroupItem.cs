@@ -1,10 +1,9 @@
-﻿namespace Orc.WorkspaceManagement.Automation
-{
-    using System.Collections.Generic;
+﻿namespace Orc.WorkspaceManagement.Automation;
 
-    public class WorkspaceViewGroupItem 
-    {
-        public string? GroupName { get; set; }
-        public IReadOnlyList<WorkspaceViewItem>? Items { get; set; }
-    }
+using System.Collections.Generic;
+
+public class WorkspaceViewGroupItem 
+{
+    public string? GroupName { get; set; }
+    public IReadOnlyList<WorkspaceViewItem>? Items { get; set; }
 }

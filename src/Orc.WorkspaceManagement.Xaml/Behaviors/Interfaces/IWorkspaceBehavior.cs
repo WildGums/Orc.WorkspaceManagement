@@ -1,8 +1,7 @@
-﻿namespace Orc.WorkspaceManagement.Behaviors
+﻿namespace Orc.WorkspaceManagement.Behaviors;
+
+public interface IWorkspaceBehavior
 {
-    public interface IWorkspaceBehavior
-    {
-        void Load(IWorkspace workspace);
-        void Save(IWorkspace workspace);
-    }
+    void Load(IWorkspace workspace);
+    void Save(IWorkspace workspace);
 }

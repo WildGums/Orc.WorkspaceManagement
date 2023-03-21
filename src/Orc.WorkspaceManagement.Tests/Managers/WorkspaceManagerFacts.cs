@@ -1,261 +1,260 @@
-﻿namespace Orc.WorkspaceManagement.Test.Managers
+﻿namespace Orc.WorkspaceManagement.Test.Managers;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Mocks;
+using Moq;
+using NUnit.Framework;
+
+public class WorkspaceManagerFacts
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Mocks;
-    using Moq;
-    using NUnit.Framework;
-
-    public class WorkspaceManagerFacts
+    [TestFixture]
+    public class TheAddMethod
     {
-        [TestFixture]
-        public class TheAddMethod
+        [TestCase]
+        public async Task AddsTheWorkspaceAsync()
         {
-            [TestCase]
-            public async Task AddsTheWorkspaceAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
-                await workspaceManager.AddAsync(workspace);
+            await workspaceManager.AddAsync(workspace);
 
-                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
-            }
-
-            [TestCase]
-            public async Task RaisesWorkspaceAddedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                var eventRaised = false;
-                workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
-
-                await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
-
-                Assert.IsTrue(eventRaised);
-            }
-
-            [TestCase]
-            public async Task RaisesWorkspacesChangedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
-
-                await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
-
-                Assert.IsTrue(eventRaised);
-            }
+            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
         }
 
-        [TestFixture]
-        public class TheRemoveMethod
+        [TestCase]
+        public async Task RaisesWorkspaceAddedEventAsync()
         {
-            [TestCase]
-            public async Task RemovesTheWorkspaceAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            var eventRaised = false;
+            workspaceManager.WorkspaceAdded += (sender, e) => eventRaised = true;
 
-                await workspaceManager.AddAsync(workspace);
+            await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
-                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
-
-                await workspaceManager.RemoveAsync(workspace);
-
-                Assert.IsFalse(workspaceManager.Workspaces.Contains(workspace));
-            }
-
-            [TestCase]
-            public async Task DoesNotRemoveWorkspaceWithCanDeleteIsFalseAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
-                workspace.CanDelete = false;
-
-                await workspaceManager.AddAsync(workspace);
-
-                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
-
-                await workspaceManager.RemoveAsync(workspace);
-
-                Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
-            }
-
-            [TestCase]
-            public async Task RaisesWorkspaceRemovedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
-
-                await workspaceManager.AddAsync(workspace);
-
-                var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
-
-                await workspaceManager.RemoveAsync(workspace);
-
-                Assert.IsTrue(eventRaised);
-            }
-
-            [TestCase]
-            public async Task RaisesWorkspacesChangedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
-
-                await workspaceManager.AddAsync(workspace);
-
-                var eventRaised = false;
-                workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
-
-                await workspaceManager.RemoveAsync(workspace);
-
-                Assert.IsTrue(eventRaised);
-            }
+            Assert.IsTrue(eventRaised);
         }
 
-        [TestFixture]
-        public class TheInitializeMethod
+        [TestCase]
+        public async Task RaisesWorkspacesChangedEventAsync()
         {
-            [TestCase]
-            public async Task RaisesInitializingEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var eventRaised = false;
-                workspaceManager.Initializing += (sender, e) => eventRaised = true;
+            var eventRaised = false;
+            workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
-                await workspaceManager.InitializeAsync();
+            await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
-                Assert.IsTrue(eventRaised);
-            }
+            Assert.IsTrue(eventRaised);
+        }
+    }
 
-            [TestCase]
-            public async Task RaisesInitializedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+    [TestFixture]
+    public class TheRemoveMethod
+    {
+        [TestCase]
+        public async Task RemovesTheWorkspaceAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var eventRaised = false;
-                workspaceManager.Initialized += (sender, e) => eventRaised = true;
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
-                await workspaceManager.InitializeAsync();
+            await workspaceManager.AddAsync(workspace);
 
-                Assert.IsTrue(eventRaised);
-            }
+            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+
+            await workspaceManager.RemoveAsync(workspace);
+
+            Assert.IsFalse(workspaceManager.Workspaces.Contains(workspace));
         }
 
-        [TestFixture]
-        public class TheStoreMethod
+        [TestCase]
+        public async Task DoesNotRemoveWorkspaceWithCanDeleteIsFalseAsync()
         {
-            [TestCase]
-            public async Task PreventsSaveForReadonlyWorkspacesAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
-                workspace.CanEdit = false;
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            workspace.CanDelete = false;
 
-                await workspaceManager.AddAsync(workspace);
-                await workspaceManager.SetWorkspaceAsync(workspace);
+            await workspaceManager.AddAsync(workspace);
 
-                var eventRaised = false;
-                workspaceManager.WorkspaceInfoRequested += (sender, e) => eventRaised = true;
+            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
 
-                await workspaceManager.StoreWorkspaceAsync();
+            await workspaceManager.RemoveAsync(workspace);
 
-                Assert.IsFalse(eventRaised);
-            }
+            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
         }
 
-        [TestFixture]
-        public class TheSaveMethod
+        [TestCase]
+        public async Task RaisesWorkspaceRemovedEventAsync()
         {
-            [TestCase]
-            public async Task RaisesSavingAsyncEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                await workspaceManager.AddAsync(new Workspace("test"));
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.First());
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
-                var eventRaised = false;
-                workspaceManager.WorkspaceSavingAsync += async (sender, e) => eventRaised = true;
+            await workspaceManager.AddAsync(workspace);
 
-                await workspaceManager.SaveAsync();
+            var eventRaised = false;
+            workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
 
-                Assert.IsTrue(eventRaised);
-            }
+            await workspaceManager.RemoveAsync(workspace);
 
-            [TestCase]
-            public async Task RaisesSavedEventAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-
-                await workspaceManager.AddAsync(new Workspace("test"));
-                await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.First());
-
-                var eventRaised = false;
-                workspaceManager.WorkspaceSaved += (sender, e) => eventRaised = true;
-
-                await workspaceManager.SaveAsync();
-
-                Assert.IsTrue(eventRaised);
-            }
+            Assert.IsTrue(eventRaised);
         }
 
-        [TestFixture]
-        public class ThePersistenceLogic
+        [TestCase]
+        public async Task RaisesWorkspacesChangedEventAsync()
         {
-            // TODO : write unit tests
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+
+            await workspaceManager.AddAsync(workspace);
+
+            var eventRaised = false;
+            workspaceManager.WorkspacesChanged += (sender, e) => eventRaised = true;
+
+            await workspaceManager.RemoveAsync(workspace);
+
+            Assert.IsTrue(eventRaised);
+        }
+    }
+
+    [TestFixture]
+    public class TheInitializeMethod
+    {
+        [TestCase]
+        public async Task RaisesInitializingEventAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+
+            var eventRaised = false;
+            workspaceManager.Initializing += (sender, e) => eventRaised = true;
+
+            await workspaceManager.InitializeAsync();
+
+            Assert.IsTrue(eventRaised);
         }
 
-        [TestFixture]
-        public class TheAddProviderMethod
+        [TestCase]
+        public async Task RaisesInitializedEventAsync()
         {
-            [TestCase]
-            public async Task CallsProviderWhenStoringWorkspaceAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                await workspaceManager.AddAsync(workspace, true);
+            var eventRaised = false;
+            workspaceManager.Initialized += (sender, e) => eventRaised = true;
 
-                var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                workspaceManager.AddProvider(workspaceProvider);
+            await workspaceManager.InitializeAsync();
 
-                await workspaceManager.StoreWorkspaceAsync();
+            Assert.IsTrue(eventRaised);
+        }
+    }
 
-                Assert.AreEqual("value1", workspace.GetWorkspaceValue("key1", "unexpected"));
-            }
+    [TestFixture]
+    public class TheStoreMethod
+    {
+        [TestCase]
+        public async Task PreventsSaveForReadonlyWorkspacesAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            workspace.CanEdit = false;
+
+            await workspaceManager.AddAsync(workspace);
+            await workspaceManager.SetWorkspaceAsync(workspace);
+
+            var eventRaised = false;
+            workspaceManager.WorkspaceInfoRequested += (sender, e) => eventRaised = true;
+
+            await workspaceManager.StoreWorkspaceAsync();
+
+            Assert.IsFalse(eventRaised);
+        }
+    }
+
+    [TestFixture]
+    public class TheSaveMethod
+    {
+        [TestCase]
+        public async Task RaisesSavingAsyncEventAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+
+            await workspaceManager.AddAsync(new Workspace("test"));
+            await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.First());
+
+            var eventRaised = false;
+            workspaceManager.WorkspaceSavingAsync += async (sender, e) => eventRaised = true;
+
+            await workspaceManager.SaveAsync();
+
+            Assert.IsTrue(eventRaised);
         }
 
-        [TestFixture]
-        public class TheRemoveProviderMethod
+        [TestCase]
+        public async Task RaisesSavedEventAsync()
         {
-            [TestCase]
-            public async Task CorrectlyRemovesProviderWhenStoringWorkspaceAsync()
-            {
-                var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
-                await workspaceManager.AddAsync(workspace, true);
+            await workspaceManager.AddAsync(new Workspace("test"));
+            await workspaceManager.SetWorkspaceAsync(workspaceManager.Workspaces.First());
 
-                var workspaceProvider = new WorkspaceProvider("key1", "value1");
-                workspaceManager.AddProvider(workspaceProvider);
-                workspaceManager.RemoveProvider(workspaceProvider);
+            var eventRaised = false;
+            workspaceManager.WorkspaceSaved += (sender, e) => eventRaised = true;
 
-                await workspaceManager.StoreWorkspaceAsync();
+            await workspaceManager.SaveAsync();
 
-                Assert.AreEqual("expected", workspace.GetWorkspaceValue("key1", "expected"));
-            }
+            Assert.IsTrue(eventRaised);
+        }
+    }
+
+    [TestFixture]
+    public class ThePersistenceLogic
+    {
+        // TODO : write unit tests
+    }
+
+    [TestFixture]
+    public class TheAddProviderMethod
+    {
+        [TestCase]
+        public async Task CallsProviderWhenStoringWorkspaceAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+
+            await workspaceManager.AddAsync(workspace, true);
+
+            var workspaceProvider = new WorkspaceProvider("key1", "value1");
+            workspaceManager.AddProvider(workspaceProvider);
+
+            await workspaceManager.StoreWorkspaceAsync();
+
+            Assert.AreEqual("value1", workspace.GetWorkspaceValue("key1", "unexpected"));
+        }
+    }
+
+    [TestFixture]
+    public class TheRemoveProviderMethod
+    {
+        [TestCase]
+        public async Task CorrectlyRemovesProviderWhenStoringWorkspaceAsync()
+        {
+            var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+
+            await workspaceManager.AddAsync(workspace, true);
+
+            var workspaceProvider = new WorkspaceProvider("key1", "value1");
+            workspaceManager.AddProvider(workspaceProvider);
+            workspaceManager.RemoveProvider(workspaceProvider);
+
+            await workspaceManager.StoreWorkspaceAsync();
+
+            Assert.AreEqual("expected", workspace.GetWorkspaceValue("key1", "expected"));
         }
     }
 }

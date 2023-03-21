@@ -1,45 +1,44 @@
-﻿namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement;
+
+using System;
+using System.Threading.Tasks;
+using Behaviors;
+using Catel.IoC;
+using Catel.Services;
+
+public class BehaviorWorkspaceProvider : WorkspaceProviderBase
 {
-    using System;
-    using System.Threading.Tasks;
-    using Behaviors;
-    using Catel.IoC;
-    using Catel.Services;
+    private readonly IWorkspaceBehavior _workspaceBehavior;
+    private readonly IDispatcherService _dispatcherService;
 
-    public class BehaviorWorkspaceProvider : WorkspaceProviderBase
+    public BehaviorWorkspaceProvider(IWorkspaceManager workspaceManager, IWorkspaceBehavior workspaceBehavior, IDispatcherService dispatcherService,
+        IServiceLocator serviceLocator) 
+        : base(workspaceManager, serviceLocator)
     {
-        private readonly IWorkspaceBehavior _workspaceBehavior;
-        private readonly IDispatcherService _dispatcherService;
+        ArgumentNullException.ThrowIfNull(workspaceBehavior);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
 
-        public BehaviorWorkspaceProvider(IWorkspaceManager workspaceManager, IWorkspaceBehavior workspaceBehavior, IDispatcherService dispatcherService,
-            IServiceLocator serviceLocator) 
-            : base(workspaceManager, serviceLocator)
+        _workspaceBehavior = workspaceBehavior;
+        _dispatcherService = dispatcherService;
+    }
+
+    public override Task ProvideInformationAsync(IWorkspace workspace)
+    {
+        if (workspace is null)
         {
-            ArgumentNullException.ThrowIfNull(workspaceBehavior);
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
-            _workspaceBehavior = workspaceBehavior;
-            _dispatcherService = dispatcherService;
+            return Task.CompletedTask;
         }
 
-        public override Task ProvideInformationAsync(IWorkspace workspace)
-        {
-            if (workspace is null)
-            {
-                return Task.CompletedTask;
-            }
+        return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Save(workspace));
+    }
 
-            return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Save(workspace));
+    public override Task ApplyWorkspaceAsync(IWorkspace workspace)
+    {
+        if (workspace is null)
+        {
+            return Task.CompletedTask;
         }
 
-        public override Task ApplyWorkspaceAsync(IWorkspace workspace)
-        {
-            if (workspace is null)
-            {
-                return Task.CompletedTask;
-            }
-
-            return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Load(workspace));
-        }
+        return _dispatcherService.InvokeAsync(() => _workspaceBehavior.Load(workspace));
     }
 }

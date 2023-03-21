@@ -1,33 +1,31 @@
-﻿namespace Orc.WorkspaceManagement.Converters
-{
-    using System;
-    using System.Windows;
-    using Catel;
-    using Catel.IoC;
-    using Catel.MVVM.Converters;
+﻿namespace Orc.WorkspaceManagement.Converters;
 
-    public class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConverterBase
-    {
+using System;
+using System.Windows;
+using Catel;
+using Catel.IoC;
+using Catel.MVVM.Converters;
+
+public class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConverterBase
+{
 #pragma warning disable IDISP006 // Implement IDisposable.
-        private readonly IServiceLocator _serviceLocator;
+    private readonly IServiceLocator _serviceLocator;
 #pragma warning restore IDISP006 // Implement IDisposable.
 
-        public IsCurrentWorkspaceToCollapsingVisibilityConverter()
-            : base(Visibility.Collapsed)
+    public IsCurrentWorkspaceToCollapsingVisibilityConverter()
+        : base(Visibility.Collapsed)
+    {
+        _serviceLocator = this.GetServiceLocator();
+    }
+
+    protected override bool IsVisible(object? value, Type targetType, object? parameter)
+    {
+        if (value is not IWorkspace workspace)
         {
-            _serviceLocator = this.GetServiceLocator();
+            return false;
         }
 
-        protected override bool IsVisible(object? value, Type targetType, object? parameter)
-        {
-            var workspace = value as IWorkspace;
-            if (workspace is null)
-            {
-                return false;
-            }
-
-            var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
-            return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
-        }
+        var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
+        return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
     }
 }
