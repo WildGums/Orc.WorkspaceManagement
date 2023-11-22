@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <AssemblyName>Orc.WorkspaceManagement</AssemblyName>
     <RootNamespace>Orc.WorkspaceManagement</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
