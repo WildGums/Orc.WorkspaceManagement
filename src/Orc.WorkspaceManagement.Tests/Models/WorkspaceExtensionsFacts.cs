@@ -21,11 +21,11 @@ public class WorkspaceExtensionsFacts
 
         workspaceA.SynchronizeWithWorkspace(workspaceB);
 
-        Assert.AreEqual(0, workspaceA.GetWorkspaceValue("A", 0));
-        Assert.AreEqual(0, workspaceA.GetWorkspaceValue("B", 0));
-        Assert.AreEqual(0, workspaceA.GetWorkspaceValue("C", 0));
-        Assert.AreEqual(4, workspaceA.GetWorkspaceValue("D", 0));
-        Assert.AreEqual(5, workspaceA.GetWorkspaceValue("E", 0));
-        Assert.AreEqual(6, workspaceA.GetWorkspaceValue("F", 0));
+        Assert.That(workspaceA.GetWorkspaceValue("A", 0), Is.EqualTo(0));
+        Assert.That(workspaceA.GetWorkspaceValue("B", 0), Is.EqualTo(0));
+        Assert.That(workspaceA.GetWorkspaceValue("C", 0), Is.EqualTo(0));
+        Assert.That(workspaceA.GetWorkspaceValue("D", 0), Is.EqualTo(4));
+        Assert.That(workspaceA.GetWorkspaceValue("E", 0), Is.EqualTo(5));
+        Assert.That(workspaceA.GetWorkspaceValue("F", 0), Is.EqualTo(6));
     }
 }

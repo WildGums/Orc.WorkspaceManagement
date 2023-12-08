@@ -21,7 +21,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.AddAsync(workspace);
 
-            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+            Assert.That(workspaceManager.Workspaces.Contains(workspace), Is.True);
         }
 
         [TestCase]
@@ -34,7 +34,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
 
         [TestCase]
@@ -47,7 +47,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.AddAsync(new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName()));
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
     }
 
@@ -63,11 +63,11 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.AddAsync(workspace);
 
-            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+            Assert.That(workspaceManager.Workspaces.Contains(workspace), Is.True);
 
             await workspaceManager.RemoveAsync(workspace);
 
-            Assert.IsFalse(workspaceManager.Workspaces.Contains(workspace));
+            Assert.That(workspaceManager.Workspaces.Contains(workspace), Is.False);
         }
 
         [TestCase]
@@ -80,11 +80,11 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.AddAsync(workspace);
 
-            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+            Assert.That(workspaceManager.Workspaces.Contains(workspace), Is.True);
 
             await workspaceManager.RemoveAsync(workspace);
 
-            Assert.IsTrue(workspaceManager.Workspaces.Contains(workspace));
+            Assert.That(workspaceManager.Workspaces.Contains(workspace), Is.True);
         }
 
         [TestCase]
@@ -101,7 +101,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.RemoveAsync(workspace);
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
 
         [TestCase]
@@ -118,7 +118,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.RemoveAsync(workspace);
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
     }
 
@@ -135,7 +135,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.InitializeAsync();
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
 
         [TestCase]
@@ -148,7 +148,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.InitializeAsync();
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
     }
 
@@ -171,7 +171,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.StoreWorkspaceAsync();
 
-            Assert.IsFalse(eventRaised);
+            Assert.That(eventRaised, Is.False);
         }
     }
 
@@ -191,7 +191,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.SaveAsync();
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
 
         [TestCase]
@@ -207,7 +207,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.SaveAsync();
 
-            Assert.IsTrue(eventRaised);
+            Assert.That(eventRaised, Is.True);
         }
     }
 
@@ -233,7 +233,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.StoreWorkspaceAsync();
 
-            Assert.AreEqual("value1", workspace.GetWorkspaceValue("key1", "unexpected"));
+            Assert.That(workspace.GetWorkspaceValue("key1", "unexpected"), Is.EqualTo("value1"));
         }
     }
 
@@ -254,7 +254,7 @@ public class WorkspaceManagerFacts
 
             await workspaceManager.StoreWorkspaceAsync();
 
-            Assert.AreEqual("expected", workspace.GetWorkspaceValue("key1", "expected"));
+            Assert.That(workspace.GetWorkspaceValue("key1", "expected"), Is.EqualTo("expected"));
         }
     }
 }

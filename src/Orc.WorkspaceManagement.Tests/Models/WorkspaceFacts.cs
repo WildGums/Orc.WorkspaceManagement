@@ -9,7 +9,7 @@ public class WorkspaceFacts
     {
         [TestCase("bool", false, null, true, true)]
         [TestCase("bool", true, false, true, false)]
-        public void CorrectlyHandlesValuesWithDefaults(string configurationKey, bool setValueBeforeRetrieving, object valueToSet, object defaultValue, object expectedValue)
+        public void CorrectlyHandlesValuesWithDefaults(string configurationKey, bool setValueBeforeRetrieving, object? valueToSet, object defaultValue, object expectedValue)
         {
             var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
 
@@ -20,7 +20,7 @@ public class WorkspaceFacts
 
             var currentValue = workspace.GetWorkspaceValue(configurationKey, defaultValue);
 
-            Assert.AreEqual(expectedValue, currentValue);
+            Assert.That(currentValue, Is.EqualTo(expectedValue));
         }
     }
 }

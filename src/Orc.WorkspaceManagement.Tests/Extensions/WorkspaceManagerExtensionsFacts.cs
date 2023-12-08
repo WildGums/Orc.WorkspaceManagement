@@ -22,7 +22,7 @@ public class WorkspaceManagerExtensionsFacts
 
             await workspaceManager.SetWorkspaceSchemesDirectoryAsync(someDirectoryName);
 
-            Assert.AreEqual(someDirectoryName, workspaceManager.BaseDirectory);
+            Assert.That(workspaceManager.BaseDirectory, Is.EqualTo(someDirectoryName));
         }
 
         [TestCase(1)]
@@ -48,7 +48,7 @@ public class WorkspaceManagerExtensionsFacts
                 await workspaceManager.SetWorkspaceSchemesDirectoryAsync("Some directory");
             }
 
-            Assert.AreEqual(workspacesCount + 1, workspaceManager.Workspaces.Count());
+            Assert.That(workspaceManager.Workspaces.Count(), Is.EqualTo(workspacesCount + 1));
         }
 
         [TestCase("1", "2", "3")]
@@ -65,7 +65,7 @@ public class WorkspaceManagerExtensionsFacts
 
             var titles2 = workspaceManager.Workspaces.Select(w => w.Title).ToArray();
             var intersect = titles.Intersect(titles2);
-            Assert.AreEqual(titles.Count(), intersect.Count());
+            Assert.That(intersect.Count(), Is.EqualTo(titles.Count()));
         }
 
         [Test]
@@ -81,7 +81,7 @@ public class WorkspaceManagerExtensionsFacts
 
             await workspaceManager.SetWorkspaceSchemesDirectoryAsync(emptyDirectory, false, false);
 
-            Assert.AreEqual(null, workspaceManager.Workspace);
+            Assert.That(workspaceManager.Workspace, Is.EqualTo(null));
         }
 
         [Test]
@@ -97,7 +97,7 @@ public class WorkspaceManagerExtensionsFacts
 
             await workspaceManager.SetWorkspaceSchemesDirectoryAsync(notEmptyDirectory, defaultWorkspaceName: defaultWorkspace);
 
-            Assert.AreEqual(defaultWorkspace, workspaceManager.Workspace.Title);
+            Assert.That(workspaceManager.Workspace.Title, Is.EqualTo(defaultWorkspace));
         }
     }
 }
