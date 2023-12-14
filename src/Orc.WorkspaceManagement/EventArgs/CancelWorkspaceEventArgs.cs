@@ -1,20 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CancelWorkspaceEventArgs.cs" company="WildGums">
-//   Copyright (c) 2008 - 2019 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement;
 
-namespace Orc.WorkspaceManagement
+using System;
+using System.ComponentModel;
+
+public class CancelWorkspaceEventArgs : CancelEventArgs
 {
-    using System.ComponentModel;
-
-    public class CancelWorkspaceEventArgs : CancelEventArgs
+    public CancelWorkspaceEventArgs(IWorkspace workspace)
     {
-        public CancelWorkspaceEventArgs(IWorkspace workspace)
-        {
-            Workspace = workspace;
-        }
+        ArgumentNullException.ThrowIfNull(workspace);
 
-        public IWorkspace Workspace { get; private set; }
+        Workspace = workspace;
     }
+
+    public IWorkspace Workspace { get; }
 }

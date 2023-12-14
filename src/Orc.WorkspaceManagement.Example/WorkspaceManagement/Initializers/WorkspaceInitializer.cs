@@ -1,33 +1,24 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceInitializer.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement.Example.WorkspaceManagement;
 
+using System;
+using System.Threading.Tasks;
+using Catel;
+using Catel.Threading;
 
-namespace Orc.WorkspaceManagement.Example.WorkspaceManagement
+public class WorkspaceInitializer : IWorkspaceInitializer
 {
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Threading;
-
-    public class WorkspaceInitializer : IWorkspaceInitializer
+    public void Initialize(IWorkspace workspace)
     {
-        #region IWorkspaceInitializer Members
-        public void Initialize(IWorkspace workspace)
-        {
-            Argument.IsNotNull(() => workspace);
+        ArgumentNullException.ThrowIfNull(workspace);
 
-            workspace.SetWorkspaceValue("AView.Width", 200d);
-            workspace.SetWorkspaceValue("BView.Width", 200d);
-        }
+        workspace.SetWorkspaceValue("AView.Width", 200d);
+        workspace.SetWorkspaceValue("BView.Width", 200d);
+    }
 
-        public Task InitializeAsync(IWorkspace workspace)
-        {
-            Initialize(workspace);
+    public Task InitializeAsync(IWorkspace workspace)
+    {
+        Initialize(workspace);
 
-            return TaskHelper.Completed;
-        }
-        #endregion
+        return Task.CompletedTask;
     }
 }

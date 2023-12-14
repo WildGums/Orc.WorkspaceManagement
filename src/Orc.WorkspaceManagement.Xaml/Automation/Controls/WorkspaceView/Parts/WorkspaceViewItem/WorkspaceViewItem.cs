@@ -1,83 +1,82 @@
-﻿namespace Orc.WorkspaceManagement.Automation
+﻿namespace Orc.WorkspaceManagement.Automation;
+
+using System.Windows.Automation;
+using Orc.Automation;
+using Orc.Automation.Controls;
+
+public class WorkspaceViewItem : ListItem
 {
-    using System.Windows.Automation;
-    using Orc.Automation;
-    using Orc.Automation.Controls;
-
-    public class WorkspaceViewItem : ListItem
+    public WorkspaceViewItem(AutomationElement element) 
+        : base(element)
     {
-        public WorkspaceViewItem(AutomationElement element) 
-            : base(element)
+    }
+
+    private WorkspaceViewItemMap Map => Map<WorkspaceViewItemMap>();
+
+    public override void Select()
+    {
+        Element.MouseClick();
+    }
+
+    public bool CanRefresh()
+    {
+        return Map.RefreshWorkspaceButton?.IsVisible() ?? false;
+    }
+
+    public bool CanEdit()
+    {
+        return Map.EditWorkspaceButton?.IsVisible() ?? false;
+    }
+
+    public void Refresh()
+    {
+        if (CanRefresh())
         {
+            Map.RefreshWorkspaceButton?.Click();
+        }
+    }
+
+    public WorkspaceWindow? Edit()
+    {
+        if (!CanEdit())
+        {
+            return null;
         }
 
-        private WorkspaceViewItemMap Map => Map<WorkspaceViewItemMap>();
+        Map.EditWorkspaceButton?.Click();
 
-        public override void Select()
+        Wait.UntilResponsive();
+
+        var hostWindow = Element.GetHostWindow();
+        var editWorkspaceWindow = hostWindow?.Find<WorkspaceWindow>();
+
+        return editWorkspaceWindow;
+    }
+
+    public bool CanDelete()
+    {
+        return Map.RemoveWorkspaceButton?.IsVisible() ?? false;
+    }
+
+    public void Delete()
+    {
+        if (!CanDelete())
         {
-            Element.MouseClick();
+            return;
         }
-
-        public bool CanRefresh()
-        {
-            return Map.RefreshWorkspaceButton.IsVisible();
-        }
-
-        public bool CanEdit()
-        {
-            return Map.EditWorkspaceButton.IsVisible();
-        }
-
-        public void Refresh()
-        {
-            if (CanRefresh())
-            {
-                Map.RefreshWorkspaceButton?.Click();
-            }
-        }
-
-        public WorkspaceWindow Edit()
-        {
-            if (!CanEdit())
-            {
-                return null;
-            }
-
-            Map.EditWorkspaceButton.Click();
-
-            Wait.UntilResponsive();
-
-            var hostWindow = Element.GetHostWindow();
-            var editWorkspaceWindow = hostWindow?.Find<WorkspaceWindow>();
-
-            return editWorkspaceWindow;
-        }
-
-        public bool CanDelete()
-        {
-            return Map.RemoveWorkspaceButton.IsVisible();
-        }
-
-        public void Delete()
-        {
-            if (!CanDelete())
-            {
-                return;
-            }
             
-            var hostWindow = Element.GetHostWindow();
-            hostWindow.SetFocus();
+        var hostWindow = Element.GetHostWindow();
+        hostWindow?.SetFocus();
 
-            Map.RemoveWorkspaceButton.Click();
+        Map.RemoveWorkspaceButton?.Click();
 
-            Wait.UntilResponsive();
+        Wait.UntilResponsive();
 
-            var messageBox = hostWindow.Find<MessageBox>();
-            messageBox?.Yes();
+        var messageBox = hostWindow?.Find<MessageBox>();
+        messageBox?.Yes();
 
-            Wait.UntilResponsive();
+        Wait.UntilResponsive();
 
-            hostWindow.SetFocus();
-        }
+        hostWindow?.SetFocus();
     }
 }

@@ -1,46 +1,41 @@
-﻿namespace Orc.WorkspaceManagement.Example.Services
+﻿namespace Orc.WorkspaceManagement.Example.Services;
+
+using System;
+using Orchestra.Services;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using Catel.IoC;
+using WorkspaceManagement;
+
+public class ApplicationInitializationService : ApplicationInitializationServiceBase
 {
-    using System;
-    using Orchestra.Services;
-    using System.Threading.Tasks;
-    using System.Windows.Media;
-    using Behaviors;
-    using Catel;
-    using Catel.IoC;
-    using Catel.Threading;
-    using Orchestra.Markup;
-    using WorkspaceManagement;
+    private readonly IServiceLocator _serviceLocator;
 
-    public class ApplicationInitializationService : ApplicationInitializationServiceBase
+    public ApplicationInitializationService(IServiceLocator serviceLocator)
     {
-        private readonly IServiceLocator _serviceLocator;
+        ArgumentNullException.ThrowIfNull(serviceLocator);
 
-        public ApplicationInitializationService(IServiceLocator serviceLocator)
-        {
-            Argument.IsNotNull(() => serviceLocator);
+        _serviceLocator = serviceLocator;
+    }
 
-            _serviceLocator = serviceLocator;
-        }
+    public override Task InitializeBeforeCreatingShellAsync()
+    {
+        InitializeFonts();
+        RegisterTypes();
 
-        public override Task InitializeBeforeCreatingShellAsync()
-        {
-            InitializeFonts();
-            RegisterTypes();
+        return Task.CompletedTask;
+    }
 
-            return TaskHelper.Completed;
-        }
+    private void InitializeFonts()
+    {
+        Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/Orc.WorkspaceManagement.Example;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
 
-        private void InitializeFonts()
-        {
-            Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/Orc.WorkspaceManagement.Example;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
+        Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
+        Orc.Theming.FontImage.DefaultFontFamily = "FontAwesome";
+    }
 
-            Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
-            Orc.Theming.FontImage.DefaultFontFamily = "FontAwesome";
-        }
-
-        private void RegisterTypes()
-        {
-            _serviceLocator.RegisterType<IWorkspaceInitializer, WorkspaceInitializer>();
-        }
+    private void RegisterTypes()
+    {
+        _serviceLocator.RegisterType<IWorkspaceInitializer, WorkspaceInitializer>();
     }
 }

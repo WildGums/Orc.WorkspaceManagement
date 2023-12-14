@@ -1,89 +1,65 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceProviderBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement;
 
+using System;
+using System.Threading.Tasks;
+using Catel.IoC;
 
-namespace Orc.WorkspaceManagement
+/// <summary>
+/// Base implementation for workspace providers.
+/// </summary>
+public abstract class WorkspaceProviderBase : IWorkspaceProvider
 {
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Data;
-    using Catel.IoC;
-    using Catel.Threading;
+    protected readonly IServiceLocator ServiceLocator;
+
+    private object? _scope;
 
     /// <summary>
-    /// Base implementation for workspace providers.
+    /// Initializes a new instance of the <see cref="WorkspaceProviderBase"/> class.
     /// </summary>
-    public abstract class WorkspaceProviderBase : IWorkspaceProvider
+    /// <param name="workspaceManager">The workspace manager.</param>
+    /// <param name="serviceLocator"></param>
+    protected WorkspaceProviderBase(IWorkspaceManager workspaceManager, IServiceLocator serviceLocator)
     {
-        #region Fields
-        protected readonly IServiceLocator ServiceLocator;
+        ArgumentNullException.ThrowIfNull(workspaceManager);
+        ArgumentNullException.ThrowIfNull(serviceLocator);
 
-        private object _scope;
-        #endregion
+        ServiceLocator = serviceLocator;
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkspaceProviderBase"/> class.
-        /// </summary>
-        /// <param name="workspaceManager">The workspace manager.</param>
-        /// <param name="serviceLocator"></param>
-        protected WorkspaceProviderBase(IWorkspaceManager workspaceManager, IServiceLocator serviceLocator)
+        WorkspaceManager = workspaceManager;
+    }
+
+    /// <summary>
+    /// Gets the workspace manager.
+    /// </summary>
+    /// <value>The workspace manager.</value>
+    protected IWorkspaceManager WorkspaceManager { get; set; }
+ 
+    public virtual object? Scope
+    {
+        get { return _scope; }
+        set
         {
-            Argument.IsNotNull(() => workspaceManager);
-            Argument.IsNotNull(() => serviceLocator);
-
-            ServiceLocator = serviceLocator;
-
-            WorkspaceManager = workspaceManager;
+            WorkspaceManager = ServiceLocator.ResolveRequiredType<IWorkspaceManager>(value);
+            _scope = value;
         }
-        #endregion
+    }
 
-        #region Properties
-        /// <summary>
-        /// Gets the workspace manager.
-        /// </summary>
-        /// <value>The workspace manager.</value>
-        protected IWorkspaceManager WorkspaceManager { get; set; }
-        #endregion
+    public object? Tag { get; set; }
 
-        #region IWorkspaceProvider Members
-        public virtual object Scope
-        {
-            get { return _scope; }
-            set
-            {
-                var workspaceManager = ServiceLocator.ResolveType<IWorkspaceManager>(value);
-                if (workspaceManager is null)
-                {
-                    throw new PropertyNotNullableException("WorkspaceManager", typeof(IWorkspaceManager));
-                }
+    /// <summary>
+    /// Provides the information for the workspace with the current state.
+    /// </summary>
+    /// <param name="workspace">The workspace.</param>
+    public abstract Task ProvideInformationAsync(IWorkspace workspace);
 
-                WorkspaceManager = workspaceManager;
-                _scope = value;
-            }
-        }
+    /// <summary>
+    /// Applies the workspace values in response to a workspace change.
+    /// </summary>
+    /// <param name="workspace">The workspace.</param>
+    public abstract Task ApplyWorkspaceAsync(IWorkspace workspace);
 
-        public object Tag { get; set; }
-
-        /// <summary>
-        /// Provides the information for the workspace with the current state.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
-        public abstract Task ProvideInformationAsync(IWorkspace workspace);
-
-        /// <summary>
-        /// Applies the workspace values in response to a workspace change.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
-        public abstract Task ApplyWorkspaceAsync(IWorkspace workspace);
-
-        public virtual Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
-        {
-            return TaskHelper<bool>.FromResult(false);
-        }
-        #endregion
+    public virtual Task<bool> CheckIsDirtyAsync(IWorkspace workspace)
+    {
+        return Task.FromResult(false);
     }
 }

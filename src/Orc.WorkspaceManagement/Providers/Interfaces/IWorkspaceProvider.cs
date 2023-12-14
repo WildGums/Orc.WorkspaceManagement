@@ -1,40 +1,32 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkspaceProvider.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement;
 
+using System.Threading.Tasks;
 
-namespace Orc.WorkspaceManagement
+/// <summary>
+/// Provider that can be registered in the workspace manager to retrieve information about a workspace.
+/// </summary>
+public interface IWorkspaceProvider
 {
-    using System.Threading.Tasks;
+    object? Scope { get; set; }
+
+    object? Tag { get; set; }
 
     /// <summary>
-    /// Provider that can be registered in the workspace manager to retrieve information about a workspace.
+    /// Provides the information for the workspace with the current state.
     /// </summary>
-    public interface IWorkspaceProvider
-    {
-        object Scope { get; set; }
+    /// <param name="workspace">The workspace.</param>
+    Task ProvideInformationAsync(IWorkspace workspace);
 
-        object Tag { get; set; }
+    /// <summary>
+    /// Applies the workspace values in response to a workspace change.
+    /// </summary>
+    /// <param name="workspace">The workspace.</param>
+    Task ApplyWorkspaceAsync(IWorkspace workspace);
 
-        /// <summary>
-        /// Provides the information for the workspace with the current state.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
-        Task ProvideInformationAsync(IWorkspace workspace);
-
-        /// <summary>
-        /// Applies the workspace values in response to a workspace change.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
-        Task ApplyWorkspaceAsync(IWorkspace workspace);
-
-        /// <summary>
-        /// Check if workspace was changed
-        /// </summary>
-        /// <param name="workspace">The workspace</param>
-        /// <returns></returns>
-        Task<bool> CheckIsDirtyAsync(IWorkspace workspace);
-    }
+    /// <summary>
+    /// Check if workspace was changed
+    /// </summary>
+    /// <param name="workspace">The workspace</param>
+    /// <returns></returns>
+    Task<bool> CheckIsDirtyAsync(IWorkspace workspace);
 }

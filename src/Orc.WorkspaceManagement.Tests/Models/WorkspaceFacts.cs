@@ -1,34 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement.Test.Models;
 
+using NUnit.Framework;
 
-namespace Orc.WorkspaceManagement.Test.Models
+public class WorkspaceFacts
 {
-    using NUnit.Framework;
-
-    public class WorkspaceFacts
+    [TestFixture]
+    public class TheGetConfigurationValueMethod
     {
-        [TestFixture]
-        public class TheGetConfigurationValueMethod
+        [TestCase("bool", false, null, true, true)]
+        [TestCase("bool", true, false, true, false)]
+        public void CorrectlyHandlesValuesWithDefaults(string configurationKey, bool setValueBeforeRetrieving, object? valueToSet, object defaultValue, object expectedValue)
         {
-            [TestCase("bool", false, null, true, true)]
-            [TestCase("bool", true, false, true, false)]
-            public void CorrectlyHandlesValuesWithDefaults(string configurationKey, bool setValueBeforeRetrieving, object valueToSet, object defaultValue, object expectedValue)
+            var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
+
+            if (setValueBeforeRetrieving)
             {
-                var workspace = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
-
-                if (setValueBeforeRetrieving)
-                {
-                    workspace.SetConfigurationValue(configurationKey, valueToSet);
-                }
-
-                var currentValue = workspace.GetWorkspaceValue(configurationKey, defaultValue);
-
-                Assert.AreEqual(expectedValue, currentValue);
+                workspace.SetConfigurationValue(configurationKey, valueToSet);
             }
+
+            var currentValue = workspace.GetWorkspaceValue(configurationKey, defaultValue);
+
+            Assert.That(currentValue, Is.EqualTo(expectedValue));
         }
     }
 }

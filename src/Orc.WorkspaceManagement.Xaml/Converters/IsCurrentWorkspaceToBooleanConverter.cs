@@ -1,43 +1,29 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsCurrentWorkspaceToBooleanConverter.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement.Converters;
 
+using System;
+using Catel;
+using Catel.IoC;
+using Catel.MVVM.Converters;
+using WorkspaceManagement;
 
-namespace Orc.WorkspaceManagement.Converters
+public class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
 {
-    using System;
-    using Catel;
-    using Catel.IoC;
-    using Catel.MVVM.Converters;
-    using Orc.WorkspaceManagement;
+    private readonly IWorkspaceManager _workspaceManager;
 
-    public class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
+    public IsCurrentWorkspaceToBooleanConverter()
     {
-        #region Fields
-        private readonly IWorkspaceManager _workspaceManager;
-        #endregion
+        var dependencyResolver = this.GetDependencyResolver();
+        _workspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
+    }
 
-        #region Constructors
-        public IsCurrentWorkspaceToBooleanConverter()
+    protected override object? Convert(object? value, Type targetType, object? parameter)
+    {
+        var workspace = value as IWorkspace;
+        if (workspace is null)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _workspaceManager = dependencyResolver.Resolve<IWorkspaceManager>();
+            return false;
         }
-        #endregion
 
-        #region Methods
-        protected override object Convert(object value, Type targetType, object parameter)
-        {
-            var workspace = value as IWorkspace;
-            if (workspace is null)
-            {
-                return false;
-            }
-
-            return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
-        }
-        #endregion
+        return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
     }
 }

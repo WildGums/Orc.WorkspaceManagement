@@ -1,24 +1,23 @@
-﻿namespace Orc.WorkspaceManagement
+﻿namespace Orc.WorkspaceManagement;
+
+using System.Collections.Generic;
+using System.Diagnostics;
+
+[DebuggerDisplay("{Title}")]
+public class WorkspaceGroup
 {
-    using System.Collections.Generic;
-    using System.Diagnostics;
-
-    [DebuggerDisplay("{Title}")]
-    public class WorkspaceGroup
+    public WorkspaceGroup(string? title, IEnumerable<IWorkspace> workspaces)
     {
-        public WorkspaceGroup(string title, IEnumerable<IWorkspace> workspaces)
+        Title = title;
+        Workspaces = new List<IWorkspace>();
+
+        if (workspaces is not null)
         {
-            Title = title;
-            Workspaces = new List<IWorkspace>();
-
-            if (workspaces is not null)
-            {
-                Workspaces.AddRange(workspaces);
-            }
+            Workspaces.AddRange(workspaces);
         }
-
-        public string Title { get; private set; }
-
-        public List<IWorkspace> Workspaces { get; private set; }
     }
+
+    public string? Title { get; private set; }
+
+    public List<IWorkspace> Workspaces { get; private set; }
 }

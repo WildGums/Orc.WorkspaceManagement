@@ -1,38 +1,30 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WorkspaceEventArgs.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.WorkspaceManagement;
 
+using System;
+using Catel;
 
-namespace Orc.WorkspaceManagement
+public class WorkspaceUpdatedEventArgs : EventArgs
 {
-    using System;
-    using Catel;
-
-    public class WorkspaceUpdatedEventArgs : EventArgs
+    public WorkspaceUpdatedEventArgs(IWorkspace? oldWorkspace, IWorkspace? newWorkspace)
     {
-        public WorkspaceUpdatedEventArgs(IWorkspace oldWorkspace, IWorkspace newWorkspace)
+        OldWorkspace = oldWorkspace;
+        NewWorkspace = newWorkspace;
+    }
+
+    public IWorkspace? OldWorkspace { get; }
+
+    public IWorkspace? NewWorkspace { get; }
+
+    public bool IsRefresh
+    {
+        get
         {
-            OldWorkspace = oldWorkspace;
-            NewWorkspace = newWorkspace;
-        }
-
-        public IWorkspace OldWorkspace { get; private set; }
-
-        public IWorkspace NewWorkspace { get; private set; }
-
-        public bool IsRefresh
-        {
-            get
+            if (OldWorkspace is null || NewWorkspace is null)
             {
-                if (OldWorkspace is null || NewWorkspace is null)
-                {
-                    return false;
-                }
-
-                return ObjectHelper.AreEqual(OldWorkspace, NewWorkspace);
+                return false;
             }
+
+            return ObjectHelper.AreEqual(OldWorkspace, NewWorkspace);
         }
     }
 }
