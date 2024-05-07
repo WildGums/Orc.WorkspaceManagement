@@ -47,8 +47,7 @@ public class WorkspaceViewItem : ListItem
 
         Wait.UntilResponsive();
 
-        var hostWindow = Element.GetHostWindow();
-        var editWorkspaceWindow = hostWindow?.Find<WorkspaceWindow>();
+        var editWorkspaceWindow = Window.WaitForWindow<WorkspaceWindow>();
 
         return editWorkspaceWindow;
     }
