@@ -6,7 +6,7 @@ using System.Windows.Automation;
 using Orc.Automation;
 using Orc.Automation.Controls;
 
-[AutomatedControl(ControlTypeName = nameof(ControlType.Pane))]
+[Control(ControlTypeName = nameof(ControlType.Pane))]
 public class WorkspaceViewGroupList : FrameworkElement
 {
     public WorkspaceViewGroupList(AutomationElement element) 
