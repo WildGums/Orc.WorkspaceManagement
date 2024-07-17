@@ -18,7 +18,7 @@ namespace Orc.WorkspaceManagement.Automation
         public string? GroupName { get; set; }
         public System.Collections.Generic.IReadOnlyList<Orc.WorkspaceManagement.Automation.WorkspaceViewItem>? Items { get; set; }
     }
-    [Orc.Automation.AutomatedControl(ControlTypeName="Pane")]
+    [Orc.Automation.Control(ControlTypeName="Pane")]
     public class WorkspaceViewGroupList : Orc.Automation.Controls.FrameworkElement
     {
         public WorkspaceViewGroupList(System.Windows.Automation.AutomationElement element) { }
