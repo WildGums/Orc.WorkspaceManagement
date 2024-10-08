@@ -36,6 +36,16 @@ public interface IWorkspaceManager
     event AsyncEventHandler<WorkspaceUpdatingEventArgs>? WorkspaceUpdatingAsync;
     event EventHandler<WorkspaceUpdatedEventArgs>? WorkspaceUpdated;
 
+    Task SetWorkspaceSchemesDirectoryAsync(string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true,
+        bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default", bool autoselectDefault = true);
+
+    Task InitializeAsync(bool addDefaultWorkspaceIfNoWorkspacesAreFound = true, bool alwaysEnsureDefaultWorkspace = true,
+        string defaultWorkspaceName = "Default", bool autoSelect = true);
+
+    Task EnsureDefaultWorkspaceAsync(string defaultWorkspaceName = "Default", bool autoSelect = true);
+
+    Task AddAsync(IWorkspace workspace, bool autoSelect);
+
     Task SetWorkspaceAsync(IWorkspace? value);
     Task<bool> TrySetWorkspaceAsync(IWorkspace? value);
     Task UpdateIsDirtyFlagAsync(IWorkspace workspace);
