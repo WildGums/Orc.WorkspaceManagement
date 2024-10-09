@@ -136,10 +136,9 @@ public static class IWorkspaceManagerExtensions
         Argument.IsNotNullOrEmpty(() => directoryName);
         Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
 
-        if (workspaceManager.TrySetBaseDirectory(directoryName))
-        {
-            await workspaceManager.InitializeAsync(addDefaultWorkspaceIfNoWorkspacesAreFound, alwaysEnsureDefaultWorkspace, defaultWorkspaceName, autoselectDefault);
-        }
+        workspaceManager.TrySetBaseDirectory(directoryName);
+     
+        await workspaceManager.InitializeAsync(addDefaultWorkspaceIfNoWorkspacesAreFound, alwaysEnsureDefaultWorkspace, defaultWorkspaceName, autoselectDefault);
     }
 
     /// <summary>
