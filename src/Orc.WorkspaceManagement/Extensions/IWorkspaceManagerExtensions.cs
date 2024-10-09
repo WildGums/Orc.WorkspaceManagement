@@ -129,15 +129,17 @@ public static class IWorkspaceManagerExtensions
         }
     }
 
-    public static Task SetWorkspaceSchemesDirectoryAsync(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true,
+    public static async Task SetWorkspaceSchemesDirectoryAsync(this IWorkspaceManager workspaceManager, string directoryName, bool addDefaultWorkspaceIfNoWorkspacesAreFound = true,
         bool alwaysEnsureDefaultWorkspace = true, string defaultWorkspaceName = "Default", bool autoselectDefault = true)
     {
         ArgumentNullException.ThrowIfNull(workspaceManager);
         Argument.IsNotNullOrEmpty(() => directoryName);
         Argument.IsNotNullOrEmpty(() => defaultWorkspaceName);
 
-        workspaceManager.BaseDirectory = directoryName;
-        return workspaceManager.InitializeAsync(addDefaultWorkspaceIfNoWorkspacesAreFound, alwaysEnsureDefaultWorkspace, defaultWorkspaceName, autoselectDefault);
+        if (workspaceManager.TrySetBaseDirectory(directoryName))
+        {
+            await workspaceManager.InitializeAsync(addDefaultWorkspaceIfNoWorkspacesAreFound, alwaysEnsureDefaultWorkspace, defaultWorkspaceName, autoselectDefault);
+        }
     }
 
     /// <summary>

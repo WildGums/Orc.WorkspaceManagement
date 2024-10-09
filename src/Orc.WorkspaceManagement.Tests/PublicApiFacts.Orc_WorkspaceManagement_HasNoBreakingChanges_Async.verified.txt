@@ -41,6 +41,7 @@ namespace Orc.WorkspaceManagement
     public interface IWorkspaceManager
     {
         bool AutoRefreshEnabled { get; set; }
+        [set: System.Obsolete("Use TrySetBaseDirectory() method instead. Will be removed in version 6.0.0.", true)]
         string BaseDirectory { get; set; }
         string DefaultWorkspaceTitle { get; set; }
         System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }
@@ -76,6 +77,7 @@ namespace Orc.WorkspaceManagement
         System.Threading.Tasks.Task StoreWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         System.Threading.Tasks.Task<bool> TryInitializeAsync();
         System.Threading.Tasks.Task<bool> TryInitializeAsync(bool autoSelect);
+        bool TrySetBaseDirectory(string value);
         System.Threading.Tasks.Task<bool> TrySetWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace? value);
         System.Threading.Tasks.Task UpdateIsDirtyFlagAsync(Orc.WorkspaceManagement.IWorkspace workspace);
     }
@@ -185,6 +187,7 @@ namespace Orc.WorkspaceManagement
     {
         public WorkspaceManager(Orc.WorkspaceManagement.IWorkspaceInitializer workspaceInitializer, Orc.WorkspaceManagement.IWorkspacesStorageService workspacesStorageService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IAppDataService appDataService) { }
         public bool AutoRefreshEnabled { get; set; }
+        [set: System.Obsolete("Use TrySetBaseDirectory() method instead. Will be removed in version 6.0.0.", true)]
         public string BaseDirectory { get; set; }
         public string DefaultWorkspaceTitle { get; set; }
         public System.Collections.Generic.IEnumerable<Orc.WorkspaceManagement.IWorkspaceProvider> Providers { get; }
@@ -222,6 +225,7 @@ namespace Orc.WorkspaceManagement
         public System.Threading.Tasks.Task StoreWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public System.Threading.Tasks.Task<bool> TryInitializeAsync() { }
         public System.Threading.Tasks.Task<bool> TryInitializeAsync(bool autoSelect) { }
+        public virtual bool TrySetBaseDirectory(string value) { }
         public System.Threading.Tasks.Task<bool> TrySetWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace? value) { }
         public System.Threading.Tasks.Task UpdateIsDirtyFlagAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
     }
