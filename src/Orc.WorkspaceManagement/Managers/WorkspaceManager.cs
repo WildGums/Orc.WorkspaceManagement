@@ -61,7 +61,7 @@ public class WorkspaceManager : IWorkspaceManager
     {
         get => _baseDirectory;
         [Obsolete("Use TrySetBaseDirectory() method instead. Will be removed in version 6.0.0.", true)]
-        set => _baseDirectory = value;
+        set => TrySetBaseDirectory(value);
     }
 
     public IEnumerable<IWorkspaceProvider> Providers
