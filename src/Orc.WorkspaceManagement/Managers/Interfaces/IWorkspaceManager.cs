@@ -8,12 +8,7 @@ using Catel;
 
 public interface IWorkspaceManager
 {
-    string BaseDirectory 
-    {
-        get;
-        [Obsolete("Use TrySetBaseDirectory() method instead. Will be removed in version 6.0.0.", true)]
-        set;
-    }
+    string BaseDirectory { get; set; }
     IEnumerable<IWorkspace> Workspaces { get; }
     IWorkspace? Workspace { get; }
     IEnumerable<IWorkspaceProvider> Providers { get; }
@@ -40,8 +35,6 @@ public interface IWorkspaceManager
 
     event AsyncEventHandler<WorkspaceUpdatingEventArgs>? WorkspaceUpdatingAsync;
     event EventHandler<WorkspaceUpdatedEventArgs>? WorkspaceUpdated;
-
-    bool TrySetBaseDirectory(string value);
 
     Task SetWorkspaceAsync(IWorkspace? value);
     Task<bool> TrySetWorkspaceAsync(IWorkspace? value);

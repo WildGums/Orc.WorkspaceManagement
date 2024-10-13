@@ -24,7 +24,6 @@ public class WorkspaceManager : IWorkspaceManager
     private object? _scope;
 
     private IWorkspacesStorageService _workspacesStorageService;
-    private string _baseDirectory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
@@ -47,7 +46,7 @@ public class WorkspaceManager : IWorkspaceManager
         _appDataService = appDataService;
 
         UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
-        _baseDirectory = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
+        BaseDirectory = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
         DefaultWorkspaceTitle = "Default";
     }
 
@@ -57,12 +56,7 @@ public class WorkspaceManager : IWorkspaceManager
     /// Gets or sets the base directory to store the workspaces in.
     /// </summary>
     /// <value>The base directory.</value>
-    public string BaseDirectory
-    {
-        get => _baseDirectory;
-        [Obsolete("Use TrySetBaseDirectory() method instead. Will be removed in version 6.0.0.", true)]
-        set => TrySetBaseDirectory(value);
-    }
+    public string BaseDirectory { get; set; }
 
     public IEnumerable<IWorkspaceProvider> Providers
     {
@@ -112,12 +106,6 @@ public class WorkspaceManager : IWorkspaceManager
 
     public event AsyncEventHandler<CancelWorkspaceEventArgs>? WorkspaceSavingAsync;
     public event EventHandler<WorkspaceEventArgs>? WorkspaceSaved;
-
-    public virtual bool TrySetBaseDirectory(string value)
-    {
-        _baseDirectory = value;
-        return true;
-    }
 
     public async Task SetWorkspaceAsync(IWorkspace? value)
     {
