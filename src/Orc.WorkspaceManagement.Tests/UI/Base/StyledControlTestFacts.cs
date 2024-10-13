@@ -10,7 +10,7 @@ using Theming;
 using FrameworkElement = System.Windows.FrameworkElement;
 
 //TODO:Vladimir: create base type in Orc.Automation
-public abstract class StyledControlTestFacts<TControl> : ControlUiTestFactsBase<TControl>
+public abstract class StyledControlTestFacts<TControl> : ControlUiTestsBase<TControl>
     where TControl : FrameworkElement
 {
     protected TestHostAutomationControl TestHost { get; private set; }
