@@ -31,10 +31,8 @@ public class WorkspaceViewGroupList(AutomationElement element)
 
         var groupItems = new List<WorkspaceViewGroupItem>();
 
-        foreach (var group in groupNamesElements.Zip(itemList))
+        foreach (var (groupName, groupList) in groupNamesElements.Zip(itemList))
         {
-            var groupName = group.First;
-            var groupList = group.Second;
             if (groupList is null)
             {
                 continue;
