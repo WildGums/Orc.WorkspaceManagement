@@ -30,7 +30,6 @@ public class WorkspaceViewGroupList(AutomationElement element)
         }
 
         var groupItems = new List<WorkspaceViewGroupItem>();
-
         foreach (var (groupName, groupList) in groupNamesElements.Zip(itemList))
         {
             if (groupList is null)

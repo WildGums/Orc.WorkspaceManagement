@@ -4,14 +4,12 @@ using System.Windows.Automation;
 using Orc.Automation;
 using Orc.Automation.Controls;
 
-public class WorkspaceViewItem : ListItem
+public class WorkspaceViewItem(AutomationElement element) 
+    : ListItem(element)
 {
-    public WorkspaceViewItem(AutomationElement element) 
-        : base(element)
-    {
-    }
-
     private WorkspaceViewItemMap Map => Map<WorkspaceViewItemMap>();
+
+    public bool IsActive => Map.CurrentWorkspaceTextBlock is not null;
 
     public override void Select()
     {

@@ -56,23 +56,32 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Path Grid.Column="0"
-                                              Margin="0,2,0,0"
-                                              Height="10"
-                                              Width="10"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Data="{StaticResource ArrowRightGeometry}"
-                                              Stretch="Fill"
-                                              Fill="{DynamicResource Orc.Brushes.Control.Default.Foreground}"
-                                              Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}"/>
+                                        <TextBlock x:Name="CurrentWorkspaceTextBlock" 
+                                                   Grid.Column="0"
+                                                   Margin="0,2,0,0"
+                                                   Height="10"
+                                                   Width="10"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Visibility="{Binding Converter={StaticResource IsCurrentWorkspaceToCollapsingVisibilityConverter}}">
+                                            <Path Margin="0"
+                                                  Height="10"
+                                                  Width="10"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Data="{StaticResource ArrowRightGeometry}"
+                                                  Stretch="Fill"
+                                                  Fill="{DynamicResource Orc.Brushes.Control.Default.Foreground}"/>
+                                        </TextBlock>
 
-                                        <Label Grid.Column="1" 
-                                               Content="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
-                                            <Label.InputBindings>
-                                                <MouseBinding Command="{Binding ElementName=layoutRoot, Path=DataContext.Refresh}" MouseAction="LeftClick" />
-                                            </Label.InputBindings>
-                                        </Label>
+                                        <TextBlock x:Name="DisplayNameTextBlock"
+                                                   Grid.Column="1"
+                                                   Text="{Binding DisplayName, Converter={converters:UnderscoreToDoubleUnderscoresStringConverter}}">
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding Command="{Binding ElementName=layoutRoot, Path=DataContext.Refresh}"
+                                                              MouseAction="LeftClick" />
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
 
                                         <Border Grid.Column="2" 
                                                 BorderThickness="0"
