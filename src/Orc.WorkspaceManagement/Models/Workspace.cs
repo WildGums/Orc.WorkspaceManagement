@@ -225,7 +225,8 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
             return true;
         }
 
-        return string.Equals(Title, other.Title);
+        return string.Equals(WorkspaceGroup, other.WorkspaceGroup)
+            && string.Equals(Title, other.Title);
     }
 
     public override bool Equals(object? obj)
