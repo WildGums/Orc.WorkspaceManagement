@@ -6,6 +6,7 @@ using System.Linq;
 using NUnit.Framework;
 using Orc.Automation.Controls;
 using Orc.Automation.Tests;
+using Theming;
 using FrameworkElement = System.Windows.FrameworkElement;
 
 //TODO:Vladimir: create base type in Orc.Automation
