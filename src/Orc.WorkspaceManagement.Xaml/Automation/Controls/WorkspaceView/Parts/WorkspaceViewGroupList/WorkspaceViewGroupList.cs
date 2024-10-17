@@ -7,40 +7,35 @@ using Orc.Automation;
 using Orc.Automation.Controls;
 
 [Control(ControlTypeName = nameof(ControlType.Pane))]
-public class WorkspaceViewGroupList : FrameworkElement
+public class WorkspaceViewGroupList(AutomationElement element)
+    : FrameworkElement(element)
 {
-    public WorkspaceViewGroupList(AutomationElement element) 
-        : base(element)
-    {
-    }
-
     public IReadOnlyList<WorkspaceViewGroupItem> GetGroupItems()
     {
-        var childElements = Element.GetChildElements()
+        var dataItems = By.Many<DataItem>();
+
+        var groupNamesElements = dataItems
+            .Select(x => x.By.One<Text>()?.Value)
             .ToList();
 
-        var groupNamesElements = childElements
-            .Where(x => Equals(x.Current.ControlType, ControlType.Text))
-            .Select(x => x.As<Text>()?.Value)
-            .ToList();
+        var itemList = dataItems
+            .Select(x => x.By.One<ListBox>())
+            .Where(x => x is not null)
+            .ToArray();
 
-        var itemList = childElements
-            .Where(x => Equals(x.Current.ControlType, ControlType.List))
-            .Select(x => x.As<List>())
-            .ToList();
-
-        if (groupNamesElements.Count < itemList.Count)
+        if (groupNamesElements.Count < itemList.Length)
         {
             //Insert default group name
             groupNamesElements.Insert(0, null);
         }
 
         var groupItems = new List<WorkspaceViewGroupItem>();
-
-        foreach (var group in groupNamesElements.Zip(itemList))
+        foreach (var (groupName, groupList) in groupNamesElements.Zip(itemList))
         {
-            var groupName = group.First;
-            var groupList = group.Second;
+            if (groupList is null)
+            {
+                continue;
+            }
 
             var items = groupList.GetItemsOfType<WorkspaceViewItem>();
             groupItems.Add(new WorkspaceViewGroupItem

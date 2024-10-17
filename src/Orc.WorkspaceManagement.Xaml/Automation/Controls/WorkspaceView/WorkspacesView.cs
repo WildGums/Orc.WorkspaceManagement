@@ -6,13 +6,9 @@ using Orc.Automation;
 using Orc.Automation.Controls;
 
 [AutomatedControl(Class = typeof(Views.WorkspacesView))]
-public class WorkspacesView : FrameworkElement<WorkspaceViewModel, WorkspaceViewMap>
+public class WorkspacesView(AutomationElement element)
+    : FrameworkElement<WorkspaceViewModel, WorkspaceViewMap>(element)
 {
-    public WorkspacesView(AutomationElement element) 
-        : base(element)
-    {
-    }
-
     public IReadOnlyList<WorkspaceViewGroupItem>? GroupItems
         => Map.GroupList?.GetGroupItems();
 }

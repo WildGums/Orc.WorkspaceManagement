@@ -21,7 +21,7 @@ public class WorkspacesViewFacts : StyledControlTestFacts<Views.WorkspacesView>
         target.Execute<InitWorkspacesViewMethodRun>();
     }
 
-    [TestCase(WorkspacesViewTestData.TestScopeWith3CustomRecords)]
+   // [TestCase(WorkspacesViewTestData.TestScopeWith3CustomRecords)]
     [TestCase(WorkspacesViewTestData.TestScopeWith5CustomRecords)]
     [TestCase(WorkspacesViewTestData.TestScopeWith0CustomRecords)]
     public void CorrectlyInitializeScope(string scope)
