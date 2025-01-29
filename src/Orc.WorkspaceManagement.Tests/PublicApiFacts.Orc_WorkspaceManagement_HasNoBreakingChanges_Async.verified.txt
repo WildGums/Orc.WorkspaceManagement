@@ -229,9 +229,9 @@ namespace Orc.WorkspaceManagement
     {
         protected readonly Catel.IoC.IServiceLocator ServiceLocator;
         protected WorkspaceProviderBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.IoC.IServiceLocator serviceLocator) { }
+        public virtual object? Scope { get; set; }
         public object? Tag { get; set; }
         protected Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; set; }
-        public virtual object? Scope { get; set; }
         public abstract System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         public virtual System.Threading.Tasks.Task<bool> CheckIsDirtyAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public abstract System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace);
