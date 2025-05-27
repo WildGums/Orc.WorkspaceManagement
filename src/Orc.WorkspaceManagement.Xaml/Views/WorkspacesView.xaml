@@ -93,11 +93,15 @@
                                             <Button x:Name="RefreshWorkspaceButton"
                                                     CommandParameter="{Binding }" 
                                                     ToolTip="{catel:LanguageBinding WorkspaceManagement_Refresh}" 
-                                                    Width="24" 
+                                                    Height="24" 
                                                     Padding="5 6.5 5 6.5"
                                                     Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:WorkspacesView}}, Path=HasRefreshButton, Converter={catel:BooleanToHidingVisibilityConverter}}">
 
-                                                <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                                <b:Interaction.Behaviors>
+                                                    <orctheming:Square/>
+                                                </b:Interaction.Behaviors>
+
+                                                    <!-- NOTE: important to fix commands where command parameter is not yet available when
                                                     the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
                                                 <Button.Command>
                                                     <MultiBinding Converter="{StaticResource TriggerConverter}">
