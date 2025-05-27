@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>Orc.WorkspaceManagement.Tests</AssemblyName>
@@ -27,7 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Orc.Automation.Tests" Version="5.0.5" />
-    <PackageReference Include="Orc.Theming" Version="5.3.0" />
+    <PackageReference Include="Orc.Theming" Version="5.3.1" />
     <PackageReference Include="PublicApiGenerator" Version="11.4.1" PrivateAssets="all" />
     <PackageReference Include="Verify.NUnit" Version="28.9.0" />
   </ItemGroup>
