@@ -3,7 +3,10 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:converters="clr-namespace:Orc.WorkspaceManagement.Converters"
-                   xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views">
+                   xmlns:views="clr-namespace:Orc.WorkspaceManagement.Views"
+                   xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+                   xmlns:workspaceManagement="clr-namespace:Orc.WorkspaceManagement;assembly=Orc.WorkspaceManagement">
 
     <UserControl.Resources>
         <catel:BooleanToHidingVisibilityConverter x:Key="BooleanToHidingVisibilityConverter" />
@@ -44,7 +47,7 @@
                                  BorderThickness="0" 
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="{x:Type workspaceManagement:Workspace}">
                                     <Grid Width="286" 
                                           Background="Transparent"
                                           PreviewMouseLeftButtonDown="OnWorkspacePreviewMouseLeftButtonDown">
@@ -112,13 +115,18 @@
 
                                         <Button x:Name="EditWorkspaceButton"
                                                 Grid.Column="3" 
+                                                FontSize="{orctheming:FontSize Absolute=12}"
+                                                Height="24"
                                                 Content="..."
                                                 CommandParameter="{Binding }" 
                                                 ToolTip="{catel:LanguageBinding WorkspaceManagement_Edit}" 
-                                                Width="24" 
                                                 Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
 
-                                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                            <b:Interaction.Behaviors>
+                                                <orctheming:Square/>
+                                            </b:Interaction.Behaviors>
+
+<!-- NOTE: important to fix commands where command parameter is not yet available when
                                             the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
                                             <Button.Command>
                                                 <MultiBinding Converter="{StaticResource TriggerConverter}">
@@ -131,13 +139,18 @@
 
                                         <Button x:Name="RemoveWorkspaceButton"
                                                 Grid.Column="4"
+                                                Padding="7"
+                                                Height="24"
+                                                FontSize="{orctheming:FontSize Absolute=12}"
                                                 CommandParameter="{Binding }"
                                                 ToolTip="{catel:LanguageBinding WorkspaceManagement_Remove}"
-                                                Width="24"
-                                                Padding="7 8.5 7 8.5"
                                                 Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
 
-                                            <!-- NOTE: important to fix commands where command parameter is not yet available when
+                                            <b:Interaction.Behaviors>
+                                                <orctheming:Square/>
+                                            </b:Interaction.Behaviors>
+
+<!-- NOTE: important to fix commands where command parameter is not yet available when
                                             the command is being evaluated. See http://stackoverflow.com/questions/335849/wpf-commandparameter-is-null-first-time-canexecute-is-called -->
                                             <Button.Command>
                                                 <MultiBinding Converter="{StaticResource TriggerConverter}">
