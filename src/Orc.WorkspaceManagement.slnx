@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/misc/">
+    <File Path="Directory.build.project.props" />
+    <File Path="Directory.build.props" />
+    <File Path="Directory.build.shared.explicit.props" />
+    <File Path="Directory.build.shared.implicit.props" />
+    <File Path="Directory.build.shared.mat.props" />
+    <File Path="Directory.build.targets" />
+    <File Path="GlobalSuppressions.cs" />
+    <File Path="nuget.config" />
+    <File Path="Orc.WorkspaceManagement.sln.DotSettings" />
+    <File Path="SolutionAssemblyInfo.cs" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="Orc.WorkspaceManagement.Xaml/Orc.WorkspaceManagement.Xaml.csproj" />
+    <Project Path="Orc.WorkspaceManagement/Orc.WorkspaceManagement.csproj" />
+  </Folder>
+  <Folder Name="/src/Example/">
+    <Project Path="Orc.WorkspaceManagement.Example/Orc.WorkspaceManagement.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/">
+    <Project Path="Orc.WorkspaceManagement.Tests/Orc.WorkspaceManagement.Tests.csproj" />
+  </Folder>
+</Solution>
