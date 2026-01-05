@@ -9,11 +9,10 @@ using Catel;
 public interface IWorkspaceManager
 {
     string BaseDirectory { get; set; }
-    IEnumerable<IWorkspace> Workspaces { get; }
+    IReadOnlyList<IWorkspace> Workspaces { get; }
     IWorkspace? Workspace { get; }
-    IEnumerable<IWorkspaceProvider> Providers { get; }
+    IReadOnlyList<IWorkspaceProvider> Providers { get; }
     string DefaultWorkspaceTitle { get; set; }
-    object? Scope { get; set; }
     IWorkspace? RefreshingWorkspace { get; }
     bool AutoRefreshEnabled { get; set; }
 
@@ -97,7 +96,7 @@ public interface IWorkspaceManager
     /// </summary>
     Task StoreWorkspaceAsync(IWorkspace workspace);
 
-    List<IWorkspaceProvider> GetWorkspaceProviders();
+    IReadOnlyList<IWorkspaceProvider> GetWorkspaceProviders();
     Task GetInformationFromProvidersAsync(IWorkspace workspace);
     Task ApplyWorkspaceUsingProvidersAsync(IWorkspace workspace);
 

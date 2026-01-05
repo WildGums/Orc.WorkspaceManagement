@@ -3,19 +3,16 @@
 using System;
 using System.Windows;
 using Catel;
-using Catel.IoC;
 using Catel.MVVM.Converters;
 
-public class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConverterBase
+public partial class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConverterBase
 {
-#pragma warning disable IDISP006 // Implement IDisposable.
-    private readonly IServiceLocator _serviceLocator;
-#pragma warning restore IDISP006 // Implement IDisposable.
+    private readonly IWorkspaceManager _workspaceManager;
 
-    public IsCurrentWorkspaceToCollapsingVisibilityConverter()
+    public IsCurrentWorkspaceToCollapsingVisibilityConverter(IWorkspaceManager workspaceManager)
         : base(Visibility.Collapsed)
     {
-        _serviceLocator = this.GetServiceLocator();
+        _workspaceManager = workspaceManager;
     }
 
     protected override bool IsVisible(object? value, Type targetType, object? parameter)
@@ -25,7 +22,6 @@ public class IsCurrentWorkspaceToCollapsingVisibilityConverter : VisibilityConve
             return false;
         }
 
-        var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
-        return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
+        return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
     }
 }

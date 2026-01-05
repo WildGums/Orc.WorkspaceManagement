@@ -10,21 +10,6 @@ using ViewModels;
 
 public partial class WorkspacesView
 {
-    public WorkspacesView()
-    {
-        InitializeComponent();
-    }
-
-    [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
-    public object? Scope
-    {
-        get { return GetValue(ScopeProperty); }
-        set { SetValue(ScopeProperty, value); }
-    }
-
-    public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register(nameof(Scope), typeof(object),
-        typeof(WorkspacesView), new FrameworkPropertyMetadata((sender, e) => ((WorkspacesView)sender).OnScopeChanged(e)));
-
     public bool HasRefreshButton
     {
         get { return (bool) GetValue(HasRefreshButtonProperty); }
@@ -34,13 +19,6 @@ public partial class WorkspacesView
     public static readonly DependencyProperty HasRefreshButtonProperty = DependencyProperty.Register(nameof(HasRefreshButton), 
         typeof(bool), typeof(WorkspacesView), new PropertyMetadata(false));
 
-    private void OnScopeChanged(DependencyPropertyChangedEventArgs e)
-    {
-        if (ViewModel is WorkspacesViewModel vm)
-        {
-            vm.Scope = Scope;
-        }
-    }
 
     private void OnWorkspacePreviewMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
     {

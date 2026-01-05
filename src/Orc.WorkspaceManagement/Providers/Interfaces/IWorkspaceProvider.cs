@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 /// </summary>
 public interface IWorkspaceProvider
 {
-    object? Scope { get; set; }
-
-    object? Tag { get; set; }
-
     /// <summary>
     /// Provides the information for the workspace with the current state.
     /// </summary>

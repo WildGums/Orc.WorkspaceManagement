@@ -10,13 +10,12 @@ public abstract class WorkspaceBehaviorBase<T> : BehaviorBase<T>, IWorkspaceBeha
 {
     private readonly BehaviorWorkspaceProvider _workspaceProvider;
 
-    protected WorkspaceBehaviorBase()
+    protected WorkspaceBehaviorBase(IWorkspaceManager workspaceManager,
+        IDispatcherService dispatcherService)
     {
-        var dependencyResolver = this.GetDependencyResolver();
-        WorkspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
-        var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
+        WorkspaceManager = workspaceManager;
 
-        _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService, this.GetServiceLocator());
+        _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService);
     }
 
     protected IWorkspaceManager WorkspaceManager { get; private set; }

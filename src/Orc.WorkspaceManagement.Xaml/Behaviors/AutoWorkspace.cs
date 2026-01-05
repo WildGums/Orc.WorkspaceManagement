@@ -1,9 +1,16 @@
 ﻿namespace Orc.WorkspaceManagement.Behaviors;
 
 using System.Windows;
+using Catel.Services;
 
 public class AutoWorkspace : WorkspaceBehaviorBase<FrameworkElement>
 {
+    public AutoWorkspace(IWorkspaceManager workspaceManager, IDispatcherService dispatcherService)
+        : base(workspaceManager, dispatcherService)
+    {
+        
+    }
+
     public bool PersistSize
     {
         get { return (bool)GetValue(PersistSizeProperty); }

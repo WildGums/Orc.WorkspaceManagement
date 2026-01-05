@@ -3,6 +3,7 @@
 using System;
 using System.Threading.Tasks;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 #if DEBUG
 using System.Diagnostics;
@@ -10,8 +11,7 @@ using System.Diagnostics;
 
 public abstract class WorkspaceWatcherBase : IDisposable
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger _logger;
     protected readonly IWorkspaceManager WorkspaceManager;
 
     private bool _justAddedWorkspace;
@@ -21,10 +21,10 @@ public abstract class WorkspaceWatcherBase : IDisposable
     private Stopwatch? _totalStopwatch;
 #endif
 
-    protected WorkspaceWatcherBase(IWorkspaceManager workspaceManager)
+    protected WorkspaceWatcherBase(ILogger logger, IWorkspaceManager workspaceManager)
     {
         ArgumentNullException.ThrowIfNull(workspaceManager);
-
+        _logger = logger;
         WorkspaceManager = workspaceManager;
 
         IgnoreSwitchToNewlyCreatedWorkspace = true;
@@ -131,7 +131,7 @@ public abstract class WorkspaceWatcherBase : IDisposable
         }
         else
         {
-            Log.Debug("Ignoring WorkspaceUpdating event because this is a newly added workspace");
+            _logger.LogDebug("Ignoring WorkspaceUpdating event because this is a newly added workspace");
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class WorkspaceWatcherBase : IDisposable
         }
         else
         {
-            Log.Debug("Ignoring WorkspaceUpdated event because this is a newly added workspace");
+            _logger.LogDebug("Ignoring WorkspaceUpdated event because this is a newly added workspace");
         }
 
         _justAddedWorkspace = false;

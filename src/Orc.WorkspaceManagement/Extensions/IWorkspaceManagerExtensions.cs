@@ -71,15 +71,6 @@ public static class IWorkspaceManagerExtensions
         }
     }
 
-    public static Task AddProviderAsync<TWorkspaceProvider>(this IWorkspaceManager workspaceManager, bool callApplyWorkspaceForCurrentWorkspace)
-        where TWorkspaceProvider : IWorkspaceProvider
-    {
-        ArgumentNullException.ThrowIfNull(workspaceManager);
-
-        var workspaceProvider = TypeFactory.Default.CreateRequiredInstance<TWorkspaceProvider>();
-        return workspaceManager.AddProviderAsync(workspaceProvider, callApplyWorkspaceForCurrentWorkspace);
-    }
-
     public static async Task EnsureDefaultWorkspaceAsync(this IWorkspaceManager workspaceManager, string defaultWorkspaceName = "Default", bool autoSelect = true)
     {
         ArgumentNullException.ThrowIfNull(workspaceManager);

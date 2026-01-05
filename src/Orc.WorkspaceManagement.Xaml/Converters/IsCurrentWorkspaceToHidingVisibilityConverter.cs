@@ -7,16 +7,14 @@ using Catel;
 using Catel.IoC;
 using Catel.MVVM.Converters;
 
-public class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
+public partial class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
 {
-#pragma warning disable IDISP006 // Implement IDisposable.
-    private readonly IServiceLocator _serviceLocator;
-#pragma warning restore IDISP006 // Implement IDisposable.
+    private readonly IWorkspaceManager _workspaceManager;
 
-    public IsCurrentWorkspaceToHidingVisibilityConverter()
+    public IsCurrentWorkspaceToHidingVisibilityConverter(IWorkspaceManager workspaceManager)
         : base(Visibility.Hidden)
     {
-        _serviceLocator = this.GetServiceLocator();
+        _workspaceManager = workspaceManager;
     }
 
     protected override bool IsVisible(object? value, Type targetType, object? parameter)
@@ -26,8 +24,6 @@ public class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverter
             return false;
         }
 
-        var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(workspace.Scope);
-
-        return workspaceManager is not null && ObjectHelper.AreEqual(workspaceManager.Workspace, workspace);
+        return ObjectHelper.AreEqual(_workspaceManager.Workspace, workspace);
     }
 }

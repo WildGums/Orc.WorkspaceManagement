@@ -2,18 +2,16 @@
 
 using System;
 using Catel;
-using Catel.IoC;
 using Catel.MVVM.Converters;
 using WorkspaceManagement;
 
-public class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
+public partial class IsCurrentWorkspaceToBooleanConverter : ValueConverterBase
 {
     private readonly IWorkspaceManager _workspaceManager;
 
-    public IsCurrentWorkspaceToBooleanConverter()
+    public IsCurrentWorkspaceToBooleanConverter(IWorkspaceManager workspaceManager)
     {
-        var dependencyResolver = this.GetDependencyResolver();
-        _workspaceManager = dependencyResolver.ResolveRequired<IWorkspaceManager>();
+        _workspaceManager = workspaceManager;
     }
 
     protected override object? Convert(object? value, Type targetType, object? parameter)

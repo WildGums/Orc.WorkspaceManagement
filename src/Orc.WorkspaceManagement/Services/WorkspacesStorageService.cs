@@ -3,41 +3,32 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Catel;
-using Catel.Configuration;
-using Catel.Data;
-using Catel.Logging;
-using Catel.Runtime.Serialization;
-using Catel.Runtime.Serialization.Xml;
-using FileSystem;
 using System.Threading.Tasks;
+using Catel;
+using Catel.Logging;
+using FileSystem;
+using Microsoft.Extensions.Logging;
+using Orc.Serialization.Json;
 
 public class WorkspacesStorageService : IWorkspacesStorageService
 {
-    private const string WorkspaceFileExtension = ".xml";
+    private const string WorkspaceFileExtension = ".json";
 
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(WorkspacesStorageService));
 
-    protected readonly ISerializationManager _serializationManager;
-    protected readonly IXmlSerializer _xmlSerializer;
+    protected readonly IJsonSerializerFactory _jsonSerializerFactory;
     protected readonly IFileService _fileService;
     protected readonly IDirectoryService _directoryService;
 
-    public WorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer,
+    public WorkspacesStorageService(IJsonSerializerFactory jsonSerializerFactory,
         IFileService fileService, IDirectoryService directoryService)
     {
-        ArgumentNullException.ThrowIfNull(serializationManager);
-        ArgumentNullException.ThrowIfNull(xmlSerializer);
-        ArgumentNullException.ThrowIfNull(fileService);
-        ArgumentNullException.ThrowIfNull(directoryService);
-
-        _serializationManager = serializationManager;
-        _xmlSerializer = xmlSerializer;
+        _jsonSerializerFactory = jsonSerializerFactory;
         _fileService = fileService;
         _directoryService = directoryService;
     }
 
-    public virtual async Task<IEnumerable<IWorkspace>> LoadWorkspacesAsync(string path)
+    public virtual async Task<IReadOnlyList<IWorkspace>> LoadWorkspacesAsync(string path)
     {
         Argument.IsNotNullOrEmpty(() => path);
 
@@ -47,11 +38,6 @@ public class WorkspacesStorageService : IWorkspacesStorageService
         {
             if (_directoryService.Exists(path))
             {
-                // Note: since Catel caches serializable members of an object, we might have introduced new dynamic members,
-                // so we need to clear the cache in order to make sure we always (deserialize) the right members
-                _serializationManager.Clear(typeof(Workspace));
-                _serializationManager.Clear(typeof(DynamicConfiguration));
-
                 foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
                 {
                     var workspace = await LoadWorkspaceAsync(workspaceFile);
@@ -64,7 +50,7 @@ public class WorkspacesStorageService : IWorkspacesStorageService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Failed to load workspaces '{path}'");
+            Logger.LogError(ex, $"Failed to load workspaces '{path}'");
         }
 
         return workspaces;
@@ -78,58 +64,60 @@ public class WorkspacesStorageService : IWorkspacesStorageService
 
         try
         {
-            Log.Debug("Loading workspace from '{0}'", fileName);
+            Logger.LogDebug("Loading workspace from '{0}'", fileName);
 
             if (!_fileService.Exists(fileName))
             {
-                Log.Warning("File '{0}' not found. Maybe this workspace hasn't been saved yet or doesn't need a save location'.", fileName);
+                Logger.LogWarning("File '{0}' not found. Maybe this workspace hasn't been saved yet or doesn't need a save location'.", fileName);
 
                 return null;
             }
 
+            var serializer = _jsonSerializerFactory.CreateSerializer();
+
             using (var fileStream = _fileService.Open(fileName, FileMode.Open))
             {
-                var workspace = _xmlSerializer.Deserialize<Workspace>(fileStream);
+                var workspace = serializer.Deserialize<Workspace>(fileStream);
                 if (workspace is null || string.IsNullOrEmpty(workspace.Title))
                 {
-                    Log.Warning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
+                    Logger.LogWarning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
                 }
                 else
                 {
                     result = workspace;
 
-                    Log.Debug("Loaded workspace");
+                    Logger.LogDebug("Loaded workspace");
                 }
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to load workspace from '{0}'", fileName);
+            Logger.LogError(ex, "Failed to load workspace from '{0}'", fileName);
         }
 
         return result;
     }
 
-    public virtual async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
+    public virtual async Task SaveWorkspacesAsync(string path, IReadOnlyList<IWorkspace> workspaces)
     {
         Argument.IsNotNullOrEmpty(() => path);
         ArgumentNullException.ThrowIfNull(workspaces);
 
         _directoryService.Create(path);
 
-        Log.Debug("Deleting previous workspace files");
+        Logger.LogDebug("Deleting previous workspace files");
 
         foreach (var workspaceFile in _directoryService.GetFiles(path, $"*{WorkspaceFileExtension}"))
         {
             try
             {
-                Log.Debug("Deleting file '{0}'", workspaceFile);
+                Logger.LogDebug("Deleting file '{0}'", workspaceFile);
 
                 _fileService.Delete(workspaceFile);
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to delete file '{0}'", workspaceFile);
+                Logger.LogWarning(ex, "Failed to delete file '{0}'", workspaceFile);
             }
         }
 
@@ -147,15 +135,19 @@ public class WorkspacesStorageService : IWorkspacesStorageService
 
         if (!workspace.Persist)
         {
-            Log.Debug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
+            Logger.LogDebug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
             return;
         }
 
-        Log.Debug("Saving workspace '{0}' to '{1}'", workspace, fileName);
+        Logger.LogDebug("Saving workspace '{0}' to '{1}'", workspace, fileName);
 
-        ((Workspace)workspace).SaveAsXml(fileName);
+        var serializer = _jsonSerializerFactory.CreateSerializer();
+
+        using (var fileStream = _fileService.Create(fileName))
+        {
+            serializer.Serialize(fileStream, workspace);
+        }
     }
-
 
     public string GetWorkspaceFileName(string directory, IWorkspace workspace)
     {

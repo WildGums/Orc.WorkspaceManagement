@@ -1,7 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement;
 
 using System.Collections.Generic;
-using Catel.Runtime.Serialization;
 
 public interface IWorkspace
 {
@@ -15,9 +14,6 @@ public interface IWorkspace
 
     string? WorkspaceGroup { get; set; }
     string? DisplayName { get; }
-
-    [ExcludeFromSerialization]
-    object? Scope { get; set; }
 
     void SetWorkspaceValue(string name, object? value);
     T GetWorkspaceValue<T>(string name, T defaultValue);
