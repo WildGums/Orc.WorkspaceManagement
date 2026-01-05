@@ -1,5 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Tests;
 
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using Catel.IoC;
@@ -21,48 +22,50 @@ public class InitWorkspacesViewMethodRun : NamedAutomationMethodRun
             return true;
         }
 
-#pragma warning disable IDISP001 // Dispose created
-        var serviceLocator = this.GetServiceLocator();
-#pragma warning restore IDISP001 // Dispose created
+        throw new NotImplementedException();
 
-        var fileServiceType = typeof(FileService);
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
-        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement.Xaml", "Orc.WorkspaceManagement.Properties", "Resources"));
+//#pragma warning disable IDISP001 // Dispose created
+//        var serviceLocator = this.GetServiceLocator();
+//#pragma warning restore IDISP001 // Dispose created
 
-        serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
-        serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
-        serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
+//        var fileServiceType = typeof(FileService);
+//        var languageService = serviceLocator.ResolveType<ILanguageService>();
+//        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.WorkspaceManagement.Xaml", "Orc.WorkspaceManagement.Properties", "Resources"));
 
-        foreach (var scope in WorkspacesViewTestData.AvailableScopes)
-        {
-            RegisterScope(scope);
-        }
+//        serviceLocator.RegisterType<IWorkspaceManager, WorkspaceManager>();
+//        serviceLocator.RegisterType<IWorkspaceInitializer, EmptyWorkspaceInitializer>();
+//        serviceLocator.RegisterType<IWorkspacesStorageService, WorkspacesStorageService>();
 
-#pragma warning disable IDISP004 // Don't ignore created IDisposable
-        var vm = this.GetTypeFactory().CreateInstanceWithParametersAndAutoCompletion<WorkspacesViewModel>();
-#pragma warning restore IDISP004 // Don't ignore created IDisposable
-        workspacesView.DataContext = vm;
+//        foreach (var scope in WorkspacesViewTestData.AvailableScopes)
+//        {
+//            RegisterScope(scope);
+//        }
 
-        return true;
+//#pragma warning disable IDISP004 // Don't ignore created IDisposable
+//        var vm = this.GetTypeFactory().CreateInstanceWithParametersAndAutoCompletion<WorkspacesViewModel>();
+//#pragma warning restore IDISP004 // Don't ignore created IDisposable
+//        workspacesView.DataContext = vm;
+
+//        return true;
     }
 
-    private void RegisterScope(object scope)
-    {
-#pragma warning disable IDISP001 // Dispose created
-        var serviceLocator = this.GetServiceLocator();
-        var typeFactory = this.GetTypeFactory();
-#pragma warning restore IDISP001 // Dispose created
+//    private void RegisterScope(object scope)
+//    {
+//#pragma warning disable IDISP001 // Dispose created
+//        var serviceLocator = this.GetServiceLocator();
+//        var typeFactory = this.GetTypeFactory();
+//#pragma warning restore IDISP001 // Dispose created
 
-        var testStorageService = new TestWorkspaceStorageService();
-        serviceLocator.RegisterInstance(typeof(IWorkspacesStorageService), testStorageService, scope);
+//        var testStorageService = new TestWorkspaceStorageService();
+//        serviceLocator.RegisterInstance(typeof(IWorkspacesStorageService), testStorageService, scope);
 
-        var workspaceManager = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<WorkspaceManager>(scope);
-        workspaceManager.Scope = scope;
-        workspaceManager.SetWorkspaceSchemesDirectoryAsync(scope?.ToString() ?? string.Empty);
+//        var workspaceManager = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<WorkspaceManager>(scope);
+//        workspaceManager.Scope = scope;
+//        workspaceManager.SetWorkspaceSchemesDirectoryAsync(scope?.ToString() ?? string.Empty);
             
-        var task = Task.Run(async () => await workspaceManager.InitializeAsync());
-        Task.WaitAll(task);
+//        var task = Task.Run(async () => await workspaceManager.InitializeAsync());
+//        Task.WaitAll(task);
           
-        serviceLocator.RegisterInstance(typeof(IWorkspaceManager), workspaceManager, scope);
-    }
+//        serviceLocator.RegisterInstance(typeof(IWorkspaceManager), workspaceManager, scope);
+//    }
 }

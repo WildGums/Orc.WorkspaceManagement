@@ -17,7 +17,7 @@ public interface IWorkspace
 
     void SetWorkspaceValue(string name, object? value);
     T GetWorkspaceValue<T>(string name, T defaultValue);
-    List<string> GetAllWorkspaceValueNames();
+    IReadOnlyList<string> GetAllWorkspaceValueNames();
     void ClearWorkspaceValues();
     void UpdateIsDirtyFlag(bool isDirty);
 }

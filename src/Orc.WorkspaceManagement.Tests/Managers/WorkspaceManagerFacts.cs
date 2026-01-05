@@ -126,7 +126,7 @@ public class WorkspaceManagerFacts
     public class TheInitializeMethod
     {
         [TestCase]
-        public async Task RaisesInitializingEventAsync()
+        public async Task Raises_InitializingEvent_Async()
         {
             var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 
@@ -139,7 +139,7 @@ public class WorkspaceManagerFacts
         }
 
         [TestCase]
-        public async Task RaisesInitializedEventAsync()
+        public async Task Raises_InitializedEvent_Async()
         {
             var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer();
 

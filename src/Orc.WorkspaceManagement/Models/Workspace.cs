@@ -129,25 +129,28 @@ public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
         }
     }
 
-    public List<string> GetAllWorkspaceValueNames()
+    public IReadOnlyList<string> GetAllWorkspaceValueNames()
     {
         var valueNames = new List<string>();
 
-        var propertyData = PropertyDataManager.Default.GetCatelTypeInfo(GetType());
+        var propertyNames = GetPropertyBagPropertyNames();
 
-        foreach (var catelProperty in propertyData.GetCatelProperties())
+        foreach (var propertyName in propertyNames)
         {
-            if (catelProperty.Value.IsModelBaseProperty)
+            if (IgnoredProperties.Contains(propertyName))
             {
                 continue;
             }
 
-            if (IgnoredProperties.Contains(catelProperty.Key))
+            if (TryGetPropertyData(propertyName, out var catelPropertyData))
             {
-                continue;
+                if (catelPropertyData.IsModelBaseProperty)
+                {
+                    continue;
+                }
             }
 
-            valueNames.Add(catelProperty.Key);
+            valueNames.Add(propertyName);
         }
 
         return valueNames;

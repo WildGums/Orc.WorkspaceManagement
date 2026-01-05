@@ -214,11 +214,13 @@ public class WorkspaceManager : IWorkspaceManager
         _workspaces.Clear();
 
         var workspaces = await _workspacesStorageService.LoadWorkspacesAsync(baseDirectory);
-
-        foreach (var workspace in workspaces)
+        if (workspaces is not null)
         {
-            _workspaces.Add(workspace);
-            workspace.UpdateIsDirtyFlag(false);
+            foreach (var workspace in workspaces)
+            {
+                _workspaces.Add(workspace);
+                workspace.UpdateIsDirtyFlag(false);
+            }
         }
 
         if (autoSelect && _workspaces.Any())
