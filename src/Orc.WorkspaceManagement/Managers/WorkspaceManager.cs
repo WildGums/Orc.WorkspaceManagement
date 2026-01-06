@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IO;
-using Catel.IoC;
 using Catel.Logging;
 using Catel.Services;
 using Microsoft.Extensions.Logging;
@@ -22,7 +21,7 @@ public class WorkspaceManager : IWorkspaceManager
     private readonly List<IWorkspaceProvider> _workspaceProviders;
     private readonly List<IWorkspace> _workspaces = new();
 
-    private IWorkspacesStorageService _workspacesStorageService;
+    private readonly IWorkspacesStorageService _workspacesStorageService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.

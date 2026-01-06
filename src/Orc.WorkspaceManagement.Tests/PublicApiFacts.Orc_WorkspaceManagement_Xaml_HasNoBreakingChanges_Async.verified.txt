@@ -11,6 +11,13 @@ public static class ModuleInitializer
     [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
+namespace Orc
+{
+    public static class OrcWorkspaceManagementXamlModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcWorkspaceManagementXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
+}
 namespace Orc.WorkspaceManagement.Automation
 {
     public class WorkspaceViewGroupItem
@@ -115,10 +122,6 @@ namespace Orc.WorkspaceManagement
         public static void SaveSizeToWorkspace(this System.Windows.FrameworkElement frameworkElement, Orc.WorkspaceManagement.IWorkspace? workspace = null, string? prefix = null) { }
         public static void SaveValueToWorkspace(this System.Windows.FrameworkElement frameworkElement, string name, object? value, Orc.WorkspaceManagement.IWorkspace? workspace = null, string? prefix = null) { }
     }
-    public static class OrcWorkspaceManagementXamlModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcWorkspaceManagementXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
-    }
     [System.Diagnostics.DebuggerDisplay("{Title}")]
     public class WorkspaceGroup
     {
@@ -133,6 +136,7 @@ namespace Orc.WorkspaceManagement.Behaviors
     {
         public static readonly System.Windows.DependencyProperty PersistGridSettingsProperty;
         public static readonly System.Windows.DependencyProperty PersistSizeProperty;
+        public AutoWorkspace() { }
         public AutoWorkspace(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IDispatcherService dispatcherService) { }
         public bool PersistGridSettings { get; set; }
         public bool PersistSize { get; set; }
@@ -143,6 +147,7 @@ namespace Orc.WorkspaceManagement.Behaviors
     {
         public static readonly System.Windows.DependencyProperty ColumnsToPersistProperty;
         public static readonly System.Windows.DependencyProperty RowsToPersistProperty;
+        public AutoWorkspaceGrid() { }
         public AutoWorkspaceGrid(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IDispatcherService dispatcherService) { }
         public string? ColumnsToPersist { get; set; }
         public string? RowsToPersist { get; set; }
