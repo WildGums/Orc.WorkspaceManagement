@@ -3,11 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using Catel;
 using Catel.Data;
 using Catel.Logging;
 using Microsoft.Extensions.Logging;
+using Orc.WorkspaceManagement.Serialization;
 
+[JsonConverter(typeof(WorkspaceJsonConverter))]
 public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
 {
     private static readonly ILogger Logger = LogManager.GetLogger(typeof(Workspace));
@@ -47,11 +50,19 @@ public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
     public string? DisplayName { get; set; }
     public string? WorkspaceGroup { get; set; }
 
+    [JsonIgnore]
     public bool Persist { get; set; }
+
+    [JsonIgnore]
     public bool CanEdit { get; set; }
+
+    [JsonIgnore]
     public bool CanDelete { get; set; }
+
+    [JsonIgnore]
     public bool IsVisible { get; set; }
 
+    [JsonIgnore]
     public new bool IsDirty
     {
         get { return _isDirty; }
@@ -105,13 +116,6 @@ public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
 
         IsDirty = true;
     }
-
-    //protected override void OnDeserialized()
-    //{
-    //    base.OnDeserialized();
-
-    //    UpdateDisplayName();
-    //}
 
     private void UpdateDisplayName()
     {

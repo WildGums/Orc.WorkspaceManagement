@@ -1,7 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Behaviors;
 
 using System.Windows;
-using Catel.IoC;
 using Catel.Services;
 using Catel.Windows.Interactivity;
 

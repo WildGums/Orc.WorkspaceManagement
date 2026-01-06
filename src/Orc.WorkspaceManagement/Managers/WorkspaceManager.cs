@@ -218,6 +218,12 @@ public class WorkspaceManager : IWorkspaceManager
         {
             foreach (var workspace in workspaces)
             {
+                if (string.IsNullOrWhiteSpace(workspace.Title) &&
+                    string.IsNullOrWhiteSpace(workspace.DisplayName))
+                {
+                    continue;
+                }
+
                 _workspaces.Add(workspace);
                 workspace.UpdateIsDirtyFlag(false);
             }
@@ -234,7 +240,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         Initialized?.Invoke(this, EventArgs.Empty);
 
-        Logger.LogInformation($"Initialized '{_workspaces.Count}' workspaces from '{baseDirectory}'");
+        Logger.LogInformation($"Initialized '{_workspaces.Count}' workspace(s) from '{baseDirectory}'");
 
         return true;
     }
@@ -477,6 +483,7 @@ public class WorkspaceManager : IWorkspaceManager
     public async Task GetInformationFromProvidersAsync(IWorkspace workspace)
     {
         var workspaceProviders = GetWorkspaceProviders();
+
         foreach (var provider in workspaceProviders)
         {
             try

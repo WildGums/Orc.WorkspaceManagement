@@ -23,7 +23,7 @@ public class WorkspacesViewModel : ViewModelBase
 
     private readonly IWorkspaceManager _workspaceManager;
 
-    public WorkspacesViewModel(IServiceProvider serviceProvider, IWorkspaceManager workspaceManager, 
+    public WorkspacesViewModel(IServiceProvider serviceProvider, IWorkspaceManager workspaceManager,
         IUIVisualizerService uiVisualizerService, IDispatcherService dispatcherService, IMessageService messageService,
         ILanguageService languageService)
         : base(serviceProvider)
@@ -256,10 +256,10 @@ public class WorkspacesViewModel : ViewModelBase
         try
         {
             var workspaceGroups = (from workspace in workspaceManager.Workspaces
-                where workspace.IsVisible
-                orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
-                group workspace by workspace.WorkspaceGroup into g
-                select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
+                                   where workspace.IsVisible
+                                   orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
+                                   group workspace by workspace.WorkspaceGroup into g
+                                   select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
 
             WorkspaceGroups = workspaceGroups;
 

@@ -2,13 +2,14 @@
 
 using System.Windows.Automation.Peers;
 using Automation;
-using WorkspaceViewModel = ViewModels.WorkspaceViewModel;
 
-/// <summary>
-/// Interaction logic for WorkspaceWindow.xaml.
-/// </summary>
 public partial class WorkspaceWindow
 {
+    partial void OnInitializingComponent()
+    {
+        Mode = Catel.Windows.DataWindowMode.OkCancel;
+    }
+
     protected override AutomationPeer OnCreateAutomationPeer()
     {
         return new WorkspaceWindowPeer(this);

@@ -2,8 +2,5 @@
 
 public partial class BView
 {
-    public BView()
-    {
-        InitializeComponent();
-    }
+
 }

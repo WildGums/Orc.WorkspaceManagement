@@ -2,19 +2,18 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Catel.Runtime.Serialization;
-using Catel.Runtime.Serialization.Xml;
 using Orc.FileSystem;
+using Orc.Serialization.Json;
 
 public class ExampleWorkspacesStorageService : WorkspacesStorageService
 {
-    public ExampleWorkspacesStorageService(ISerializationManager serializationManager, IXmlSerializer xmlSerializer, 
+    public ExampleWorkspacesStorageService(IJsonSerializerFactory jsonSerializerFactory,
         IFileService fileService, IDirectoryService directoryService) 
-        : base(serializationManager, xmlSerializer, fileService, directoryService)
+        : base(jsonSerializerFactory, fileService, directoryService)
     {
     }
 
-    public override async Task<IEnumerable<IWorkspace>> LoadWorkspacesAsync(string path)
+    public override async Task<IReadOnlyList<IWorkspace>> LoadWorkspacesAsync(string path)
     {
         var workspaces = new List<IWorkspace>(await base.LoadWorkspacesAsync(path));
 

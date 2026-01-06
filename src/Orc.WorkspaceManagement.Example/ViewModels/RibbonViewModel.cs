@@ -1,5 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Example.ViewModels;
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.MVVM;
@@ -14,22 +15,27 @@ public class RibbonViewModel : ViewModelBase
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IWorkspaceManager _workspaceManager;
     private readonly IMessageService _messageService;
+    private readonly IDispatcherService _dispatcherService;
 
-    public RibbonViewModel(IWorkspaceManager workspaceManager, IViewModelFactory viewModelFactory,
-        IUIVisualizerService uiVisualizerService, ISelectDirectoryService selectDirectoryService, IMessageService messageService)
+    public RibbonViewModel(IServiceProvider serviceProvider, IWorkspaceManager workspaceManager, 
+        IViewModelFactory viewModelFactory, IUIVisualizerService uiVisualizerService, 
+        ISelectDirectoryService selectDirectoryService, IMessageService messageService,
+        IDispatcherService dispatcherService)
+        : base(serviceProvider)
     {
         _workspaceManager = workspaceManager;
         _viewModelFactory = viewModelFactory;
         _uiVisualizerService = uiVisualizerService;
         _selectDirectoryService = selectDirectoryService;
         _messageService = messageService;
+        _dispatcherService = dispatcherService;
 
-        AddWorkspace = new TaskCommand(OnAddWorkspaceExecuteAsync);
-        SaveWorkspace = new TaskCommand(OnSaveWorkspaceExecuteAsync, OnSaveWorkspaceCanExecute);
+        AddWorkspace = new TaskCommand(serviceProvider, OnAddWorkspaceExecuteAsync);
+        SaveWorkspace = new TaskCommand(serviceProvider, OnSaveWorkspaceExecuteAsync, OnSaveWorkspaceCanExecute);
 
-        EditWorkspace = new TaskCommand(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
-        RemoveWorkspace = new TaskCommand(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
-        ChooseBaseDirectory = new TaskCommand(OnChooseBaseDirectoryAsync);
+        EditWorkspace = new TaskCommand(serviceProvider, OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
+        RemoveWorkspace = new TaskCommand(serviceProvider, OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
+        ChooseBaseDirectory = new TaskCommand(serviceProvider, OnChooseBaseDirectoryAsync);
     }
 
     public IWorkspace? CurrentWorkspace { get; private set; }
@@ -131,9 +137,15 @@ public class RibbonViewModel : ViewModelBase
 
         _workspaceManager.WorkspaceUpdated += OnCurrentWorkspaceChanged;
 
-        await _workspaceManager.InitializeAsync(true);
+        // Dispatch to load other views first
+        _dispatcherService.BeginInvoke(async () =>
+        {
+            await Task.Delay(100);
 
-        UpdateCurrentWorkspace();
+            await _workspaceManager.InitializeAsync(true);
+
+            UpdateCurrentWorkspace();
+        });
     }
 
     protected override Task CloseAsync()

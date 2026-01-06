@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Catel.Services;
 
-public class AutoWorkspaceGrid : WorkspaceBehaviorBase<Grid>
+public partial class AutoWorkspaceGrid : WorkspaceBehaviorBase<Grid>
 {
     private readonly Dictionary<string, string> _defaultValues = new Dictionary<string, string>();
 
