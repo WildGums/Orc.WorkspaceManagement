@@ -226,8 +226,7 @@ namespace Orc.WorkspaceManagement
     }
     public abstract class WorkspaceProviderBase : Orc.WorkspaceManagement.IWorkspaceProvider
     {
-        protected WorkspaceProviderBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
-        protected Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; set; }
+        protected WorkspaceProviderBase() { }
         public abstract System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace);
         public virtual System.Threading.Tasks.Task<bool> CheckIsDirtyAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public abstract System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace);
