@@ -10,18 +10,10 @@ public abstract class WorkspaceProviderBase : IWorkspaceProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkspaceProviderBase"/> class.
     /// </summary>
-    /// <param name="workspaceManager">The workspace manager.</param>
-    protected WorkspaceProviderBase(IWorkspaceManager workspaceManager)
+    protected WorkspaceProviderBase()
     {
-        WorkspaceManager = workspaceManager;
     }
 
-    /// <summary>
-    /// Gets the workspace manager.
-    /// </summary>
-    /// <value>The workspace manager.</value>
-    protected IWorkspaceManager WorkspaceManager { get; set; }
- 
     /// <summary>
     /// Provides the information for the workspace with the current state.
     /// </summary>

@@ -14,7 +14,7 @@ public abstract class WorkspaceBehaviorBase<T> : BehaviorBase<T>, IWorkspaceBeha
     {
         WorkspaceManager = workspaceManager;
 
-        _workspaceProvider = new BehaviorWorkspaceProvider(WorkspaceManager, this, dispatcherService);
+        _workspaceProvider = new BehaviorWorkspaceProvider(this, dispatcherService);
     }
 
     protected IWorkspaceManager WorkspaceManager { get; private set; }

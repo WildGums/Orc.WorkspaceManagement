@@ -9,9 +9,9 @@ public class BehaviorWorkspaceProvider : WorkspaceProviderBase
     private readonly IWorkspaceBehavior _workspaceBehavior;
     private readonly IDispatcherService _dispatcherService;
 
-    public BehaviorWorkspaceProvider(IWorkspaceManager workspaceManager, IWorkspaceBehavior workspaceBehavior, 
+    public BehaviorWorkspaceProvider(IWorkspaceBehavior workspaceBehavior, 
         IDispatcherService dispatcherService) 
-        : base(workspaceManager)
+        : base()
     {
         _workspaceBehavior = workspaceBehavior;
         _dispatcherService = dispatcherService;
