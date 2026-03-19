@@ -238,7 +238,6 @@ namespace Orc.WorkspaceManagement.Views
     public class WorkspaceWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public WorkspaceWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public WorkspaceWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public WorkspaceWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
@@ -248,7 +247,6 @@ namespace Orc.WorkspaceManagement.Views
     {
         public static readonly System.Windows.DependencyProperty HasRefreshButtonProperty;
         public WorkspacesView() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public WorkspacesView(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public WorkspacesView(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public bool HasRefreshButton { get; set; }
