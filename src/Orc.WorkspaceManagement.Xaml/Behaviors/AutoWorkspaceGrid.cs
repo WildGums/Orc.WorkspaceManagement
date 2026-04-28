@@ -4,15 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Catel.Services;
 
-public class AutoWorkspaceGrid : WorkspaceBehaviorBase<Grid>
+public partial class AutoWorkspaceGrid : WorkspaceBehaviorBase<Grid>
 {
     private readonly Dictionary<string, string> _defaultValues = new Dictionary<string, string>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AutoWorkspaceGrid"/> class.
     /// </summary>
-    public AutoWorkspaceGrid()
+    public AutoWorkspaceGrid(IWorkspaceManager workspaceManager, IDispatcherService dispatcherService)
+        : base(workspaceManager, dispatcherService)
     {
     }
 

@@ -6,44 +6,38 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel;
-using Catel.IoC;
 using Catel.IO;
 using Catel.Logging;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 
 public class WorkspaceManager : IWorkspaceManager
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-    private readonly IServiceLocator _serviceLocator;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(WorkspaceManager));
+
     private readonly IAppDataService _appDataService;
     private readonly IWorkspaceInitializer _workspaceInitializer;
 
-    private readonly List<IWorkspaceProvider> _workspaceProviders = new();
+    private readonly List<IWorkspaceProvider> _workspaceProviders;
     private readonly List<IWorkspace> _workspaces = new();
 
-    private object? _scope;
-
-    private IWorkspacesStorageService _workspacesStorageService;
+    private readonly IWorkspacesStorageService _workspacesStorageService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkspaceManager"/> class.
     /// </summary>
     /// <param name="workspaceInitializer">The workspace initializer.</param>
     /// <param name="workspacesStorageService">The for saving and loading workspaces</param>
-    /// <param name="serviceLocator"></param>
     /// <param name="appDataService">The app data service.</param>
+    /// <param name="workspaceProviders"></param>
     public WorkspaceManager(IWorkspaceInitializer workspaceInitializer, IWorkspacesStorageService workspacesStorageService,
-        IServiceLocator serviceLocator, IAppDataService appDataService)
+        IAppDataService appDataService, IEnumerable<IWorkspaceProvider> workspaceProviders)
     {
-        ArgumentNullException.ThrowIfNull(workspaceInitializer);
-        ArgumentNullException.ThrowIfNull(serviceLocator);
-        ArgumentNullException.ThrowIfNull(serviceLocator);
-        ArgumentNullException.ThrowIfNull(appDataService);
-
         _workspaceInitializer = workspaceInitializer;
         _workspacesStorageService = workspacesStorageService;
-        _serviceLocator = serviceLocator;
         _appDataService = appDataService;
+
+        _workspaceProviders = workspaceProviders.ToList();
 
         UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WorkspaceManager>();
         BaseDirectory = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming), "workspaces");
@@ -58,28 +52,18 @@ public class WorkspaceManager : IWorkspaceManager
     /// <value>The base directory.</value>
     public string BaseDirectory { get; set; }
 
-    public IEnumerable<IWorkspaceProvider> Providers
+    public IReadOnlyList<IWorkspaceProvider> Providers
     {
         get
         {
             lock (_workspaceProviders)
             {
-                return _workspaceProviders.ToArray();
+                return _workspaceProviders;
             }
         }
     }
 
-    public object? Scope
-    {
-        get => _scope;
-        set
-        {
-            _scope = value;
-            _workspacesStorageService = _serviceLocator.ResolveRequiredType<IWorkspacesStorageService>(_scope);
-        }
-    }
-
-    public IEnumerable<IWorkspace> Workspaces => _workspaces.ToArray();
+    public IReadOnlyList<IWorkspace> Workspaces => _workspaces.ToArray();
 
     public IWorkspace? Workspace { get; private set; }
 
@@ -113,7 +97,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         if (!await TrySetWorkspaceAsync(value))
         {
-            throw Log.ErrorAndCreateException(message => new WorkspaceException(value, message),
+            throw Logger.LogErrorAndCreateException(message => new WorkspaceException(value, message),
                 "Unable to set value to Workspace property.");
         }
     }
@@ -133,13 +117,13 @@ public class WorkspaceManager : IWorkspaceManager
             return true;
         }
 
-        Log.Debug($"[{Scope}] Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
+        Logger.LogDebug($"Changing workspace from '{oldWorkspace}' to '{newWorkspace}'");
 
         var workspaceUpdatingEventArgs = new WorkspaceUpdatingEventArgs(oldWorkspace, newWorkspace);
         await WorkspaceUpdatingAsync.SafeInvokeAsync(this, workspaceUpdatingEventArgs);
         if (workspaceUpdatingEventArgs.Cancel)
         {
-            Log.Debug($"[{Scope}] Changing workspace was canceled");
+            Logger.LogDebug($"Changing workspace was canceled");
             return false;
         }
 
@@ -161,7 +145,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         if (AutoRefreshEnabled && oldWorkspace is not null && !oldWorkspace.Title.EqualsIgnoreCase(DefaultWorkspaceTitle))
         {
-            Log.Debug($"[{Scope}] Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
+            Logger.LogDebug($"Reloading old workspace '{oldWorkspace}' from disk because it might have unsaved changes");
 
             await ReloadWorkspaceAsync(oldWorkspace);
 
@@ -203,7 +187,7 @@ public class WorkspaceManager : IWorkspaceManager
     {
         if (!await TryInitializeAsync(autoSelect))
         {
-            throw Log.ErrorAndCreateException(message => new WorkspaceManagementInitializationException(this, message),
+            throw Logger.LogErrorAndCreateException(message => new WorkspaceManagementInitializationException(this, message),
                 "Unable to initialize WorkspaceManager");
         }
     }
@@ -217,7 +201,7 @@ public class WorkspaceManager : IWorkspaceManager
     {
         var baseDirectory = BaseDirectory;
 
-        Log.Debug($"[{Scope}] Initializing workspaces from '{baseDirectory}'");
+        Logger.LogDebug($"Initializing workspaces from '{baseDirectory}'");
 
         var cancelEventArgs = new CancelEventArgs();
         Initializing?.Invoke(this, cancelEventArgs);
@@ -229,12 +213,19 @@ public class WorkspaceManager : IWorkspaceManager
         _workspaces.Clear();
 
         var workspaces = await _workspacesStorageService.LoadWorkspacesAsync(baseDirectory);
-
-        foreach (var workspace in workspaces)
+        if (workspaces is not null)
         {
-            workspace.Scope = Scope;
-            _workspaces.Add(workspace);
-            workspace.UpdateIsDirtyFlag(false);
+            foreach (var workspace in workspaces)
+            {
+                if (string.IsNullOrWhiteSpace(workspace.Title) &&
+                    string.IsNullOrWhiteSpace(workspace.DisplayName))
+                {
+                    continue;
+                }
+
+                _workspaces.Add(workspace);
+                workspace.UpdateIsDirtyFlag(false);
+            }
         }
 
         if (autoSelect && _workspaces.Any())
@@ -248,7 +239,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         Initialized?.Invoke(this, EventArgs.Empty);
 
-        Log.Info($"[{Scope}] Initialized '{_workspaces.Count}' workspaces from '{baseDirectory}'");
+        Logger.LogInformation($"Initialized '{_workspaces.Count}' workspace(s) from '{baseDirectory}'");
 
         return true;
     }
@@ -262,7 +253,7 @@ public class WorkspaceManager : IWorkspaceManager
         ArgumentNullException.ThrowIfNull(workspaceProvider);
 
 #if DEBUG
-        Log.Debug($"[{Scope}] Adding provider {workspaceProvider.GetType()} to the WorkspaceManager (Scope = '{Scope ?? "null"}')");
+        Logger.LogDebug($"Adding provider {workspaceProvider.GetType()} to the WorkspaceManager");
 #endif
 
         lock (_workspaceProviders)
@@ -283,7 +274,7 @@ public class WorkspaceManager : IWorkspaceManager
         ArgumentNullException.ThrowIfNull(workspaceProvider);
 
 #if DEBUG
-        Log.Debug($"[{Scope}] Removing provider {workspaceProvider.GetType()} from the WorkspaceManager (Tag == \"{Scope ?? "null"}\")");
+        Logger.LogDebug($"Removing provider {workspaceProvider.GetType()} from the WorkspaceManager");
 #endif
 
         bool removed;
@@ -313,7 +304,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         if (!_workspaces.Contains(workspace))
         {
-            Log.Debug($"[{Scope}] Adding workspace '{workspace}'");
+            Logger.LogDebug($"Adding workspace '{workspace}'");
 
             await _workspaceInitializer.InitializeAsync(workspace);
 
@@ -322,8 +313,6 @@ public class WorkspaceManager : IWorkspaceManager
             WorkspaceAdded?.Invoke(this, new WorkspaceEventArgs(workspace));
             WorkspacesChanged?.Invoke(this, EventArgs.Empty);
         }
-
-        workspace.Scope = Scope;
     }
 
     /// <summary>
@@ -335,17 +324,17 @@ public class WorkspaceManager : IWorkspaceManager
     {
         ArgumentNullException.ThrowIfNull(workspace);
 
-        Log.Debug($"[{Scope}] Deleting workspace '{workspace}'");
+        Logger.LogDebug($"Deleting workspace '{workspace}'");
 
         if (!_workspaces.Contains(workspace))
         {
-            Log.Debug($"[{Scope}] Can't delete workspace '{workspace}', workspace is not contained by the manager");
+            Logger.LogDebug($"Can't delete workspace '{workspace}', workspace is not contained by the manager");
             return false;
         }
 
         if (!workspace.CanDelete)
         {
-            Log.Debug($"[{Scope}] Can't delete workspace '{workspace}', CanDelete = false");
+            Logger.LogDebug($"Can't delete workspace '{workspace}', CanDelete = false");
             return false;
         }
 
@@ -379,26 +368,26 @@ public class WorkspaceManager : IWorkspaceManager
     /// </summary>
     private async Task ReloadWorkspaceAsync(IWorkspace workspace)
     {
-        Log.Debug($"[{Scope}] Reloading workspace '{workspace}'");
+        Logger.LogDebug($"Reloading workspace '{workspace}'");
 
         if (workspace is null)
         {
-            Log.Error($"[{Scope}] Workspace is empty, cannot reload workspace");
+            Logger.LogError($"Workspace is empty, cannot reload workspace");
             return;
         }
 
-        //TODO: implement reloding (resetting) default workspace as well
+        //TODO: implement reloading (resetting) default workspace as well
         var workspacePath = _workspacesStorageService.GetWorkspaceFileName(BaseDirectory, workspace);
         var workspaceFromDisk = await _workspacesStorageService.LoadWorkspaceAsync(workspacePath);
         if (workspaceFromDisk is null)
         {
-            Log.Warning($"[{Scope}] Failed to reload workspace '{workspace}'");
+            Logger.LogWarning($"Failed to reload workspace '{workspace}'");
             return;
         }
 
         workspace.SynchronizeWithWorkspace(workspaceFromDisk);
 
-        Log.Info($"[{Scope}] Reloaded workspace '{workspace}'");
+        Logger.LogInformation($"Reloaded workspace '{workspace}'");
     }
 
     /// <summary>
@@ -420,17 +409,17 @@ public class WorkspaceManager : IWorkspaceManager
     /// </summary>
     public async Task StoreWorkspaceAsync(IWorkspace workspace)
     {
-        Log.Debug($"[{Scope}] Storing workspace '{workspace}'");
+        Logger.LogDebug($"Storing workspace '{workspace}'");
 
         if (workspace is null)
         {
-            Log.Error($"[{Scope}] Workspace is empty, cannot store workspace");
+            Logger.LogError($"Workspace is empty, cannot store workspace");
             return;
         }
 
         if (!workspace.CanEdit)
         {
-            Log.Warning($"[{Scope}] Workspace is read-only, cannot store workspace");
+            Logger.LogWarning($"Workspace is read-only, cannot store workspace");
             return;
         }
 
@@ -440,8 +429,8 @@ public class WorkspaceManager : IWorkspaceManager
 
         await GetInformationFromProvidersAsync(workspace);
 
-        Log.Info($"[{Scope}] Stored workspace '{workspace}'");
-        Log.Status("Stored workspace");
+        Logger.LogInformation($"Stored workspace '{workspace}'");
+        //Logger.LogStatus("Stored workspace");
     }
 
     /// <summary>
@@ -457,7 +446,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         var baseDirectory = BaseDirectory;
 
-        Log.Debug($"[{Scope}] Saving workspace to '{baseDirectory}'");
+        Logger.LogDebug($"Saving workspace to '{baseDirectory}'");
 
         var cancelEventArgs = new CancelWorkspaceEventArgs(workspace);
         await WorkspaceSavingAsync.SafeInvokeAsync(this, cancelEventArgs);
@@ -473,12 +462,12 @@ public class WorkspaceManager : IWorkspaceManager
         var workspaceEventArgs = new WorkspaceEventArgs(workspace);
         WorkspaceSaved?.Invoke(this, workspaceEventArgs);
 
-        Log.Info($"[{Scope}] Saved current workspace to '{baseDirectory}'");
+        Logger.LogInformation($"Saved current workspace to '{baseDirectory}'");
 
         return true;
     }
 
-    public List<IWorkspaceProvider> GetWorkspaceProviders()
+    public IReadOnlyList<IWorkspaceProvider> GetWorkspaceProviders()
     {
         var providers = new List<IWorkspaceProvider>();
 
@@ -493,6 +482,7 @@ public class WorkspaceManager : IWorkspaceManager
     public async Task GetInformationFromProvidersAsync(IWorkspace workspace)
     {
         var workspaceProviders = GetWorkspaceProviders();
+
         foreach (var provider in workspaceProviders)
         {
             try
@@ -501,7 +491,7 @@ public class WorkspaceManager : IWorkspaceManager
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"[{Scope}] Failed to get information for workspace using provider '{provider.GetType().Name}'");
+                Logger.LogWarning(ex, $"Failed to get information for workspace using provider '{provider.GetType().Name}'");
             }
         }
     }
@@ -518,7 +508,7 @@ public class WorkspaceManager : IWorkspaceManager
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"[{Scope}] Failed to apply workspace using provider '{provider.GetType().Name}'");
+                Logger.LogWarning(ex, $"Failed to apply workspace using provider '{provider.GetType().Name}'");
             }
         }
     }

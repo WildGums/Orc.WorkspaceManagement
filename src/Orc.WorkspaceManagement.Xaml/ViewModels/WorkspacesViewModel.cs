@@ -10,42 +10,35 @@ using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 
 public class WorkspacesViewModel : ViewModelBase
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(WorkspaceViewModel));
 
     private readonly IUIVisualizerService _uiVisualizerService;
-    private readonly IServiceLocator _serviceLocator;
     private readonly IDispatcherService _dispatcherService;
     private readonly IMessageService _messageService;
     private readonly ILanguageService _languageService;
 
-    private IWorkspaceManager? _workspaceManager;
+    private readonly IWorkspaceManager _workspaceManager;
 
-    public WorkspacesViewModel(IWorkspaceManager workspaceManager, IUIVisualizerService uiVisualizerService,
-        IServiceLocator serviceLocator, IDispatcherService dispatcherService, IMessageService messageService,
+    public WorkspacesViewModel(IServiceProvider serviceProvider, IWorkspaceManager workspaceManager,
+        IUIVisualizerService uiVisualizerService, IDispatcherService dispatcherService, IMessageService messageService,
         ILanguageService languageService)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(workspaceManager);
-        ArgumentNullException.ThrowIfNull(uiVisualizerService);
-        ArgumentNullException.ThrowIfNull(serviceLocator);
-        ArgumentNullException.ThrowIfNull(dispatcherService);
-        ArgumentNullException.ThrowIfNull(messageService);
-        ArgumentNullException.ThrowIfNull(languageService);
-
         _workspaceManager = workspaceManager;
         _uiVisualizerService = uiVisualizerService;
-        _serviceLocator = serviceLocator;
         _dispatcherService = dispatcherService;
         _messageService = messageService;
         _languageService = languageService;
 
         WorkspaceGroups = new List<WorkspaceGroup>();
 
-        EditWorkspace = new TaskCommand<IWorkspace>(OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
-        RemoveWorkspace = new TaskCommand<IWorkspace>(OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
-        Refresh = new TaskCommand<IWorkspace>(OnRefreshAsync, OnRefreshCanExecute);
+        EditWorkspace = new TaskCommand<IWorkspace>(serviceProvider, OnEditWorkspaceExecuteAsync, OnEditWorkspaceCanExecute);
+        RemoveWorkspace = new TaskCommand<IWorkspace>(serviceProvider, OnRemoveWorkspaceExecuteAsync, OnRemoveWorkspaceCanExecute);
+        Refresh = new TaskCommand<IWorkspace>(serviceProvider, OnRefreshAsync, OnRefreshCanExecute);
     }
 
     public List<WorkspaceGroup> WorkspaceGroups { get; private set; }
@@ -62,8 +55,6 @@ public class WorkspacesViewModel : ViewModelBase
             }
         }
     }
-
-    public object? Scope { get; set; }
 
     public TaskCommand<IWorkspace> Refresh { get; private set; }
 
@@ -224,94 +215,25 @@ public class WorkspacesViewModel : ViewModelBase
         _dispatcherService.Invoke(() => RaisePropertyChanged(nameof(SelectedWorkspace)));
     }
 
-    private void OnScopeChanged()
-    {
-        var scope = Scope;
-
-        Log.Debug($"Scope has changed to '{scope}'");
-
-        DeactivateWorkspaceManager();
-        ActivateWorkspaceManager();
-
-        UpdateWorkspaces();
-    }
-
     protected override async Task InitializeAsync()
     {
         await base.InitializeAsync();
 
-        ActivateWorkspaceManager();
+        _workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
     }
 
     protected override Task CloseAsync()
     {
-        DeactivateWorkspaceManager(false);
+        _workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
 
         return base.CloseAsync();
     }
 
     private void OnWorkspacesChanged(object? sender, EventArgs e)
     {
-        var workspaceManager = _workspaceManager;
-
-        Log.Debug($"Workspaces have changed, updating workspaces, current workspace manager scope is '{workspaceManager?.Scope}'");
+        Logger.LogDebug($"Workspaces have changed, updating workspaces");
 
         UpdateWorkspaces();
-    }
-
-    private void SetWorkspaceManager(IWorkspaceManager? workspaceManager)
-    {
-        var previousWorkspaceManager = _workspaceManager;
-        if (ReferenceEquals(workspaceManager, previousWorkspaceManager))
-        {
-            return;
-        }
-
-        if (previousWorkspaceManager is not null)
-        {
-            previousWorkspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
-        }
-
-        Log.Debug($"Updating current workspace manager with scope '{workspaceManager?.Scope}' to new instance with '{workspaceManager?.Workspaces.Count() ?? 0}' workspaces");
-
-        _workspaceManager = workspaceManager;
-
-        if (workspaceManager is not null)
-        {
-            workspaceManager.WorkspaceUpdated += OnWorkspacesChanged;
-        }
-    }
-
-    private void ActivateWorkspaceManager()
-    {
-        var scope = Scope;
-
-        Log.Debug($"Activating workspace manager using scope '{scope}'");
-
-        var workspaceManager = _serviceLocator.ResolveType<IWorkspaceManager>(scope);
-        SetWorkspaceManager(workspaceManager);
-
-        UpdateWorkspaces();
-    }
-
-    private void DeactivateWorkspaceManager(bool setToNull = true)
-    {
-        Log.Debug($"Deactivating workspace manager");
-
-        SelectedWorkspace = null;
-
-        var workspaceManager = _workspaceManager;
-        if (workspaceManager is not null)
-        {
-            workspaceManager.WorkspaceUpdated -= OnWorkspacesChanged;
-
-            if (setToNull)
-            {
-                _workspaceManager = null;
-            }
-        }
-
-        WorkspaceGroups.Clear();
     }
 
     private bool _updatingWorkspace;
@@ -334,10 +256,10 @@ public class WorkspacesViewModel : ViewModelBase
         try
         {
             var workspaceGroups = (from workspace in workspaceManager.Workspaces
-                where workspace.IsVisible
-                orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
-                group workspace by workspace.WorkspaceGroup into g
-                select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
+                                   where workspace.IsVisible
+                                   orderby workspace.WorkspaceGroup, workspace.Title, workspace.CanDelete
+                                   group workspace by workspace.WorkspaceGroup into g
+                                   select new WorkspaceGroup(string.IsNullOrWhiteSpace(g.Key) ? null : g.Key, g)).ToList();
 
             WorkspaceGroups = workspaceGroups;
 

@@ -11,6 +11,13 @@ public static class ModuleInitializer
     [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
+namespace Orc
+{
+    public static class OrcWorkspaceManagementXamlModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcWorkspaceManagementXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
+}
 namespace Orc.WorkspaceManagement.Automation
 {
     public class WorkspaceViewGroupItem
@@ -102,7 +109,7 @@ namespace Orc.WorkspaceManagement
 {
     public class BehaviorWorkspaceProvider : Orc.WorkspaceManagement.WorkspaceProviderBase
     {
-        public BehaviorWorkspaceProvider(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Orc.WorkspaceManagement.Behaviors.IWorkspaceBehavior workspaceBehavior, Catel.Services.IDispatcherService dispatcherService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public BehaviorWorkspaceProvider(Orc.WorkspaceManagement.Behaviors.IWorkspaceBehavior workspaceBehavior, Catel.Services.IDispatcherService dispatcherService) { }
         public override System.Threading.Tasks.Task ApplyWorkspaceAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
         public override System.Threading.Tasks.Task ProvideInformationAsync(Orc.WorkspaceManagement.IWorkspace workspace) { }
     }
@@ -130,6 +137,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         public static readonly System.Windows.DependencyProperty PersistGridSettingsProperty;
         public static readonly System.Windows.DependencyProperty PersistSizeProperty;
         public AutoWorkspace() { }
+        public AutoWorkspace(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IDispatcherService dispatcherService) { }
         public bool PersistGridSettings { get; set; }
         public bool PersistSize { get; set; }
         protected override void LoadSettings(Orc.WorkspaceManagement.IWorkspace workspace, string? prefix) { }
@@ -140,6 +148,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         public static readonly System.Windows.DependencyProperty ColumnsToPersistProperty;
         public static readonly System.Windows.DependencyProperty RowsToPersistProperty;
         public AutoWorkspaceGrid() { }
+        public AutoWorkspaceGrid(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IDispatcherService dispatcherService) { }
         public string? ColumnsToPersist { get; set; }
         public string? RowsToPersist { get; set; }
         protected override void LoadSettings(Orc.WorkspaceManagement.IWorkspace workspace, string? prefix) { }
@@ -155,7 +164,7 @@ namespace Orc.WorkspaceManagement.Behaviors
         where T : System.Windows.FrameworkElement
     {
         public static readonly System.Windows.DependencyProperty KeyPrefixProperty;
-        protected WorkspaceBehaviorBase() { }
+        protected WorkspaceBehaviorBase(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IDispatcherService dispatcherService) { }
         public string? KeyPrefix { get; set; }
         protected Orc.WorkspaceManagement.IWorkspaceManager WorkspaceManager { get; }
         public void Load(Orc.WorkspaceManagement.IWorkspace workspace) { }
@@ -171,16 +180,19 @@ namespace Orc.WorkspaceManagement.Converters
     public class IsCurrentWorkspaceToBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsCurrentWorkspaceToBooleanConverter() { }
+        public IsCurrentWorkspaceToBooleanConverter(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         protected override object? Convert(object? value, System.Type targetType, object? parameter) { }
     }
     public class IsCurrentWorkspaceToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public IsCurrentWorkspaceToCollapsingVisibilityConverter() { }
+        public IsCurrentWorkspaceToCollapsingVisibilityConverter(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         protected override bool IsVisible(object? value, System.Type targetType, object? parameter) { }
     }
     public class IsCurrentWorkspaceToHidingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public IsCurrentWorkspaceToHidingVisibilityConverter() { }
+        public IsCurrentWorkspaceToHidingVisibilityConverter(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager) { }
         protected override bool IsVisible(object? value, System.Type targetType, object? parameter) { }
     }
     public class TriggerConverter : System.Windows.Data.IMultiValueConverter
@@ -197,11 +209,11 @@ namespace Orc.WorkspaceManagement.Converters
 }
 namespace Orc.WorkspaceManagement.ViewModels
 {
-    public class WorkspaceViewModel : Catel.MVVM.ViewModelBase
+    public class WorkspaceViewModel : Catel.MVVM.FeaturedViewModelBase
     {
         public static readonly Catel.Data.IPropertyData? WorkspaceProperty;
         public static readonly Catel.Data.IPropertyData? WorkspaceTitleProperty;
-        public WorkspaceViewModel(Orc.WorkspaceManagement.IWorkspace workspace, Catel.Services.ILanguageService languageService) { }
+        public WorkspaceViewModel(Orc.WorkspaceManagement.IWorkspace workspace, System.IServiceProvider serviceProvider, Catel.Services.ILanguageService languageService) { }
         [Catel.MVVM.Model]
         public Orc.WorkspaceManagement.IWorkspace? Workspace { get; }
         [Catel.MVVM.ViewModelToModel("Workspace", "Title")]
@@ -210,13 +222,11 @@ namespace Orc.WorkspaceManagement.ViewModels
     }
     public class WorkspacesViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.IPropertyData ScopeProperty;
         public static readonly Catel.Data.IPropertyData WorkspaceGroupsProperty;
-        public WorkspacesViewModel(Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.IoC.IServiceLocator serviceLocator, Catel.Services.IDispatcherService dispatcherService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService) { }
+        public WorkspacesViewModel(System.IServiceProvider serviceProvider, Orc.WorkspaceManagement.IWorkspaceManager workspaceManager, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IDispatcherService dispatcherService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService) { }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> EditWorkspace { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> Refresh { get; }
         public Catel.MVVM.TaskCommand<Orc.WorkspaceManagement.IWorkspace> RemoveWorkspace { get; }
-        public object? Scope { get; set; }
         public Orc.WorkspaceManagement.IWorkspace? SelectedWorkspace { get; set; }
         public System.Collections.Generic.List<Orc.WorkspaceManagement.WorkspaceGroup> WorkspaceGroups { get; }
         protected override System.Threading.Tasks.Task CloseAsync() { }
@@ -228,18 +238,18 @@ namespace Orc.WorkspaceManagement.Views
     public class WorkspaceWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public WorkspaceWindow() { }
-        public WorkspaceWindow(Orc.WorkspaceManagement.ViewModels.WorkspaceViewModel? viewModel) { }
+        public WorkspaceWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
+        public WorkspaceWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
         protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() { }
     }
     public class WorkspacesView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector, System.Windows.Markup.IStyleConnector
     {
         public static readonly System.Windows.DependencyProperty HasRefreshButtonProperty;
-        public static readonly System.Windows.DependencyProperty ScopeProperty;
         public WorkspacesView() { }
+        public WorkspacesView(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
+        public WorkspacesView(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public bool HasRefreshButton { get; set; }
-        [Catel.MVVM.Views.ViewToViewModel("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
-        public object? Scope { get; set; }
         public void InitializeComponent() { }
         protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer() { }
     }

@@ -3,15 +3,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using Catel;
-using Catel.Configuration;
 using Catel.Data;
 using Catel.Logging;
-using Catel.Runtime.Serialization;
+using Microsoft.Extensions.Logging;
+using Orc.WorkspaceManagement.Serialization;
 
-public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Workspace>
+[JsonConverter(typeof(WorkspaceJsonConverter))]
+public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(Workspace));
 
     private static readonly HashSet<string> IgnoredProperties = new(new[]
     {
@@ -22,9 +24,6 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
         nameof(CanEdit),
         nameof(CanDelete),
         nameof(IsVisible),
-        nameof(Scope),
-        nameof(Tag),
-        nameof(IsReadOnly),
         nameof(IsDirty),
     });
 
@@ -51,11 +50,19 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
     public string? DisplayName { get; set; }
     public string? WorkspaceGroup { get; set; }
 
+    [JsonIgnore]
     public bool Persist { get; set; }
+
+    [JsonIgnore]
     public bool CanEdit { get; set; }
+
+    [JsonIgnore]
     public bool CanDelete { get; set; }
+
+    [JsonIgnore]
     public bool IsVisible { get; set; }
 
+    [JsonIgnore]
     public new bool IsDirty
     {
         get { return _isDirty; }
@@ -72,12 +79,6 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
             UpdateDisplayName();
         }
     }
-
-    [ExcludeFromSerialization]
-    public object? Scope { get; set; }
-
-    [ExcludeFromSerialization]
-    public object? Tag { get; set; }
 
     public void ClearWorkspaceValues()
     {
@@ -116,13 +117,6 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
         IsDirty = true;
     }
 
-    protected override void OnDeserialized()
-    {
-        base.OnDeserialized();
-
-        UpdateDisplayName();
-    }
-
     private void UpdateDisplayName()
     {
         _updatingDisplayName = true;
@@ -139,25 +133,28 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
         }
     }
 
-    public List<string> GetAllWorkspaceValueNames()
+    public IReadOnlyList<string> GetAllWorkspaceValueNames()
     {
         var valueNames = new List<string>();
 
-        var propertyData = PropertyDataManager.Default.GetCatelTypeInfo(GetType());
+        var propertyNames = GetPropertyBagPropertyNames();
 
-        foreach (var catelProperty in propertyData.GetCatelProperties())
+        foreach (var propertyName in propertyNames)
         {
-            if (catelProperty.Value.IsModelBaseProperty)
+            if (IgnoredProperties.Contains(propertyName))
             {
                 continue;
             }
 
-            if (IgnoredProperties.Contains(catelProperty.Key))
+            if (TryGetPropertyData(propertyName, out var catelPropertyData))
             {
-                continue;
+                if (catelPropertyData.IsModelBaseProperty)
+                {
+                    continue;
+                }
             }
 
-            valueNames.Add(catelProperty.Key);
+            valueNames.Add(propertyName);
         }
 
         return valueNames;
@@ -170,19 +167,14 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
 
     public void SetWorkspaceValue(string name, object? value)
     {
-        SetConfigurationValue(name, value);
+        SetValueToPropertyBag(name, value);
     }
 
     public T GetWorkspaceValue<T>(string name, T defaultValue)
     {
-        if (!IsConfigurationValueSet(name))
-        {
-            return defaultValue;
-        }
-
         try
         {
-            var value = GetConfigurationValue(name);
+            var value = GetValueFromPropertyBag<T>(name);
             if (value is T)
             {
                 return (T)value;
@@ -203,7 +195,7 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
                 }
             }
 
-            Log.Warning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
+            Logger.LogWarning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
 
             return defaultValue;
         }
@@ -226,8 +218,7 @@ public class Workspace : DynamicConfiguration, IWorkspace, IEqualityComparer<Wor
         }
 
         return string.Equals(WorkspaceGroup, other.WorkspaceGroup)
-            && string.Equals(Title, other.Title)
-            && Equals(Scope, other.Scope);
+            && string.Equals(Title, other.Title);
     }
 
     public override bool Equals(object? obj)

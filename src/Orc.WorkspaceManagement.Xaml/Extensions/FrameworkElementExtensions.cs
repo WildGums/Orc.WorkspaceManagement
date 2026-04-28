@@ -3,6 +3,7 @@
 using System;
 using System.Windows;
 using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
 
 public static partial class FrameworkElementExtensions
 {
@@ -44,7 +45,8 @@ public static partial class FrameworkElementExtensions
     {
         if (workspace is null)
         {
-            var workspaceManager = ServiceLocator.Default.ResolveType<IWorkspaceManager>();
+            var serviceProvider = IoCContainer.GetServiceProvider();
+            var workspaceManager = serviceProvider?.GetService<IWorkspaceManager>();
             workspace = workspaceManager?.Workspace;
         }
 

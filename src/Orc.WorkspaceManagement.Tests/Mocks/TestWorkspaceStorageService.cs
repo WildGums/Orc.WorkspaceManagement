@@ -8,7 +8,7 @@ using FilterBuilder.Tests;
 
 public class TestWorkspaceStorageService : IWorkspacesStorageService
 {
-    public async Task<IEnumerable<IWorkspace>> LoadWorkspacesAsync(string path)
+    public async Task<IReadOnlyList<IWorkspace>> LoadWorkspacesAsync(string path)
     {
         var scope = path;
 
@@ -25,7 +25,7 @@ public class TestWorkspaceStorageService : IWorkspacesStorageService
         return workspace;
     }
 
-    public async Task SaveWorkspacesAsync(string path, IEnumerable<IWorkspace> workspaces)
+    public async Task SaveWorkspacesAsync(string path, IReadOnlyList<IWorkspace> workspaces)
     {
             
     }
@@ -39,6 +39,6 @@ public class TestWorkspaceStorageService : IWorkspacesStorageService
     {
         ArgumentNullException.ThrowIfNull(workspace);
 
-        return $"{(workspace as Workspace)?.Scope}/{workspace.Title}";
+        return $"{workspace.Title}";
     }
 }

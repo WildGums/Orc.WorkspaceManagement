@@ -7,7 +7,7 @@ using Test;
 public class WorkspaceExtensionsFacts
 {
     [Test]
-    public void SynchronizesWorkspaces()
+    public void Synchronizes_Workspaces()
     {
         var workspaceA = new Workspace(WorkspaceNameHelper.GetRandomWorkspaceName());
         workspaceA.SetWorkspaceValue("A", 1);

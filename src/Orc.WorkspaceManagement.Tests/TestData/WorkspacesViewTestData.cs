@@ -34,18 +34,9 @@ public static class WorkspacesViewTestData
         {
             return new List<IWorkspace>
             {
-                new Workspace("First")
-                {
-                    Scope = scope
-                },
-                new Workspace("Second")
-                {
-                    Scope = scope
-                },
-                new Workspace("Third")
-                {
-                    Scope = scope
-                },
+                new Workspace("First"),
+                new Workspace("Second"),
+                new Workspace("Third"),
             };
         }
 
@@ -55,58 +46,47 @@ public static class WorkspacesViewTestData
             {
                 new Workspace("One")
                 {
-                    WorkspaceGroup = "Numbers",
-                    Scope = scope
+                    WorkspaceGroup = "Numbers"
                 },
                 new Workspace("Two")
                 {
-                    WorkspaceGroup = "Numbers",
-                    Scope = scope
+                    WorkspaceGroup = "Numbers"
                 },
                 new Workspace("Three")
                 {
-                    WorkspaceGroup = "Numbers",
-                    Scope = scope
+                    WorkspaceGroup = "Numbers"
                 },
                 new Workspace("Four")
                 {
-                    WorkspaceGroup = "Numbers",
-                    Scope = scope
+                    WorkspaceGroup = "Numbers"
                 },
                 new Workspace("Five")
                 {
-                    WorkspaceGroup = "Numbers",
-                    Scope = scope
+                    WorkspaceGroup = "Numbers"
                 },
                 new Workspace("Five")
                 {
-                    WorkspaceGroup = "Animals",
-                    Scope = scope
+                    WorkspaceGroup = "Animals"
                 },
                 new Workspace("Mouse")
                 {
-                    WorkspaceGroup = "Animals",
-                    Scope = scope
+                    WorkspaceGroup = "Animals"
                 },
                 new Workspace("Platypus")
                 {
-                    WorkspaceGroup = "Animals",
-                    Scope = scope
+                    WorkspaceGroup = "Animals"
                 },
                 new Workspace("Elephant")
                 {
-                    WorkspaceGroup = "Animals",
-                    Scope = scope
+                    WorkspaceGroup = "Animals"
                 },
                 new Workspace("Tyrannosaur")
                 {
-                    WorkspaceGroup = "Dinosaurs",
-                    Scope = scope
+                    WorkspaceGroup = "Dinosaurs"
                 },
                 new Workspace("Ankylosaurus")
                 {
-                    WorkspaceGroup = "Dinosaurs",
-                    Scope = scope
+                    WorkspaceGroup = "Dinosaurs"
                 },
             };
         }

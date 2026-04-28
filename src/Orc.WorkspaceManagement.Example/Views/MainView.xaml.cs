@@ -1,15 +1,14 @@
 ﻿namespace Orc.WorkspaceManagement.Example.Views;
 
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 public partial class MainView
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(MainView));
 
-    public MainView()
+    partial void OnInitializedComponent()
     {
-        InitializeComponent();
-
-        Log.Info("Welcome to the example of Orc.WorkspaceManagement. Use any of the buttons above to control the workspace. Log messages will appear here");
+        Logger.LogInformation("Welcome to the example of Orc.WorkspaceManagement. Use any of the buttons above to control the workspace. Log messages will appear here");
     }
 }

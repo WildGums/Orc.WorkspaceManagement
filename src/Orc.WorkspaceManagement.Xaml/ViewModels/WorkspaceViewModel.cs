@@ -6,13 +6,11 @@ using Catel.Data;
 using Catel.MVVM;
 using Catel.Services;
 
-public class WorkspaceViewModel : ViewModelBase
+public class WorkspaceViewModel : FeaturedViewModelBase
 {
-    public WorkspaceViewModel(IWorkspace workspace, ILanguageService languageService)
+    public WorkspaceViewModel(IWorkspace workspace, IServiceProvider serviceProvider, ILanguageService languageService)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(workspace);
-        ArgumentNullException.ThrowIfNull(languageService);
-
         DeferValidationUntilFirstSaveCall = true;
 
         Workspace = workspace;

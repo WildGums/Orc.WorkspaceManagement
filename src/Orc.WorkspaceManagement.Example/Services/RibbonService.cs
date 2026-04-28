@@ -1,7 +1,7 @@
 ﻿namespace Orc.WorkspaceManagement.Example.Services;
 
 using System.Windows;
-using Orchestra.Services;
+using Orchestra;
 using Views;
 
 public class RibbonService : IRibbonService

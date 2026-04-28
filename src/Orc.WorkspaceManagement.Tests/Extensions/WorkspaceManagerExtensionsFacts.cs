@@ -57,7 +57,8 @@ public class WorkspaceManagerExtensionsFacts
         {
             var mock = new Mock<IWorkspacesStorageService>();
 
-            mock.Setup(x => x.LoadWorkspacesAsync(It.IsAny<string>())).ReturnsAsync(titles.Select(t => new Workspace(t)));
+            mock.Setup(x => x.LoadWorkspacesAsync(It.IsAny<string>()))
+                .ReturnsAsync(titles.Select(t => new Workspace(t)).ToArray());
 
             var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
@@ -75,7 +76,8 @@ public class WorkspaceManagerExtensionsFacts
 
             const string emptyDirectory = "Empty directory";
 
-            mock.Setup(x => x.LoadWorkspacesAsync(emptyDirectory)).ReturnsAsync(Enumerable.Empty<IWorkspace>());
+            mock.Setup(x => x.LoadWorkspacesAsync(emptyDirectory))
+                .ReturnsAsync(Array.Empty<IWorkspace>());
 
             var workspaceManager = Factories.WorkspaceManager.WithEmptyInitializer(mock.Object);
 
