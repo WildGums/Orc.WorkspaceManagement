@@ -195,7 +195,7 @@ public class Workspace : ModelBase, IWorkspace, IEqualityComparer<Workspace>
                 }
             }
 
-            Logger.LogWarning($"Value '{value}' for workspace '{DisplayName}' could not be converted to '{typeof(T).Name}', returning default value");
+            Logger.LogWarning("Value '{Value}' for workspace '{DisplayName}' could not be converted to '{TypeName}', returning default value", value, DisplayName, typeof(T).Name);
 
             return defaultValue;
         }

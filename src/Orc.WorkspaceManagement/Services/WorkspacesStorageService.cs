@@ -50,7 +50,7 @@ public class WorkspacesStorageService : IWorkspacesStorageService
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, $"Failed to load workspaces '{path}'");
+            Logger.LogError(ex, "Failed to load workspaces '{Path}'", path);
         }
 
         return workspaces;
@@ -64,11 +64,11 @@ public class WorkspacesStorageService : IWorkspacesStorageService
 
         try
         {
-            Logger.LogDebug("Loading workspace from '{0}'", fileName);
+            Logger.LogDebug("Loading workspace from '{FileName}'", fileName);
 
             if (!_fileService.Exists(fileName))
             {
-                Logger.LogWarning("File '{0}' not found. Maybe this workspace hasn't been saved yet or doesn't need a save location'.", fileName);
+                Logger.LogWarning("File '{FileName}' not found. Maybe this workspace hasn't been saved yet or doesn't need a save location'.", fileName);
 
                 return null;
             }
@@ -80,7 +80,7 @@ public class WorkspacesStorageService : IWorkspacesStorageService
                 var workspace = serializer.Deserialize<Workspace>(fileStream);
                 if (workspace is null || string.IsNullOrEmpty(workspace.Title))
                 {
-                    Logger.LogWarning("File '{0}' doesn't look like a workspace, ignoring file", fileName);
+                    Logger.LogWarning("File '{FileName}' doesn't look like a workspace, ignoring file", fileName);
                 }
                 else
                 {
@@ -92,7 +92,7 @@ public class WorkspacesStorageService : IWorkspacesStorageService
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to load workspace from '{0}'", fileName);
+            Logger.LogError(ex, "Failed to load workspace from '{FileName}'", fileName);
         }
 
         return result;
@@ -111,13 +111,13 @@ public class WorkspacesStorageService : IWorkspacesStorageService
         {
             try
             {
-                Logger.LogDebug("Deleting file '{0}'", workspaceFile);
+                Logger.LogDebug("Deleting file '{WorkspaceFile}'", workspaceFile);
 
                 _fileService.Delete(workspaceFile);
             }
             catch (Exception ex)
             {
-                Logger.LogWarning(ex, "Failed to delete file '{0}'", workspaceFile);
+                Logger.LogWarning(ex, "Failed to delete file '{WorkspaceFile}'", workspaceFile);
             }
         }
 
@@ -135,11 +135,11 @@ public class WorkspacesStorageService : IWorkspacesStorageService
 
         if (!workspace.Persist)
         {
-            Logger.LogDebug("Workspace '{0}' should not be persisted, skipping save of workspace", workspace);
+            Logger.LogDebug("Workspace '{Workspace}' should not be persisted, skipping save of workspace", workspace);
             return;
         }
 
-        Logger.LogDebug("Saving workspace '{0}' to '{1}'", workspace, fileName);
+        Logger.LogDebug("Saving workspace '{Workspace}' to '{FileName}'", workspace, fileName);
 
         var serializer = _jsonSerializerFactory.CreateSerializer();
 
