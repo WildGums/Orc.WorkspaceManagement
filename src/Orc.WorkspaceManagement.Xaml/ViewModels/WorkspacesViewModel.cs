@@ -231,7 +231,7 @@ public class WorkspacesViewModel : ViewModelBase
 
     private void OnWorkspacesChanged(object? sender, EventArgs e)
     {
-        Logger.LogDebug($"Workspaces have changed, updating workspaces");
+        Logger.LogDebug("Workspaces have changed, updating workspaces");
 
         UpdateWorkspaces();
     }
