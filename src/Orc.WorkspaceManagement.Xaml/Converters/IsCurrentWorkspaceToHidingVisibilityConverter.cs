@@ -4,7 +4,6 @@ namespace Orc.WorkspaceManagement.Converters;
 using System;
 using System.Windows;
 using Catel;
-using Catel.IoC;
 using Catel.MVVM.Converters;
 
 public partial class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityConverterBase
@@ -12,9 +11,10 @@ public partial class IsCurrentWorkspaceToHidingVisibilityConverter : VisibilityC
     private readonly IWorkspaceManager _workspaceManager;
 
     public IsCurrentWorkspaceToHidingVisibilityConverter(IWorkspaceManager workspaceManager)
-        : base(Visibility.Hidden)
     {
         _workspaceManager = workspaceManager;
+
+        NotVisibleVisibility = Visibility.Hidden;
     }
 
     protected override bool IsVisible(object? value, Type targetType, object? parameter)

@@ -1,7 +1,6 @@
 ﻿namespace Orc.WorkspaceManagement.Converters;
 
 using System;
-using System.Windows;
 using Catel;
 using Catel.MVVM.Converters;
 
@@ -10,7 +9,6 @@ public partial class IsCurrentWorkspaceToCollapsingVisibilityConverter : Visibil
     private readonly IWorkspaceManager _workspaceManager;
 
     public IsCurrentWorkspaceToCollapsingVisibilityConverter(IWorkspaceManager workspaceManager)
-        : base(Visibility.Collapsed)
     {
         _workspaceManager = workspaceManager;
     }
