@@ -8,9 +8,13 @@ using Catel.Services;
 
 public class WorkspaceViewModel : FeaturedViewModelBase
 {
+    private readonly ILanguageService _languageService;
+
     public WorkspaceViewModel(IWorkspace workspace, IServiceProvider serviceProvider, ILanguageService languageService)
         : base(serviceProvider)
     {
+        _languageService = languageService;
+
         DeferValidationUntilFirstSaveCall = true;
 
         Workspace = workspace;
@@ -30,7 +34,7 @@ public class WorkspaceViewModel : FeaturedViewModelBase
 
         if (string.IsNullOrWhiteSpace(WorkspaceTitle))
         {
-            validationResults.Add(FieldValidationResult.CreateError(nameof(WorkspaceTitle), "Title is required"));
+            validationResults.Add(FieldValidationResult.CreateError(nameof(WorkspaceTitle), _languageService.GetRequiredString("WorkspaceManagement_TitleIsRequired")));
         }
     }
 }
